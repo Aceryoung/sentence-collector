@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { SentenceCard } from "@/components/SentenceCard";
-import { getRanking, type Period } from "@/lib/ranking";
+import { getPeriodStart, getRanking, type Period } from "@/lib/ranking";
 
 const PERIODS: { value: Period; label: string }[] = [
   { value: "day", label: "일간" },
@@ -13,6 +13,17 @@ function isPeriod(value: string | undefined): value is Period {
   return value === "day" || value === "week" || value === "month";
 }
 
+function formatDate(date: Date): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Seoul",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  })
+    .format(date)
+    .replace(/-/g, ".");
+}
+
 export default async function RankingPage({
   searchParams,
 }: {
@@ -22,7 +33,9 @@ export default async function RankingPage({
   const period: Period = isPeriod(rawPeriod) ? rawPeriod : "day";
 
   const supabase = await createClient();
-  const ranking = await getRanking(supabase, period, 20);
+  const now = new Date();
+  const ranking = await getRanking(supabase, period, 20, now);
+  const periodStart = getPeriodStart(period, now);
 
   return (
     <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-8">
@@ -42,6 +55,9 @@ export default async function RankingPage({
           </Link>
         ))}
       </nav>
+      <p className="font-mono text-xs text-stone">
+        {formatDate(periodStart)} - {formatDate(now)}
+      </p>
       {ranking.length > 0 ? (
         <ol className="flex flex-col gap-3">
           {ranking.map((sentence, index) => (

@@ -51,8 +51,9 @@ export async function getRanking(
   supabase: SupabaseServerClient,
   period: Period,
   limit: number,
+  now: Date = new Date(),
 ): Promise<SentenceCardData[]> {
-  const periodStart = getPeriodStart(period, new Date());
+  const periodStart = getPeriodStart(period, now);
 
   const { data: likeRows } = await supabase
     .from("likes")
