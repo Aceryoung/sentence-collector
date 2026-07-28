@@ -12,6 +12,8 @@ export async function GET(request: NextRequest) {
     if (!error) {
       return NextResponse.redirect(`${origin}/`);
     }
+
+    console.error("[auth/callback] exchangeCodeForSession failed:", error);
   }
 
   // 코드가 없거나 교환에 실패 — 링크가 만료됐거나 이미 사용된 경우
