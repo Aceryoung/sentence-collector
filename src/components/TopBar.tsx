@@ -15,7 +15,6 @@ export async function TopBar() {
         문장서고<span className="text-archive">.</span>
       </Link>
       <nav className="flex items-center gap-4 font-mono text-xs text-stone">
-        <ThemeToggle />
         {user ? (
           <>
             <Link href="/my" className="hover:text-ink">
@@ -38,6 +37,7 @@ export async function TopBar() {
             로그인
           </Link>
         )}
+        <ThemeToggle />
       </nav>
     </header>
   );

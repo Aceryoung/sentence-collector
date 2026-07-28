@@ -40,9 +40,10 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={isDark ? "라이트 모드로 전환" : "다크 모드로 전환"}
-      className="hover:text-ink"
+      title={isDark ? "라이트 모드로 전환" : "다크 모드로 전환"}
+      className="border border-hairline-strong px-2 py-1 text-sm hover:border-archive hover:text-ink"
     >
-      {isDark ? "☀" : "●"}
+      {isDark ? "☀" : "☾"}
     </button>
   );
 }
