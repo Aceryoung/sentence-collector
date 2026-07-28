@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/lib/auth-actions";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export async function TopBar() {
   const supabase = await createClient();
@@ -14,6 +15,7 @@ export async function TopBar() {
         문장서고<span className="text-archive">.</span>
       </Link>
       <nav className="flex items-center gap-4 font-mono text-xs text-stone">
+        <ThemeToggle />
         {user ? (
           <>
             <Link href="/my" className="hover:text-ink">
