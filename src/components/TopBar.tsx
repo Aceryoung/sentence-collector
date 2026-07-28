@@ -15,6 +15,9 @@ export async function TopBar() {
         문장서고<span className="text-archive">.</span>
       </Link>
       <nav className="flex items-center gap-4 font-mono text-xs text-stone">
+        <Link href="/ranking" className="hover:text-ink">
+          랭킹
+        </Link>
         {user ? (
           <>
             <Link href="/my" className="hover:text-ink">
