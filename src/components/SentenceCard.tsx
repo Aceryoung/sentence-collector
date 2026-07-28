@@ -1,3 +1,5 @@
+import { ShareImageButton } from "@/components/ShareImageButton";
+
 type Props = {
   body: string;
   source: string | null;
@@ -20,9 +22,12 @@ export function SentenceCard({ body, source, likeCount }: Props) {
         >
           {source || "출처 미상"}
         </span>
-        <span className="font-mono text-sm text-stone tabular-nums">
-          ♡ {likeCount.toLocaleString("ko-KR")}
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-sm text-stone tabular-nums">
+            ♡ {likeCount.toLocaleString("ko-KR")}
+          </span>
+          <ShareImageButton body={body} source={source} />
+        </div>
       </div>
     </article>
   );
