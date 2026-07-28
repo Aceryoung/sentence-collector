@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { SENTENCE_WITH_LIKE_COUNT_SELECT, toSentenceCardData } from "@/lib/sentences";
 import { MyArchive } from "./MyArchive";
 
 export default async function MyPage() {
@@ -14,16 +15,11 @@ export default async function MyPage() {
 
   const { data } = await supabase
     .from("sentences")
-    .select("id, body, source, created_at, likes(count)")
+    .select(SENTENCE_WITH_LIKE_COUNT_SELECT)
     .eq("author_id", user.id)
     .order("created_at", { ascending: false });
 
-  const sentences = (data ?? []).map((sentence) => ({
-    id: sentence.id,
-    body: sentence.body,
-    source: sentence.source,
-    likeCount: sentence.likes?.[0]?.count ?? 0,
-  }));
+  const sentences = (data ?? []).map(toSentenceCardData);
 
   return (
     <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-8">

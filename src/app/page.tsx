@@ -1,23 +1,26 @@
 import { createClient } from "@/lib/supabase/server";
 import { SentenceCard } from "@/components/SentenceCard";
+import { SENTENCE_WITH_LIKE_COUNT_SELECT, toSentenceCardData } from "@/lib/sentences";
 
 export default async function HomePage() {
   const supabase = await createClient();
-  const { data: sentences } = await supabase
+  const { data } = await supabase
     .from("sentences")
-    .select("id, body, source, created_at, likes(count)")
+    .select(SENTENCE_WITH_LIKE_COUNT_SELECT)
     .order("created_at", { ascending: false })
     .limit(30);
 
+  const sentences = (data ?? []).map(toSentenceCardData);
+
   return (
     <main className="mx-auto flex w-full max-w-xl flex-col gap-3 px-4 py-8">
-      {sentences && sentences.length > 0 ? (
+      {sentences.length > 0 ? (
         sentences.map((sentence) => (
           <SentenceCard
             key={sentence.id}
             body={sentence.body}
             source={sentence.source}
-            likeCount={sentence.likes?.[0]?.count ?? 0}
+            likeCount={sentence.likeCount}
           />
         ))
       ) : (

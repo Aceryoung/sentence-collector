@@ -1,5 +1,6 @@
 -- 문장 수집가 초기 스키마
--- profiles: auth.users 1:1, 닉네임은 첫 로그인 후 온보딩에서 채움 (Phase 2)
+-- profiles: auth.users 1:1. nickname은 컬럼만 두고 MVP 범위에서는 UI로 채우지 않음
+-- (2026-07-27 /plan-eng-review 결정 — 카드에 작성자 표시가 없어 당장 필요하지 않음)
 create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   nickname text,
