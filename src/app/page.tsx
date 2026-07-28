@@ -32,6 +32,7 @@ export default async function HomePage() {
             오늘 다시 보는 문장
           </span>
           <SentenceCard
+            id={dailyPick.id}
             body={dailyPick.body}
             source={dailyPick.source}
             likeCount={dailyPick.likeCount}
@@ -48,6 +49,7 @@ export default async function HomePage() {
         sentences.map((sentence) => (
           <SentenceCard
             key={sentence.id}
+            id={sentence.id}
             body={sentence.body}
             source={sentence.source}
             likeCount={sentence.likeCount}

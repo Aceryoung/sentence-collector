@@ -48,6 +48,7 @@ export function MyArchive({ sentences }: { sentences: Sentence[] }) {
         filtered.map((sentence) => (
           <SentenceCard
             key={sentence.id}
+            id={sentence.id}
             body={sentence.body}
             source={sentence.source}
             likeCount={sentence.likeCount}

@@ -1,12 +1,14 @@
 import { ShareImageButton } from "@/components/ShareImageButton";
+import { LikeButton } from "@/components/LikeButton";
 
 type Props = {
+  id: string;
   body: string;
   source: string | null;
   likeCount: number;
 };
 
-export function SentenceCard({ body, source, likeCount }: Props) {
+export function SentenceCard({ id, body, source, likeCount }: Props) {
   return (
     <article className="flex flex-col gap-4 border border-hairline border-l-2 bg-surface px-6 py-5 transition-colors hover:border-l-archive">
       <p className="text-lg leading-relaxed font-semibold text-ink text-balance">
@@ -22,10 +24,8 @@ export function SentenceCard({ body, source, likeCount }: Props) {
         >
           {source || "출처 미상"}
         </span>
-        <div className="flex items-center gap-3">
-          <span className="font-mono text-sm text-stone tabular-nums">
-            ♡ {likeCount.toLocaleString("ko-KR")}
-          </span>
+        <div className="flex items-center gap-1">
+          <LikeButton sentenceId={id} initialCount={likeCount} />
           <ShareImageButton body={body} source={source} />
         </div>
       </div>
