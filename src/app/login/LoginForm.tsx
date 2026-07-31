@@ -48,11 +48,17 @@ export function LoginForm({ initialError }: { initialError?: string }) {
   }
 
   async function handleOAuth(provider: "google" | "kakao") {
+    setMessage(null);
     const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
+
+    if (error) {
+      setStatus("error");
+      setMessage("로그인에 실패했어요, 잠시 후 다시 시도해주세요.");
+    }
   }
 
   async function handleVerifyCode(event: FormEvent<HTMLFormElement>) {

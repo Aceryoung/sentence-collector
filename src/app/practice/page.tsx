@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { getPublicDailyPick } from "@/lib/sentences";
 import { getUserStreak } from "@/lib/streak";
-import { logPractice } from "./actions";
+import { PracticeCompleteButton } from "./PracticeCompleteButton";
 
 export default async function PracticePage() {
   const supabase = await createClient();
@@ -38,15 +38,7 @@ export default async function PracticePage() {
                   오늘의 필사를 완료했어요
                 </span>
               ) : (
-                <form action={logPractice}>
-                  <input type="hidden" name="sentenceId" value={sentence.id} />
-                  <button
-                    type="submit"
-                    className="border-none bg-archive px-4 py-2 font-mono text-sm text-archive-contrast"
-                  >
-                    필사 완료로 표시
-                  </button>
-                </form>
+                <PracticeCompleteButton sentenceId={sentence.id} />
               )}
             </div>
           ) : (
