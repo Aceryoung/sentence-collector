@@ -84,7 +84,12 @@ export default async function MyPage() {
 
       <MyArchive sentences={sentences} />
 
-      <h2 className="mt-4 font-serif text-lg text-ink">내가 좋아요한 문장</h2>
+      <div className="mt-4 flex flex-col gap-1">
+        <h2 className="font-serif text-lg text-ink">내가 좋아요한 문장</h2>
+        <p className="font-mono text-xs text-stone-faint">
+          이 기기에서 누른 좋아요만 보여요
+        </p>
+      </div>
       <LikedSentences />
     </main>
   );
