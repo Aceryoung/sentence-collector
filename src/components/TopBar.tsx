@@ -10,11 +10,11 @@ export async function TopBar() {
   } = await supabase.auth.getUser();
 
   return (
-    <header className="bg-paper/90 sticky top-0 z-10 flex items-center justify-between border-b border-hairline px-6 py-4 backdrop-blur">
-      <Link href="/" className="font-serif text-lg text-ink">
+    <header className="bg-paper/90 sticky top-0 z-10 flex items-center justify-between gap-2 border-b border-hairline px-4 py-4 backdrop-blur sm:px-6">
+      <Link href="/" className="shrink-0 font-serif text-base text-ink sm:text-lg">
         문장서고<span className="text-archive">.</span>
       </Link>
-      <nav className="flex items-center gap-4 font-mono text-xs text-stone">
+      <nav className="flex items-center gap-2 font-mono text-xs whitespace-nowrap text-stone sm:gap-4">
         <Link href="/ranking" className="hover:text-ink">
           랭킹
         </Link>
@@ -25,9 +25,10 @@ export async function TopBar() {
             </Link>
             <Link
               href="/write"
-              className="border-none bg-archive px-3 py-1.5 text-archive-contrast"
+              className="border-none bg-archive px-2.5 py-1.5 text-archive-contrast"
             >
-              + 등록
+              <span aria-hidden="true">+</span>
+              <span className="sr-only sm:not-sr-only sm:ml-1">등록</span>
             </Link>
             <form action={signOut}>
               <button type="submit" className="hover:text-ink">
