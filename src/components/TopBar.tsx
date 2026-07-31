@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/lib/auth-actions";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { NavMenu } from "@/components/NavMenu";
 
 export async function TopBar() {
   const supabase = await createClient();
@@ -20,7 +21,7 @@ export async function TopBar() {
         </Link>
         {user ? (
           <>
-            <Link href="/my" className="hover:text-ink">
+            <Link href="/my" className="hidden hover:text-ink sm:inline">
               내 보관함
             </Link>
             <Link
@@ -30,18 +31,24 @@ export async function TopBar() {
               <span aria-hidden="true">+</span>
               <span className="sr-only sm:not-sr-only sm:ml-1">등록</span>
             </Link>
-            <form action={signOut}>
+            <form action={signOut} className="hidden sm:block">
               <button type="submit" className="hover:text-ink">
                 로그아웃
               </button>
             </form>
+            <span className="hidden sm:inline-flex">
+              <ThemeToggle />
+            </span>
+            <NavMenu />
           </>
         ) : (
-          <Link href="/login" className="hover:text-ink">
-            로그인
-          </Link>
+          <>
+            <Link href="/login" className="hover:text-ink">
+              로그인
+            </Link>
+            <ThemeToggle />
+          </>
         )}
-        <ThemeToggle />
       </nav>
     </header>
   );
