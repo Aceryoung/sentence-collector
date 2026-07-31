@@ -6,6 +6,7 @@ import { getPeriodStart } from "@/lib/ranking";
 import { formatKstDateDisplay } from "@/lib/kst-date";
 import { getUserStreak } from "@/lib/streak";
 import { MyArchive } from "./MyArchive";
+import { LikedSentences } from "./LikedSentences";
 
 export default async function MyPage() {
   const supabase = await createClient();
@@ -82,6 +83,9 @@ export default async function MyPage() {
       </section>
 
       <MyArchive sentences={sentences} />
+
+      <h2 className="mt-4 font-serif text-lg text-ink">내가 좋아요한 문장</h2>
+      <LikedSentences />
     </main>
   );
 }
