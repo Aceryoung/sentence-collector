@@ -6,6 +6,7 @@ import {
   getPersonalDailyPick,
   toSentenceCardData,
 } from "@/lib/sentences";
+import { getUserStreak } from "@/lib/streak";
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -13,13 +14,14 @@ export default async function HomePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [{ data }, dailyPick] = await Promise.all([
+  const [{ data }, dailyPick, userStreak] = await Promise.all([
     supabase
       .from("sentences")
       .select(SENTENCE_WITH_LIKE_COUNT_SELECT)
       .order("created_at", { ascending: false })
       .limit(30),
     user ? getPersonalDailyPick(supabase, user.id) : Promise.resolve(null),
+    user ? getUserStreak(supabase, user.id) : Promise.resolve(null),
   ]);
 
   const sentences = (data ?? []).map(toSentenceCardData);
@@ -41,9 +43,14 @@ export default async function HomePage() {
       )}
       <Link
         href="/practice"
-        className="self-end font-mono text-xs text-stone hover:text-ink"
+        className="flex items-center justify-between border border-hairline-strong bg-surface px-4 py-3 transition-colors hover:border-archive"
       >
-        오늘의 필사 보러가기 →
+        <span className="font-mono text-sm text-ink">오늘의 필사 보러가기 →</span>
+        {userStreak && userStreak.streak > 0 ? (
+          <span className="border border-archive px-2 py-0.5 font-mono text-xs text-archive">
+            {userStreak.streak}일째
+          </span>
+        ) : null}
       </Link>
       {sentences.length > 0 ? (
         sentences.map((sentence) => (

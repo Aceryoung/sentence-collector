@@ -1,5 +1,5 @@
 import type { createClient } from "@/lib/supabase/server";
-import { pickDailyId } from "@/lib/daily-pick";
+import { pickDailyId } from "./daily-pick";
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 

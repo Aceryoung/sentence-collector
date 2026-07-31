@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { SentenceCard } from "@/components/SentenceCard";
 import { getPeriodStart, getRanking, type Period } from "@/lib/ranking";
+import { formatKstDateDisplay } from "@/lib/kst-date";
 
 const PERIODS: { value: Period; label: string }[] = [
   { value: "day", label: "일간" },
@@ -11,17 +12,6 @@ const PERIODS: { value: Period; label: string }[] = [
 
 function isPeriod(value: string | undefined): value is Period {
   return value === "day" || value === "week" || value === "month";
-}
-
-function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Seoul",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  })
-    .format(date)
-    .replace(/-/g, ".");
 }
 
 export default async function RankingPage({
@@ -56,7 +46,7 @@ export default async function RankingPage({
         ))}
       </nav>
       <p className="font-mono text-xs text-stone">
-        {formatDate(periodStart)} - {formatDate(now)}
+        {formatKstDateDisplay(periodStart)} - {formatKstDateDisplay(now)}
       </p>
       {ranking.length > 0 ? (
         <ol className="flex flex-col gap-3">
