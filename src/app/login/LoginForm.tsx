@@ -47,20 +47,6 @@ export function LoginForm({ initialError }: { initialError?: string }) {
     setStatus("sent");
   }
 
-  async function handleOAuth(provider: "google" | "kakao") {
-    setMessage(null);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
-
-    if (error) {
-      setStatus("error");
-      setMessage("로그인에 실패했어요, 잠시 후 다시 시도해주세요.");
-    }
-  }
-
   async function handleVerifyCode(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setVerifying(true);
@@ -121,57 +107,32 @@ export function LoginForm({ initialError }: { initialError?: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <button
-          type="button"
-          onClick={() => handleOAuth("google")}
-          className="border border-hairline-strong px-3 py-2 font-mono text-sm text-ink hover:border-archive"
-        >
-          구글로 로그인
-        </button>
-        <button
-          type="button"
-          onClick={() => handleOAuth("kakao")}
-          className="border border-hairline-strong px-3 py-2 font-mono text-sm text-ink hover:border-archive"
-        >
-          카카오로 로그인
-        </button>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <span className="h-px flex-1 bg-hairline" />
-        <span className="font-mono text-xs text-stone-faint">또는 이메일로</span>
-        <span className="h-px flex-1 bg-hairline" />
-      </div>
-
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <label
-          htmlFor="email"
-          className="font-mono text-xs uppercase tracking-wide text-stone"
-        >
-          이메일
-        </label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          placeholder="you@example.com"
-          className="border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
-          disabled={status === "sending"}
-        />
-        {message ? (
-          <p className="font-mono text-xs text-archive">{message}</p>
-        ) : null}
-        <button
-          type="submit"
-          disabled={status === "sending"}
-          className="border-none bg-archive px-3 py-2 font-mono text-sm text-archive-contrast disabled:opacity-60"
-        >
-          {status === "sending" ? "보내는 중…" : "로그인 링크 받기"}
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+      <label
+        htmlFor="email"
+        className="font-mono text-xs uppercase tracking-wide text-stone"
+      >
+        이메일
+      </label>
+      <input
+        id="email"
+        type="email"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        placeholder="you@example.com"
+        className="border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
+        disabled={status === "sending"}
+      />
+      {message ? (
+        <p className="font-mono text-xs text-archive">{message}</p>
+      ) : null}
+      <button
+        type="submit"
+        disabled={status === "sending"}
+        className="border-none bg-archive px-3 py-2 font-mono text-sm text-archive-contrast disabled:opacity-60"
+      >
+        {status === "sending" ? "보내는 중…" : "로그인 링크 받기"}
+      </button>
+    </form>
   );
 }
