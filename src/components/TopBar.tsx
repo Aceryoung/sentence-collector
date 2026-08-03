@@ -16,13 +16,18 @@ export async function TopBar() {
         문장서고<span className="text-archive">.</span>
       </Link>
       <nav className="flex items-center gap-2 font-mono text-xs whitespace-nowrap text-stone sm:gap-4">
-        <Link href="/ranking" className="hover:text-ink">
+        {/* 로그인 상태에서는 "보관함"(핵심 회수 경로)을 상시 노출하고 랭킹을 메뉴로
+            넣는다. 비로그인 상태에는 보관함이 없으니 랭킹을 그대로 노출한다. */}
+        <Link
+          href="/ranking"
+          className={user ? "hidden hover:text-ink sm:inline" : "hover:text-ink"}
+        >
           랭킹
         </Link>
         {user ? (
           <>
-            <Link href="/my" className="hidden hover:text-ink sm:inline">
-              내 보관함
+            <Link href="/my" className="hover:text-ink">
+              보관함
             </Link>
             <Link
               href="/write"

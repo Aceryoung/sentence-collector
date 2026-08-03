@@ -67,9 +67,17 @@ export default async function RankingPage({
           ))}
         </ol>
       ) : (
-        <p className="py-16 text-center font-mono text-sm text-stone">
-          아직 이 기간의 랭킹이 없어요. 첫 좋아요를 남겨보세요.
-        </p>
+        <div className="flex flex-col items-center gap-4 py-16">
+          <p className="text-center font-mono text-sm text-stone">
+            아직 이 기간의 랭킹이 없어요.
+          </p>
+          <Link
+            href="/"
+            className="border border-hairline-strong px-4 py-2 font-mono text-sm text-ink hover:border-archive"
+          >
+            문장 둘러보고 좋아요 남기기 →
+          </Link>
+        </div>
       )}
     </main>
   );

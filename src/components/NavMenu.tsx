@@ -44,11 +44,11 @@ export function NavMenu() {
       {open ? (
         <div className="absolute top-full right-0 z-20 mt-2 flex w-40 flex-col border border-hairline-strong bg-surface py-1 font-mono text-xs text-stone">
           <Link
-            href="/my"
+            href="/ranking"
             className="px-3 py-2 hover:bg-paper hover:text-ink"
             onClick={() => setOpen(false)}
           >
-            내 보관함
+            랭킹
           </Link>
           <div className="flex items-center justify-between px-3 py-2">
             <span>테마</span>

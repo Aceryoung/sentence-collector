@@ -19,10 +19,10 @@ export default async function PracticePage() {
       <span className="font-mono text-xs text-stone">오늘의 필사</span>
       {sentence ? (
         <div className="flex flex-col items-center gap-8 text-center">
-          <p className="font-serif text-2xl leading-loose text-ink text-balance">
+          <p className="font-serif text-2xl leading-loose break-words text-ink text-balance">
             {sentence.body}
           </p>
-          <span className="border border-hairline-strong px-3 py-1 font-mono text-sm text-stone">
+          <span className="max-w-full border border-hairline-strong px-3 py-1 font-mono text-sm break-words text-stone">
             {sentence.source || "출처 미상"}
           </span>
 

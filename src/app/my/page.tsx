@@ -77,7 +77,7 @@ export default async function MyPage() {
         {recap.topSentence ? (
           <div className="border-l-2 border-archive pl-3">
             <p className="font-mono text-xs text-stone">최고 인기 문장</p>
-            <p className="text-ink">{recap.topSentence.body}</p>
+            <p className="break-words text-ink">{recap.topSentence.body}</p>
           </div>
         ) : null}
       </section>

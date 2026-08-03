@@ -24,7 +24,11 @@ export default async function HomePage() {
     user ? getUserStreak(supabase, user.id) : Promise.resolve(null),
   ]);
 
-  const sentences = (data ?? []).map(toSentenceCardData);
+  // 다시보기 카드로 이미 위에 노출된 문장은 피드에서 제외 — 같은 카드가 한 화면에
+  // 두 번 보이는 중복을 없앤다.
+  const sentences = (data ?? [])
+    .map(toSentenceCardData)
+    .filter((sentence) => sentence.id !== dailyPick?.id);
 
   return (
     <main className="mx-auto flex w-full max-w-xl flex-col gap-3 px-4 py-8">
@@ -63,9 +67,17 @@ export default async function HomePage() {
           />
         ))
       ) : (
-        <p className="py-16 text-center font-mono text-sm text-stone">
-          아직 등록된 문장이 없어요. 가장 먼저 남겨보세요.
-        </p>
+        <div className="flex flex-col items-center gap-4 py-16">
+          <p className="text-center font-mono text-sm text-stone">
+            아직 등록된 문장이 없어요.
+          </p>
+          <Link
+            href="/write"
+            className="bg-archive px-4 py-2 font-mono text-sm text-archive-contrast"
+          >
+            첫 문장 남기기
+          </Link>
+        </div>
       )}
     </main>
   );

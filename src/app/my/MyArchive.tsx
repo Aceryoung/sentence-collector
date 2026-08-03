@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { SentenceCard } from "@/components/SentenceCard";
 
 type Sentence = {
@@ -25,9 +26,17 @@ export function MyArchive({ sentences }: { sentences: Sentence[] }) {
 
   if (sentences.length === 0) {
     return (
-      <p className="py-16 text-center font-mono text-sm text-stone">
-        아직 모은 문장이 없어요.
-      </p>
+      <div className="flex flex-col items-center gap-4 py-16">
+        <p className="text-center font-mono text-sm text-stone">
+          아직 모은 문장이 없어요.
+        </p>
+        <Link
+          href="/write"
+          className="bg-archive px-4 py-2 font-mono text-sm text-archive-contrast"
+        >
+          첫 문장 남기기
+        </Link>
+      </div>
     );
   }
 
