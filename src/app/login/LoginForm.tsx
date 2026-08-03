@@ -72,22 +72,25 @@ export function LoginForm({ initialError }: { initialError?: string }) {
     return (
       <div className="flex flex-col gap-5">
         <p className="font-mono text-sm text-stone">
-          메일함을 확인해주세요. {email}로 로그인 링크와 6자리 코드를 보냈어요.
+          메일함을 확인해주세요. {email}로 로그인 링크와 인증 코드를 보냈어요.
         </p>
         <form onSubmit={handleVerifyCode} className="flex flex-col gap-3">
           <label
             htmlFor="code"
             className="font-mono text-xs uppercase tracking-wide text-stone"
           >
-            다른 기기/브라우저라면 6자리 코드 입력
+            다른 기기/브라우저라면 인증 코드 입력
           </label>
+          {/* 코드 자릿수는 Supabase 대시보드 설정에 따라 달라진다(실제로 8자리가
+              발송되는 걸 확인함). 특정 자릿수를 UI에 박아두면 설정이 바뀔 때
+              조용히 입력이 잘리므로 상한만 넉넉히 둔다. */}
           <input
             id="code"
             inputMode="numeric"
-            maxLength={6}
+            maxLength={10}
             value={code}
             onChange={(event) => setCode(event.target.value)}
-            placeholder="123456"
+            placeholder="메일로 받은 숫자"
             className="border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
             disabled={verifying}
           />
