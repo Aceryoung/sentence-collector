@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { isValidEmail, validateSentenceBody, validateSource } from "./validation";
+import {
+  isValidEmail,
+  validatePassword,
+  validateSentenceBody,
+  validateSource,
+} from "./validation";
 
 describe("isValidEmail", () => {
   it("accepts a well-formed email", () => {
@@ -48,6 +53,37 @@ describe("validateSentenceBody", () => {
 
   it("accepts a sentence exactly at the 500 character limit", () => {
     expect(validateSentenceBody("가".repeat(500))).toBeNull();
+  });
+});
+
+describe("validatePassword", () => {
+  it("accepts a password at the minimum length", () => {
+    expect(validatePassword("abcdefgh")).toBeNull();
+  });
+
+  it("accepts a long password", () => {
+    expect(validatePassword("문장서고에서쓰는아주긴비밀번호")).toBeNull();
+  });
+
+  it("rejects an empty string", () => {
+    expect(validatePassword("")).toBe("비밀번호를 입력해주세요.");
+  });
+
+  it("rejects a password shorter than 8 characters", () => {
+    expect(validatePassword("abcdefg")).toBe(
+      "비밀번호는 8자 이상으로 입력해주세요.",
+    );
+  });
+
+  // 앞뒤 공백을 지우지 않는다 — 비밀번호는 공백도 유효한 문자다.
+  it("counts surrounding whitespace as part of the password", () => {
+    expect(validatePassword("  abcdef  ")).toBeNull();
+  });
+
+  it("rejects whitespace-only input shorter than the minimum", () => {
+    expect(validatePassword("       ")).toBe(
+      "비밀번호는 8자 이상으로 입력해주세요.",
+    );
   });
 });
 

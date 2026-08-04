@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { safeNextPath } from "@/lib/safe-redirect";
 
 // Vercel 같은 프록시 뒤에서는 request.url의 origin이 공개 주소가 아니라
 // 내부 호스트로 잡히거나 https가 http로 떨어질 수 있다. 그러면 로그인 후
@@ -15,13 +16,14 @@ export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const baseUrl = resolveBaseUrl(request, origin);
+  const next = safeNextPath(searchParams.get("next"));
 
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      return NextResponse.redirect(`${baseUrl}/`);
+      return NextResponse.redirect(`${baseUrl}${next}`);
     }
 
     console.error("[auth/callback] exchangeCodeForSession failed:", error);

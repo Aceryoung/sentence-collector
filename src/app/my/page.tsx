@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { SENTENCE_WITH_LIKE_COUNT_SELECT, toSentenceCardData } from "@/lib/sentences";
@@ -91,6 +92,13 @@ export default async function MyPage() {
         </p>
       </div>
       <LikedSentences />
+
+      <Link
+        href="/settings"
+        className="mt-6 self-start font-mono text-xs text-stone underline underline-offset-4 hover:text-ink"
+      >
+        계정 설정 (비밀번호) →
+      </Link>
     </main>
   );
 }

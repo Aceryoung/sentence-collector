@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { isValidEmail } from "@/lib/validation";
 
 type Status = "idle" | "sending" | "sent" | "error";
+type Mode = "link" | "password";
 
 export function LoginForm({ initialError }: { initialError?: string }) {
   const [email, setEmail] = useState("");
@@ -17,6 +18,9 @@ export function LoginForm({ initialError }: { initialError?: string }) {
   const [code, setCode] = useState("");
   const [verifying, setVerifying] = useState(false);
   const [codeError, setCodeError] = useState<string | null>(null);
+  const [mode, setMode] = useState<Mode>("link");
+  const [password, setPassword] = useState("");
+  const [resetSent, setResetSent] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -45,6 +49,62 @@ export function LoginForm({ initialError }: { initialError?: string }) {
     }
 
     setStatus("sent");
+  }
+
+  async function handlePasswordLogin(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!isValidEmail(email)) {
+      setStatus("error");
+      setMessage("이메일 형식을 확인해주세요.");
+      return;
+    }
+
+    setStatus("sending");
+    setMessage(null);
+
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+
+    if (error) {
+      setStatus("error");
+      // 어떤 계정이 존재하는지 알려주지 않기 위해 이메일 오류와 비밀번호
+      // 오류를 구분하지 않는다.
+      setMessage("이메일 또는 비밀번호가 올바르지 않아요.");
+      return;
+    }
+
+    window.location.assign("/");
+  }
+
+  async function handleResetRequest() {
+    if (!isValidEmail(email)) {
+      setStatus("error");
+      setMessage("이메일을 먼저 입력해주세요.");
+      return;
+    }
+
+    setStatus("sending");
+    setMessage(null);
+
+    const supabase = createClient();
+    // 재설정 링크로 들어오면 복구 세션이 붙으므로, 콜백을 거쳐 설정 화면으로
+    // 보내면 거기서 새 비밀번호를 저장할 수 있다.
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${window.location.origin}/auth/callback?next=/settings`,
+    });
+
+    if (error) {
+      setStatus("error");
+      setMessage("재설정 메일 전송에 실패했어요, 잠시 후 다시 시도해주세요.");
+      return;
+    }
+
+    setStatus("idle");
+    setResetSent(true);
   }
 
   async function handleVerifyCode(event: FormEvent<HTMLFormElement>) {
@@ -126,39 +186,104 @@ export function LoginForm({ initialError }: { initialError?: string }) {
     );
   }
 
+  const isPasswordMode = mode === "password";
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <label
-        htmlFor="email"
-        className="font-mono text-xs uppercase tracking-wide text-stone"
+    <div className="flex flex-col gap-4">
+      <form
+        onSubmit={isPasswordMode ? handlePasswordLogin : handleSubmit}
+        className="flex flex-col gap-3"
       >
-        이메일
-      </label>
-      <input
-        id="email"
-        type="email"
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-        placeholder="you@example.com"
-        className="border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
-        disabled={status === "sending"}
-      />
-      {/* 자리를 항상 비워둔다 — 조건부로 넣고 빼면 에러가 뜰 때 버튼이 아래로
-          밀려서, 다시 누르려던 손가락이 빗나간다. */}
-      <p
-        role="status"
-        aria-live="polite"
-        className="min-h-4 font-mono text-xs text-archive"
-      >
-        {message}
-      </p>
-      <button
-        type="submit"
-        disabled={status === "sending"}
-        className="border-none bg-archive px-3 py-3 font-mono text-sm text-archive-contrast disabled:opacity-60"
-      >
-        {status === "sending" ? "보내는 중…" : "로그인 링크 받기"}
-      </button>
-    </form>
+        <label
+          htmlFor="email"
+          className="font-mono text-xs uppercase tracking-wide text-stone"
+        >
+          이메일
+        </label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          placeholder="you@example.com"
+          className="border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
+          disabled={status === "sending"}
+        />
+
+        {isPasswordMode ? (
+          <>
+            <label
+              htmlFor="password"
+              className="font-mono text-xs uppercase tracking-wide text-stone"
+            >
+              비밀번호
+            </label>
+            <input
+              id="password"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              className="border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
+              disabled={status === "sending"}
+            />
+          </>
+        ) : null}
+
+        {/* 자리를 항상 비워둔다 — 조건부로 넣고 빼면 에러가 뜰 때 버튼이 아래로
+            밀려서, 다시 누르려던 손가락이 빗나간다. */}
+        <p
+          role="status"
+          aria-live="polite"
+          className="min-h-4 font-mono text-xs text-archive"
+        >
+          {resetSent
+            ? "비밀번호 재설정 메일을 보냈어요. 메일함을 확인해주세요."
+            : message}
+        </p>
+        <button
+          type="submit"
+          disabled={status === "sending"}
+          className="border-none bg-archive px-3 py-3 font-mono text-sm text-archive-contrast disabled:opacity-60"
+        >
+          {status === "sending"
+            ? isPasswordMode
+              ? "확인하는 중…"
+              : "보내는 중…"
+            : isPasswordMode
+              ? "로그인"
+              : "로그인 링크 받기"}
+        </button>
+      </form>
+
+      {/* 매직링크를 기본으로 두고 비밀번호는 선택 경로로 남긴다 — 비밀번호는
+          설정한 사람만 쓸 수 있고, 처음 오는 사람에게는 계정이 없기 때문이다. */}
+      <div className="flex flex-col items-start gap-2 font-mono text-xs text-stone">
+        <button
+          type="button"
+          onClick={() => {
+            setMode(isPasswordMode ? "link" : "password");
+            setMessage(null);
+            setResetSent(false);
+            setStatus("idle");
+          }}
+          className="underline underline-offset-4 hover:text-ink"
+        >
+          {isPasswordMode
+            ? "메일로 로그인 링크 받기"
+            : "비밀번호로 로그인"}
+        </button>
+        {isPasswordMode ? (
+          <button
+            type="button"
+            onClick={handleResetRequest}
+            disabled={status === "sending"}
+            className="underline underline-offset-4 hover:text-ink disabled:opacity-60"
+          >
+            비밀번호를 잊으셨나요?
+          </button>
+        ) : null}
+      </div>
+    </div>
   );
 }
