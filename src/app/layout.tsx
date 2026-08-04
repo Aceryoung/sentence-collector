@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { TopBar } from "@/components/TopBar";
+import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col">
         <TopBar />
         {children}
+        <SiteFooter />
       </body>
     </html>
   );

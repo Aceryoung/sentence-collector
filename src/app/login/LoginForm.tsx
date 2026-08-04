@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { isValidEmail } from "@/lib/validation";
 import { resolvePostLoginPath } from "@/lib/post-login";
@@ -26,6 +27,9 @@ export function LoginForm({ initialError }: { initialError?: string }) {
   const [mode, setMode] = useState<Mode>("link");
   const [password, setPassword] = useState("");
   const [resetSent, setResetSent] = useState(false);
+  // 별도 가입 화면이 없어 첫 로그인이 곧 가입이다. 개인정보 수집·이용 동의와
+  // 만 14세 이상 확인을 여기서 받아야 한다(PIPA §22, §22-2).
+  const [agreed, setAgreed] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -33,6 +37,12 @@ export function LoginForm({ initialError }: { initialError?: string }) {
     if (!isValidEmail(email)) {
       setStatus("error");
       setMessage("이메일 형식을 확인해주세요.");
+      return;
+    }
+
+    if (!agreed) {
+      setStatus("error");
+      setMessage("약관과 개인정보 처리방침에 동의해주세요.");
       return;
     }
 
@@ -62,6 +72,12 @@ export function LoginForm({ initialError }: { initialError?: string }) {
     if (!isValidEmail(email)) {
       setStatus("error");
       setMessage("이메일 형식을 확인해주세요.");
+      return;
+    }
+
+    if (!agreed) {
+      setStatus("error");
+      setMessage("약관과 개인정보 처리방침에 동의해주세요.");
       return;
     }
 
@@ -275,6 +291,33 @@ export function LoginForm({ initialError }: { initialError?: string }) {
             />
           </>
         ) : null}
+
+        <label className="flex items-start gap-2 text-xs leading-relaxed text-stone">
+          <input
+            type="checkbox"
+            checked={agreed}
+            onChange={(event) => setAgreed(event.target.checked)}
+            disabled={status === "sending"}
+            className="mt-0.5 size-4 shrink-0 accent-archive"
+          />
+          <span>
+            만 14세 이상이며,{" "}
+            <Link
+              href="/terms"
+              className="underline underline-offset-4 hover:text-ink"
+            >
+              이용약관
+            </Link>
+            과{" "}
+            <Link
+              href="/privacy"
+              className="underline underline-offset-4 hover:text-ink"
+            >
+              개인정보 처리방침
+            </Link>
+            에 동의합니다.
+          </span>
+        </label>
 
         {/* 자리를 항상 비워둔다 — 조건부로 넣고 빼면 에러가 뜰 때 버튼이 아래로
             밀려서, 다시 누르려던 손가락이 빗나간다. */}
