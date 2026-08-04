@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { isValidEmail } from "@/lib/validation";
+import { resolvePostLoginPath } from "@/lib/post-login";
 
 type Status = "idle" | "sending" | "sent" | "error";
 type Mode = "link" | "password";
@@ -113,7 +114,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
     setCodeError(null);
 
     const supabase = createClient();
-    const { error } = await supabase.auth.verifyOtp({
+    const { data, error } = await supabase.auth.verifyOtp({
       email: email.trim(),
       token: code.trim(),
       type: "email",
@@ -125,7 +126,8 @@ export function LoginForm({ initialError }: { initialError?: string }) {
       return;
     }
 
-    window.location.assign("/");
+    // 코드로 들어온 사람은 비밀번호가 없어 다음에도 코드를 또 받아야 한다.
+    window.location.assign(resolvePostLoginPath(data.user?.user_metadata));
   }
 
   if (status === "sent") {

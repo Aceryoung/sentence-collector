@@ -4,7 +4,9 @@ import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { PASSWORD_MIN_LENGTH, validatePassword } from "@/lib/validation";
 
-export function PasswordForm() {
+// 로그인 직후 안내 흐름에서는 저장하고 나면 갈 곳이 있어야 한다. 그냥 두면
+// "저장했어요"만 남고 다음 행동이 없는 막다른 화면이 된다.
+export function PasswordForm({ redirectOnSuccess }: { redirectOnSuccess?: string }) {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [saving, setSaving] = useState(false);
@@ -30,7 +32,12 @@ export function PasswordForm() {
     setMessage(null);
 
     const supabase = createClient();
-    const { error } = await supabase.auth.updateUser({ password });
+    // Supabase는 "비밀번호가 설정됐는지"를 알려주는 필드를 주지 않는다.
+    // 로그인 후 설정 안내를 띄울지 판단하려고 우리가 직접 표시를 남긴다.
+    const { error } = await supabase.auth.updateUser({
+      password,
+      data: { has_password: true, password_prompt_seen: true },
+    });
     setSaving(false);
 
     if (error) {
@@ -41,6 +48,10 @@ export function PasswordForm() {
     setPassword("");
     setConfirm("");
     setSaved(true);
+
+    if (redirectOnSuccess) {
+      window.location.assign(redirectOnSuccess);
+    }
   }
 
   return (

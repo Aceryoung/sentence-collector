@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { safeNextPath } from "@/lib/safe-redirect";
+import { resolvePostLoginPath } from "@/lib/post-login";
 
 // Vercel 같은 프록시 뒤에서는 request.url의 origin이 공개 주소가 아니라
 // 내부 호스트로 잡히거나 https가 http로 떨어질 수 있다. 그러면 로그인 후
@@ -20,10 +21,13 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      return NextResponse.redirect(`${baseUrl}${next}`);
+      // 매직링크로 들어온 사람도 비밀번호가 없으면 다음에 또 메일을 받아야
+      // 하므로, 목적지가 따로 지정되지 않았을 때만 설정 화면으로 안내한다.
+      const destination = resolvePostLoginPath(data.user?.user_metadata, next);
+      return NextResponse.redirect(`${baseUrl}${destination}`);
     }
 
     console.error("[auth/callback] exchangeCodeForSession failed:", error);
