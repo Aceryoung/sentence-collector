@@ -43,7 +43,7 @@ export default async function SettingsPage({
         </div>
       )}
 
-      <PasswordForm redirectOnSuccess={isSetup ? "/" : undefined} />
+      <PasswordForm variant={isSetup ? "setup" : "settings"} />
 
       {isSetup ? (
         <SkipPasswordButton />

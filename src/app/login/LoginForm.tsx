@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { isValidEmail } from "@/lib/validation";
 import { resolvePostLoginPath } from "@/lib/post-login";
+import { EMAIL_DOMAINS, applyEmailDomain } from "@/lib/email-domain";
 
 type Status = "idle" | "sending" | "sent" | "error";
 type Mode = "link" | "password";
@@ -211,6 +212,22 @@ export function LoginForm({ initialError }: { initialError?: string }) {
           className="border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
           disabled={status === "sending"}
         />
+
+        {/* 모바일에서 "@naver.com"을 직접 치면 오타가 나기 쉽고, 오타가 나면
+            메일이 안 오는 이유를 사용자가 알 수 없다. */}
+        <div className="flex flex-wrap gap-1.5">
+          {EMAIL_DOMAINS.map((domain) => (
+            <button
+              key={domain}
+              type="button"
+              onClick={() => setEmail(applyEmailDomain(email, domain))}
+              disabled={status === "sending"}
+              className="border border-hairline-strong px-2 py-1 font-mono text-xs text-stone hover:border-archive hover:text-ink disabled:opacity-60"
+            >
+              @{domain}
+            </button>
+          ))}
+        </div>
 
         {isPasswordMode ? (
           <>

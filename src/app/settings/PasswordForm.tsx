@@ -4,9 +4,11 @@ import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { PASSWORD_MIN_LENGTH, validatePassword } from "@/lib/validation";
 
-// 로그인 직후 안내 흐름에서는 저장하고 나면 갈 곳이 있어야 한다. 그냥 두면
+// setup: 로그인 직후 안내 흐름. 페이지가 이미 이유를 설명했으므로 폼은 같은
+// 말을 반복하지 않고, 저장하면 갈 곳(홈)이 있어야 한다 — 그냥 두면
 // "저장했어요"만 남고 다음 행동이 없는 막다른 화면이 된다.
-export function PasswordForm({ redirectOnSuccess }: { redirectOnSuccess?: string }) {
+export function PasswordForm({ variant }: { variant: "setup" | "settings" }) {
+  const isSetup = variant === "setup";
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [saving, setSaving] = useState(false);
@@ -49,8 +51,8 @@ export function PasswordForm({ redirectOnSuccess }: { redirectOnSuccess?: string
     setConfirm("");
     setSaved(true);
 
-    if (redirectOnSuccess) {
-      window.location.assign(redirectOnSuccess);
+    if (isSetup) {
+      window.location.assign("/");
     }
   }
 
@@ -59,8 +61,9 @@ export function PasswordForm({ redirectOnSuccess }: { redirectOnSuccess?: string
       <div className="flex flex-col gap-1">
         <h2 className="font-serif text-lg text-ink">비밀번호</h2>
         <p className="font-mono text-xs text-stone-faint">
-          설정해두면 다른 기기에서도 메일 없이 바로 로그인할 수 있어요.
-          {PASSWORD_MIN_LENGTH}자 이상.
+          {isSetup
+            ? `${PASSWORD_MIN_LENGTH}자 이상`
+            : `설정해두면 다른 기기에서도 메일 없이 바로 로그인할 수 있어요. ${PASSWORD_MIN_LENGTH}자 이상.`}
         </p>
       </div>
 
@@ -102,7 +105,9 @@ export function PasswordForm({ redirectOnSuccess }: { redirectOnSuccess?: string
         aria-live="polite"
         className={`min-h-4 font-mono text-xs ${saved ? "text-stone" : "text-archive"}`}
       >
-        {saved ? "비밀번호를 저장했어요." : message}
+        {saved
+          ? "비밀번호를 저장했어요. 다음부터 이 비밀번호로 로그인할 수 있어요."
+          : message}
       </p>
 
       <button
