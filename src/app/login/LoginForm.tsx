@@ -4,13 +4,16 @@ import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { isValidEmail } from "@/lib/validation";
 import { resolvePostLoginPath } from "@/lib/post-login";
-import { EMAIL_DOMAINS, applyEmailDomain } from "@/lib/email-domain";
+import { DIRECT_INPUT, EMAIL_DOMAINS, composeEmail } from "@/lib/email-domain";
 
 type Status = "idle" | "sending" | "sent" | "error";
 type Mode = "link" | "password";
 
 export function LoginForm({ initialError }: { initialError?: string }) {
-  const [email, setEmail] = useState("");
+  // 입력칸을 아이디/도메인으로 나눠 받고 제출 시점에 하나로 합친다.
+  const [localPart, setLocalPart] = useState("");
+  const [domain, setDomain] = useState("");
+  const email = composeEmail(localPart, domain);
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState<string | null>(
     initialError === "expired"
@@ -190,6 +193,10 @@ export function LoginForm({ initialError }: { initialError?: string }) {
   }
 
   const isPasswordMode = mode === "password";
+  // 목록에 없는 도메인을 직접 쳤으면 드롭다운은 "직접입력"을 가리켜야 한다.
+  const domainChoice = (EMAIL_DOMAINS as readonly string[]).includes(domain)
+    ? domain
+    : DIRECT_INPUT;
 
   return (
     <div className="flex flex-col gap-4">
@@ -198,36 +205,56 @@ export function LoginForm({ initialError }: { initialError?: string }) {
         className="flex flex-col gap-3"
       >
         <label
-          htmlFor="email"
+          htmlFor="email-local"
           className="font-mono text-xs uppercase tracking-wide text-stone"
         >
           이메일
         </label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          placeholder="you@example.com"
-          className="border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
-          disabled={status === "sending"}
-        />
-
         {/* 모바일에서 "@naver.com"을 직접 치면 오타가 나기 쉽고, 오타가 나면
-            메일이 안 오는 이유를 사용자가 알 수 없다. */}
-        <div className="flex flex-wrap gap-1.5">
-          {EMAIL_DOMAINS.map((domain) => (
-            <button
-              key={domain}
-              type="button"
-              onClick={() => setEmail(applyEmailDomain(email, domain))}
-              disabled={status === "sending"}
-              className="border border-hairline-strong px-2 py-1 font-mono text-xs text-stone hover:border-archive hover:text-ink disabled:opacity-60"
-            >
-              @{domain}
-            </button>
-          ))}
+            메일이 안 오는 이유를 사용자가 알 수 없다. min-w-0이 없으면 좁은
+            화면에서 입력칸이 내용 폭 밑으로 줄지 못해 가로로 넘친다. */}
+        <div className="flex items-center gap-2">
+          <input
+            id="email-local"
+            inputMode="email"
+            value={localPart}
+            onChange={(event) => setLocalPart(event.target.value)}
+            placeholder="아이디"
+            className="w-full min-w-0 flex-1 border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
+            disabled={status === "sending"}
+          />
+          <span aria-hidden="true" className="font-mono text-sm text-stone">
+            @
+          </span>
+          <input
+            id="email-domain"
+            aria-label="이메일 도메인"
+            inputMode="url"
+            value={domain}
+            onChange={(event) => setDomain(event.target.value)}
+            placeholder="도메인"
+            className="w-full min-w-0 flex-1 border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
+            disabled={status === "sending"}
+          />
         </div>
+        <select
+          aria-label="이메일 도메인 선택"
+          value={domainChoice}
+          onChange={(event) => {
+            const picked = event.target.value;
+            // 직접입력을 고르면 칸을 비워 사용자가 바로 칠 수 있게 한다.
+            setDomain(picked === DIRECT_INPUT ? "" : picked);
+          }}
+          className="border border-hairline-strong bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus-visible:border-archive"
+          disabled={status === "sending"}
+        >
+          <option value={DIRECT_INPUT}>{DIRECT_INPUT}</option>
+          {EMAIL_DOMAINS.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
 
         {isPasswordMode ? (
           <>

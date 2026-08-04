@@ -1,41 +1,37 @@
 import { describe, expect, it } from "vitest";
-import { EMAIL_DOMAINS, applyEmailDomain } from "./email-domain";
+import { DIRECT_INPUT, EMAIL_DOMAINS, composeEmail } from "./email-domain";
 
-describe("applyEmailDomain", () => {
-  it("appends the domain to a bare local part", () => {
-    expect(applyEmailDomain("reader", "gmail.com")).toBe("reader@gmail.com");
+describe("composeEmail", () => {
+  it("joins the local part and the domain", () => {
+    expect(composeEmail("reader", "gmail.com")).toBe("reader@gmail.com");
   });
 
-  it("completes an address that already ends with @", () => {
-    expect(applyEmailDomain("reader@", "naver.com")).toBe("reader@naver.com");
+  it("trims whitespace from both sides", () => {
+    expect(composeEmail("  reader ", " gmail.com ")).toBe("reader@gmail.com");
   });
 
-  // 도메인을 잘못 골랐을 때 지우고 다시 고르게 하지 않는다.
-  it("replaces an existing domain", () => {
-    expect(applyEmailDomain("reader@naver.com", "gmail.com")).toBe(
+  // 입력칸이 둘로 나뉘어 있어도 습관적으로 @를 같이 치는 사람이 있다.
+  it("drops a stray @ typed at the end of the local part", () => {
+    expect(composeEmail("reader@", "gmail.com")).toBe("reader@gmail.com");
+  });
+
+  it("drops a stray @ typed at the start of the domain", () => {
+    expect(composeEmail("reader", "@gmail.com")).toBe("reader@gmail.com");
+  });
+
+  it("keeps only the first segment when a full address is pasted into the local field", () => {
+    expect(composeEmail("reader@naver.com", "gmail.com")).toBe(
       "reader@gmail.com",
     );
   });
 
-  it("replaces a partially typed domain", () => {
-    expect(applyEmailDomain("reader@nav", "daum.net")).toBe("reader@daum.net");
+  // 비어 있어도 그대로 조합해서 이메일 검증이 잡게 둔다.
+  it("still composes when the domain is empty", () => {
+    expect(composeEmail("reader", "")).toBe("reader@");
   });
 
-  it("trims surrounding whitespace from the local part", () => {
-    expect(applyEmailDomain("  reader  ", "gmail.com")).toBe(
-      "reader@gmail.com",
-    );
-  });
-
-  // @가 여러 개면 첫 번째만 구분자로 본다.
-  it("keeps only the text before the first @", () => {
-    expect(applyEmailDomain("reader@a@b", "gmail.com")).toBe(
-      "reader@gmail.com",
-    );
-  });
-
-  it("still shows the domain when nothing has been typed yet", () => {
-    expect(applyEmailDomain("", "gmail.com")).toBe("@gmail.com");
+  it("still composes when the local part is empty", () => {
+    expect(composeEmail("", "gmail.com")).toBe("@gmail.com");
   });
 });
 
@@ -50,5 +46,10 @@ describe("EMAIL_DOMAINS", () => {
 
   it("stores bare domains without the @ prefix", () => {
     expect(EMAIL_DOMAINS.every((domain) => !domain.startsWith("@"))).toBe(true);
+  });
+
+  // 드롭다운의 "직접입력"이 실제 도메인과 겹치면 선택 상태를 구분할 수 없다.
+  it("does not collide with the direct-input sentinel", () => {
+    expect(EMAIL_DOMAINS).not.toContain(DIRECT_INPUT);
   });
 });
