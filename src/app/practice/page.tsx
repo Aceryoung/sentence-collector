@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getPublicDailyPick } from "@/lib/sentences";
 import { getUserStreak } from "@/lib/streak";
 import { PracticeCompleteButton } from "./PracticeCompleteButton";
+import { EmptyState } from "@/components/EmptyState";
 
 export default async function PracticePage() {
   const supabase = await createClient();
@@ -48,9 +49,10 @@ export default async function PracticePage() {
           )}
         </div>
       ) : (
-        <p className="text-center font-mono text-sm text-stone">
-          아직 필사할 문장이 없어요. 첫 문장을 등록해보세요.
-        </p>
+        <EmptyState
+          withMascot
+          message="아직 필사할 문장이 없어요. 첫 문장을 등록해보세요."
+        />
       )}
     </main>
   );

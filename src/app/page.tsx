@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { SentenceCard } from "@/components/SentenceCard";
+import { EmptyState } from "@/components/EmptyState";
 import {
   SENTENCE_WITH_LIKE_COUNT_SELECT,
   getPersonalDailyPick,
@@ -67,17 +68,18 @@ export default async function HomePage() {
           />
         ))
       ) : (
-        <div className="flex flex-col items-center gap-4 py-16">
-          <p className="text-center font-mono text-sm text-stone">
-            아직 등록된 문장이 없어요.
-          </p>
-          <Link
-            href="/write"
-            className="bg-archive px-4 py-2 font-mono text-sm text-archive-contrast"
-          >
-            첫 문장 남기기
-          </Link>
-        </div>
+        <EmptyState
+          withMascot
+          message="아직 등록된 문장이 없어요."
+          action={
+            <Link
+              href="/write"
+              className="bg-archive px-4 py-2 font-mono text-sm text-archive-contrast"
+            >
+              첫 문장 남기기
+            </Link>
+          }
+        />
       )}
     </main>
   );
