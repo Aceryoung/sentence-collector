@@ -5,7 +5,7 @@
  * 법정 기재사항이라 어긋나면 그 자체가 위반이 될 수 있어 한 곳에서 관리한다.
  */
 export const LEGAL = {
-  serviceName: "문장서고",
+  serviceName: "글적",
   operatorName: "퀵비즈랩",
   businessNumber: "836-21-02585",
   cpoName: "예득경",
@@ -13,7 +13,7 @@ export const LEGAL = {
   cpoPhone: "010-2349-9714",
   contactEmail: "qbizlab@gmail.com",
   effectiveDate: "2026년 8월 4일",
-  lastRevisedDate: "2026년 8월 4일",
+  lastRevisedDate: "2026년 8월 7일",
 } as const;
 
 /** 개인정보를 처리하는 해외 수탁자. 국외이전 고지(PIPA §28-8)의 근거가 된다. */

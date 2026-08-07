@@ -3,7 +3,7 @@ import { LEGAL, PROCESSORS } from "@/lib/legal";
 import { Article, LegalPage, List, P, Table } from "@/components/legal/LegalPage";
 
 export const metadata: Metadata = {
-  title: "개인정보 처리방침 | 문장서고",
+  title: "개인정보 처리방침",
 };
 
 export default function PrivacyPage() {

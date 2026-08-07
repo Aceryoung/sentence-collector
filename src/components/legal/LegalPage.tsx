@@ -31,7 +31,7 @@ export function LegalPage({
         href="/"
         className="mt-4 self-start font-mono text-xs text-stone underline underline-offset-4 hover:text-ink"
       >
-        ← 문장서고로 돌아가기
+        ← 글적으로 돌아가기
       </Link>
     </main>
   );

@@ -4,7 +4,7 @@ import { LEGAL } from "@/lib/legal";
 import { Article, LegalPage, List, P } from "@/components/legal/LegalPage";
 
 export const metadata: Metadata = {
-  title: "이용약관 | 문장서고",
+  title: "이용약관",
 };
 
 export default function TermsPage() {
@@ -13,7 +13,7 @@ export default function TermsPage() {
       <Article heading="제1조 목적">
         <P>
           이 약관은 {LEGAL.operatorName}(이하 &ldquo;회사&rdquo;)가 제공하는
-          문장서고 서비스(이하 &ldquo;서비스&rdquo;)의 이용 조건과 절차, 회사와
+          글적 서비스(이하 &ldquo;서비스&rdquo;)의 이용 조건과 절차, 회사와
           회원의 권리·의무 및 책임사항을 정하는 것을 목적으로 합니다.
         </P>
       </Article>

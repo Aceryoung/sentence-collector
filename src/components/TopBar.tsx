@@ -13,7 +13,7 @@ export async function TopBar() {
   return (
     <header className="bg-paper/90 sticky top-0 z-10 flex items-center justify-between gap-2 border-b border-hairline px-4 py-4 backdrop-blur sm:px-6">
       <Link href="/" className="shrink-0 font-serif text-base text-ink sm:text-lg">
-        문장서고<span className="text-archive">.</span>
+        글적<span className="text-archive">.</span>
       </Link>
       <nav className="flex items-center gap-2 font-mono text-xs whitespace-nowrap text-stone sm:gap-4">
         {/* 로그인 상태에서는 "보관함"(핵심 회수 경로)을 상시 노출하고 랭킹을 메뉴로

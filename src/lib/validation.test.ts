@@ -62,7 +62,7 @@ describe("validatePassword", () => {
   });
 
   it("accepts a long password", () => {
-    expect(validatePassword("문장서고에서쓰는아주긴비밀번호")).toBeNull();
+    expect(validatePassword("글적에서쓰는아주아주긴비밀번호")).toBeNull();
   });
 
   it("rejects an empty string", () => {

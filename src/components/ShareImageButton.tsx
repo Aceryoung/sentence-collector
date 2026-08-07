@@ -13,6 +13,21 @@ function subscribeNever() {
   return () => {};
 }
 
+let glyphPromise: Promise<HTMLImageElement | undefined> | null = null;
+
+/** 카드마다 다시 받지 않도록 한 번만 불러 재사용한다. */
+function loadGlyph(): Promise<HTMLImageElement | undefined> {
+  glyphPromise ??= new Promise((resolve) => {
+    // viewBox만 있는 SVG는 고유 크기가 없어 브라우저에 따라 래스터화에 실패한다.
+    // 크기를 먼저 박아두면 drawImage에서 다시 줄여도 안전하다.
+    const image = new Image(1412, 1017);
+    image.onload = () => resolve(image);
+    image.onerror = () => resolve(undefined);
+    image.src = "/brand/geuljeok-glyph.svg";
+  });
+  return glyphPromise;
+}
+
 export function ShareImageButton({ body, source }: Props) {
   const [error, setError] = useState<string | null>(null);
   // 모바일은 공유 시트가 열리고 데스크톱은 파일이 저장된다 — 실제 결과에 맞게
@@ -23,7 +38,7 @@ export function ShareImageButton({ body, source }: Props) {
     () => false,
   );
 
-  function handleClick() {
+  async function handleClick() {
     setError(null);
 
     const canvas = document.createElement("canvas");
@@ -32,7 +47,9 @@ export function ShareImageButton({ body, source }: Props) {
       return;
     }
 
-    const rendered = renderShareCard(canvas, { body, source });
+    // 로고를 못 불러와도 저장은 되어야 한다 — 서명만 워드마크로 떨어진다.
+    const glyph = await loadGlyph();
+    const rendered = renderShareCard(canvas, { body, source }, glyph);
     if (!rendered) {
       setError("이 브라우저에서는 이미지 저장을 지원하지 않아요.");
       return;

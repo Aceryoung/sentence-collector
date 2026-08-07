@@ -3,9 +3,31 @@ import { TopBar } from "@/components/TopBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sentence-collector-zeta.vercel.app";
+
+const DESCRIPTION = "문장을 모으고, 다시 꺼내보고, 나누는 곳";
+
 export const metadata: Metadata = {
-  title: "문장서고",
-  description: "문장을 모으고, 다시 꺼내보고, 나누는 곳",
+  // opengraph-image 를 절대 URL 로 뽑으려면 기준 주소가 있어야 한다.
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "글적",
+    template: "%s | 글적",
+  },
+  description: DESCRIPTION,
+  openGraph: {
+    title: "글적",
+    description: DESCRIPTION,
+    siteName: "글적",
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "글적",
+    description: DESCRIPTION,
+  },
 };
 
 export default function RootLayout({

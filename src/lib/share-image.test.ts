@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { computeCardHeight, wrapText } from "./share-image";
+import {
+  CANVAS_WIDTH,
+  computeCardHeight,
+  computeSignatureLayout,
+  wrapText,
+} from "./share-image";
 
 // 10px per character로 가정하는 가짜 measureText — 실제 Canvas 없이 줄바꿈 로직만 검증
 const CHAR_WIDTH = 10;
@@ -56,5 +61,36 @@ describe("computeCardHeight", () => {
     const deltaAtFiveLines =
       computeCardHeight(5, true) - computeCardHeight(5, false);
     expect(deltaAtThreeLines).toBe(deltaAtFiveLines);
+  });
+});
+
+describe("computeSignatureLayout", () => {
+  const CASES = [
+    [1, false],
+    [3, false],
+    [3, true],
+    [12, true],
+  ] as const;
+
+  it("keeps the signature inside the card for every content size", () => {
+    for (const [lines, hasSource] of CASES) {
+      const height = computeCardHeight(lines, hasSource);
+      const sig = computeSignatureLayout(lines, hasSource);
+      // 카드 안쪽 면(24px 인셋)을 넘지 않아야 한다.
+      expect(sig.top + sig.height).toBeLessThanOrEqual(height - 24);
+      expect(sig.right).toBeLessThanOrEqual(CANVAS_WIDTH - 24);
+    }
+  });
+
+  it("never overlaps the source tag", () => {
+    const withSource = computeSignatureLayout(3, true);
+    const withoutSource = computeSignatureLayout(3, false);
+    expect(withSource.top).toBeGreaterThan(withoutSource.top);
+  });
+
+  it("moves down as the body grows", () => {
+    expect(computeSignatureLayout(6, false).top).toBeGreaterThan(
+      computeSignatureLayout(3, false).top,
+    );
   });
 });

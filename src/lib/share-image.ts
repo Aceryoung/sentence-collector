@@ -3,7 +3,7 @@ export type ShareImageData = {
   source: string | null;
 };
 
-const CANVAS_WIDTH = 1080;
+export const CANVAS_WIDTH = 1080;
 const PADDING_X = 96;
 const PADDING_Y = 120;
 const BODY_FONT_SIZE = 52;
@@ -15,8 +15,20 @@ const SOURCE_TAG_PADDING_Y = 14;
 const SOURCE_BLOCK_HEIGHT =
   SOURCE_GAP + SOURCE_FONT_SIZE + SOURCE_TAG_PADDING_Y * 2;
 
+// 서명. 밖으로 나간 이미지가 서비스로 돌아올 유일한 단서라 항상 그린다.
+const SIGNATURE_GAP = 56;
+const SIGNATURE_HEIGHT = 32;
+const SIGNATURE_GLYPH_WIDTH = 54; // 글리프 viewBox 1412:1017 비율
+const SIGNATURE_TEXT = "글적";
+const SIGNATURE_TEXT_GAP = 12;
+const SIGNATURE_FONT_SIZE = 26;
+const SIGNATURE_BLOCK_HEIGHT = SIGNATURE_GAP + SIGNATURE_HEIGHT;
+// 서명 아래는 본문 여백만큼 띄울 필요가 없다. 그대로 두면 카드 하단이 텅 빈다.
+const SIGNATURE_BOTTOM_PADDING = 64;
+
 const BODY_FONT = `600 ${BODY_FONT_SIZE}px -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif`;
 const SOURCE_FONT = `${SOURCE_FONT_SIZE}px ui-monospace, "SF Mono", Menlo, "Courier New", monospace`;
+const SIGNATURE_FONT = `${SIGNATURE_FONT_SIZE}px ui-monospace, "SF Mono", Menlo, "Courier New", monospace`;
 
 const COLORS = {
   paper: "#faf9f6",
@@ -24,6 +36,7 @@ const COLORS = {
   ink: "#0a0a09",
   archive: "#6b4a2f",
   hairline: "#d8d5cc",
+  stoneFaint: "#b7b7b0",
 };
 
 function wrapParagraph(
@@ -60,17 +73,57 @@ export function wrapText(
   return lines;
 }
 
+/** 본문(과 출처)이 끝나는 y좌표. 서명은 이 아래에 놓인다. */
+function contentBottom(lineCount: number, hasSource: boolean): number {
+  return (
+    PADDING_Y +
+    lineCount * BODY_LINE_HEIGHT +
+    (hasSource ? SOURCE_BLOCK_HEIGHT : 0)
+  );
+}
+
 export function computeCardHeight(
   lineCount: number,
   hasSource: boolean,
 ): number {
-  const textHeight = lineCount * BODY_LINE_HEIGHT;
-  return PADDING_Y * 2 + textHeight + (hasSource ? SOURCE_BLOCK_HEIGHT : 0);
+  return (
+    contentBottom(lineCount, hasSource) +
+    SIGNATURE_BLOCK_HEIGHT +
+    SIGNATURE_BOTTOM_PADDING
+  );
+}
+
+export type SignatureLayout = {
+  top: number;
+  height: number;
+  right: number;
+};
+
+/**
+ * 서명 블록의 위치. 카드 우하단에 오른쪽 정렬한다.
+ *
+ * 가로 구성(글리프 + 워드마크)은 텍스트 실측이 필요해 렌더 시점에 하고,
+ * 여기서는 충돌이 날 수 있는 세로 위치와 오른쪽 끝만 정한다.
+ */
+export function computeSignatureLayout(
+  lineCount: number,
+  hasSource: boolean,
+): SignatureLayout {
+  return {
+    top: contentBottom(lineCount, hasSource) + SIGNATURE_GAP,
+    height: SIGNATURE_HEIGHT,
+    right: CANVAS_WIDTH - PADDING_X,
+  };
 }
 
 export function renderShareCard(
   canvas: HTMLCanvasElement,
   { body, source }: ShareImageData,
+  /**
+   * 로고 글리프. Canvas는 SVG를 직접 못 그려 호출부가 미리 불러 넘긴다.
+   * 없으면 워드마크만 그린다 — 서명이 통째로 빠지는 것보다 낫다.
+   */
+  glyph?: CanvasImageSource,
 ): boolean {
   const ctx = canvas.getContext("2d");
   if (!ctx) return false;
@@ -112,6 +165,33 @@ export function renderShareCard(
     ctx.fillStyle = COLORS.archive;
     ctx.fillText(source, PADDING_X + SOURCE_TAG_PADDING_X, tagY + SOURCE_TAG_PADDING_Y);
   }
+
+  const signature = computeSignatureLayout(lines.length, Boolean(source));
+  ctx.font = SIGNATURE_FONT;
+  const wordmarkWidth = ctx.measureText(SIGNATURE_TEXT).width;
+  const glyphWidth = glyph ? SIGNATURE_GLYPH_WIDTH + SIGNATURE_TEXT_GAP : 0;
+  const signatureLeft = signature.right - glyphWidth - wordmarkWidth;
+
+  if (glyph) {
+    const glyphHeight = (SIGNATURE_GLYPH_WIDTH * 1017) / 1412;
+    // 글리프는 검정으로 들어온다. 서명이 본문보다 세게 보이면 안 되므로 눌러 그린다.
+    ctx.globalAlpha = 0.62;
+    ctx.drawImage(
+      glyph,
+      signatureLeft,
+      signature.top + (signature.height - glyphHeight) / 2,
+      SIGNATURE_GLYPH_WIDTH,
+      glyphHeight,
+    );
+    ctx.globalAlpha = 1;
+  }
+
+  ctx.fillStyle = COLORS.stoneFaint;
+  ctx.fillText(
+    SIGNATURE_TEXT,
+    signatureLeft + glyphWidth,
+    signature.top + (signature.height - SIGNATURE_FONT_SIZE) / 2,
+  );
 
   return true;
 }
