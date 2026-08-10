@@ -7,6 +7,7 @@ export type SentenceCardData = {
   id: string;
   body: string;
   source: string | null;
+  commentary: string | null;
   likeCount: number;
 };
 
@@ -14,6 +15,7 @@ type RawSentenceRow = {
   id: string;
   body: string;
   source: string | null;
+  commentary: string | null;
   likes: { count: number }[] | null;
 };
 
@@ -22,12 +24,13 @@ export function toSentenceCardData(row: RawSentenceRow): SentenceCardData {
     id: row.id,
     body: row.body,
     source: row.source,
+    commentary: row.commentary,
     likeCount: row.likes?.[0]?.count ?? 0,
   };
 }
 
 export const SENTENCE_WITH_LIKE_COUNT_SELECT =
-  "id, body, source, created_at, likes(count)";
+  "id, body, source, commentary, created_at, likes(count)";
 
 async function fetchDailyPick(
   supabase: SupabaseServerClient,

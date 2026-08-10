@@ -70,7 +70,7 @@ export async function getRanking(
 
   const { data: sentenceRows } = await supabase
     .from("sentences")
-    .select("id, body, source, created_at")
+    .select("id, body, source, commentary, created_at")
     .in("id", distinctIds)
     .is("deleted_at", null);
 
@@ -83,7 +83,7 @@ export async function getRanking(
   const sentenceById = new Map(
     (sentenceRows ?? []).map((row) => [
       row.id as string,
-      { body: row.body as string, source: row.source as string | null },
+      { body: row.body as string, source: row.source as string | null, commentary: (row.commentary as string | null) ?? null },
     ]),
   );
 
@@ -97,6 +97,7 @@ export async function getRanking(
         id: entry.sentenceId,
         body: sentence.body,
         source: sentence.source,
+        commentary: sentence.commentary,
         likeCount: entry.likeCount,
       };
     });

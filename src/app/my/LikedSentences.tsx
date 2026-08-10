@@ -94,6 +94,7 @@ export function LikedSentences() {
           id={sentence.id}
           body={sentence.body}
           source={sentence.source}
+          commentary={sentence.commentary}
           likeCount={sentence.likeCount}
         />
       ))}

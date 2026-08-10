@@ -31,12 +31,12 @@ const SOURCE_FONT = `${SOURCE_FONT_SIZE}px ui-monospace, "SF Mono", Menlo, "Cour
 const SIGNATURE_FONT = `${SIGNATURE_FONT_SIZE}px ui-monospace, "SF Mono", Menlo, "Courier New", monospace`;
 
 const COLORS = {
-  paper: "#faf9f6",
+  paper: "#faf8f4",
   surface: "#ffffff",
-  ink: "#0a0a09",
-  archive: "#6b4a2f",
-  hairline: "#d8d5cc",
-  stoneFaint: "#b7b7b0",
+  ink: "#1a1816",
+  archive: "#8b6542",
+  hairline: "#d8d2c6",
+  stoneFaint: "#b5b0a7",
 };
 
 function wrapParagraph(

@@ -35,7 +35,7 @@ export default async function RankingPage({
           <Link
             key={p.value}
             href={`/ranking?period=${p.value}`}
-            className={`border px-3 py-1.5 ${
+            className={`rounded-[var(--radius-pill)] border px-3 py-1.5 ${
               p.value === period
                 ? "border-archive text-archive"
                 : "border-hairline-strong text-stone hover:text-ink"
@@ -60,6 +60,7 @@ export default async function RankingPage({
                   id={sentence.id}
                   body={sentence.body}
                   source={sentence.source}
+                  commentary={sentence.commentary}
                   likeCount={sentence.likeCount}
                 />
               </div>
@@ -73,7 +74,7 @@ export default async function RankingPage({
           </p>
           <Link
             href="/"
-            className="border border-hairline-strong px-4 py-2 font-mono text-sm text-ink hover:border-archive"
+            className="rounded-[var(--radius-pill)] border border-hairline-strong px-4 py-2 font-mono text-sm text-ink hover:border-archive"
           >
             문장 둘러보고 좋아요 남기기 →
           </Link>

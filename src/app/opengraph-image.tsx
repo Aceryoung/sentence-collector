@@ -17,7 +17,7 @@ export default function OpengraphImage() {
   const lockup = readFileSync(
     join(process.cwd(), "public/brand/geuljeok-lockup.svg"),
     "utf8",
-  ).replace(/currentColor/g, "#0a0a09");
+  ).replace(/currentColor/g, "#1a1816");
 
   return new ImageResponse(
     (
@@ -28,7 +28,7 @@ export default function OpengraphImage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#faf9f6",
+          background: "#faf8f4",
         }}
       >
         <img

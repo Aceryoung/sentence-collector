@@ -23,14 +23,14 @@ export default async function PracticePage() {
           <p className="font-serif text-2xl leading-loose break-words text-ink text-balance">
             {sentence.body}
           </p>
-          <span className="max-w-full border border-hairline-strong px-3 py-1 font-mono text-sm break-words text-stone">
+          <span className="max-w-full rounded-[var(--radius-pill)] border border-hairline-strong px-3 py-1 font-mono text-sm break-words text-stone">
             {sentence.source || "출처 미상"}
           </span>
 
           {user ? (
             <div className="flex flex-col items-center gap-3">
               {streak > 0 ? (
-                <span className="border border-archive px-3 py-1 font-mono text-xs text-archive">
+                <span className="rounded-[var(--radius-pill)] border border-archive px-3 py-1 font-mono text-xs text-archive">
                   {streak}일째 필사 중
                 </span>
               ) : null}

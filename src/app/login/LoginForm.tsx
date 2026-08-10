@@ -173,7 +173,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
             value={code}
             onChange={(event) => setCode(event.target.value)}
             placeholder="메일로 받은 숫자"
-            className="border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
+            className="rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
             disabled={verifying}
           />
           <p
@@ -186,7 +186,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
           <button
             type="submit"
             disabled={verifying}
-            className="border-none bg-archive px-3 py-3 font-mono text-sm text-archive-contrast disabled:opacity-60"
+            className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-3 font-mono text-sm text-archive-contrast disabled:opacity-60"
           >
             {verifying ? "확인하는 중…" : "코드로 로그인"}
           </button>
@@ -236,7 +236,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
             value={localPart}
             onChange={(event) => setLocalPart(event.target.value)}
             placeholder="아이디"
-            className="w-full min-w-0 flex-1 border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
+            className="w-full min-w-0 flex-1 rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
             disabled={status === "sending"}
           />
           <span aria-hidden="true" className="font-mono text-sm text-stone">
@@ -249,7 +249,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
             value={domain}
             onChange={(event) => setDomain(event.target.value)}
             placeholder="도메인"
-            className="w-full min-w-0 flex-1 border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
+            className="w-full min-w-0 flex-1 rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
             disabled={status === "sending"}
           />
         </div>
@@ -261,7 +261,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
             // 직접입력을 고르면 칸을 비워 사용자가 바로 칠 수 있게 한다.
             setDomain(picked === DIRECT_INPUT ? "" : picked);
           }}
-          className="border border-hairline-strong bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus-visible:border-archive"
+          className="rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus-visible:border-archive"
           disabled={status === "sending"}
         >
           <option value={DIRECT_INPUT}>{DIRECT_INPUT}</option>
@@ -286,7 +286,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
               autoComplete="current-password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
+              className="rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
               disabled={status === "sending"}
             />
           </>
@@ -333,7 +333,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
         <button
           type="submit"
           disabled={status === "sending"}
-          className="border-none bg-archive px-3 py-3 font-mono text-sm text-archive-contrast disabled:opacity-60"
+          className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-3 font-mono text-sm text-archive-contrast disabled:opacity-60"
         >
           {status === "sending"
             ? isPasswordMode

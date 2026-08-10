@@ -37,12 +37,12 @@ export function NavMenu() {
         onClick={() => setOpen((value) => !value)}
         aria-label="메뉴 열기"
         aria-expanded={open}
-        className="border border-hairline-strong px-2 py-1 text-sm hover:border-archive hover:text-ink"
+        className="rounded-[var(--radius-input)] border border-hairline-strong px-2 py-1 text-sm hover:border-archive hover:text-ink"
       >
         ⋯
       </button>
       {open ? (
-        <div className="absolute top-full right-0 z-20 mt-2 flex w-40 flex-col border border-hairline-strong bg-surface py-1 font-mono text-xs text-stone">
+        <div className="absolute top-full right-0 z-20 mt-2 flex w-40 flex-col overflow-hidden rounded-[var(--radius-card)] border border-hairline-strong bg-surface py-1 font-mono text-xs text-stone shadow-[var(--shadow-card)]">
           <Link
             href="/ranking"
             className="px-3 py-2 hover:bg-paper hover:text-ink"

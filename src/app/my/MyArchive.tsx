@@ -9,6 +9,7 @@ type Sentence = {
   id: string;
   body: string;
   source: string | null;
+  commentary: string | null;
   likeCount: number;
 };
 
@@ -33,7 +34,7 @@ export function MyArchive({ sentences }: { sentences: Sentence[] }) {
         action={
           <Link
             href="/write"
-            className="bg-archive px-4 py-2 font-mono text-sm text-archive-contrast"
+            className="rounded-[var(--radius-pill)] bg-archive px-4 py-2 font-mono text-sm text-archive-contrast"
           >
             첫 문장 남기기
           </Link>
@@ -49,7 +50,7 @@ export function MyArchive({ sentences }: { sentences: Sentence[] }) {
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         placeholder="문장이나 출처로 검색"
-        className="border border-hairline-strong bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus-visible:border-archive"
+        className="rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus-visible:border-archive"
       />
       {filtered.length === 0 ? (
         <p className="py-10 text-center font-mono text-sm text-stone">
@@ -62,6 +63,7 @@ export function MyArchive({ sentences }: { sentences: Sentence[] }) {
             id={sentence.id}
             body={sentence.body}
             source={sentence.source}
+            commentary={sentence.commentary}
             likeCount={sentence.likeCount}
           />
         ))

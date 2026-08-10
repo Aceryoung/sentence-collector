@@ -31,7 +31,7 @@ export async function TopBar() {
             </Link>
             <Link
               href="/write"
-              className="border-none bg-archive px-2.5 py-1.5 text-archive-contrast"
+              className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-1.5 text-archive-contrast"
             >
               <span aria-hidden="true">+</span>
               <span className="sr-only sm:not-sr-only sm:ml-1">등록</span>

@@ -4,6 +4,7 @@ import {
   validatePassword,
   validateSentenceBody,
   validateSource,
+  validateCommentary,
 } from "./validation";
 
 describe("isValidEmail", () => {
@@ -84,6 +85,42 @@ describe("validatePassword", () => {
     expect(validatePassword("       ")).toBe(
       "비밀번호는 8자 이상으로 입력해주세요.",
     );
+  });
+});
+
+describe("validateCommentary", () => {
+  it("rejects an empty string", () => {
+    expect(validateCommentary("")).toBe("나의 감상을 입력해주세요.");
+  });
+
+  it("rejects whitespace-only input", () => {
+    expect(validateCommentary("   ")).toBe("나의 감상을 입력해주세요.");
+  });
+
+  it("rejects commentary shorter than 30 characters", () => {
+    expect(validateCommentary("짧은 감상")).toBe(
+      "감상은 30자 이상 입력해주세요.",
+    );
+  });
+
+  it("accepts commentary at exactly 30 characters", () => {
+    expect(validateCommentary("가".repeat(30))).toBeNull();
+  });
+
+  it("accepts a normal commentary", () => {
+    expect(
+      validateCommentary("이 문장은 삶에서 선택의 순간마다 떠오르는 말이다. 완벽을 쫓기보다 솔직한 게 낫다는 뜻으로 읽힌다."),
+    ).toBeNull();
+  });
+
+  it("rejects commentary longer than 500 characters", () => {
+    expect(validateCommentary("가".repeat(501))).toBe(
+      "감상은 500자 이내로 입력해주세요.",
+    );
+  });
+
+  it("accepts commentary at exactly 500 characters", () => {
+    expect(validateCommentary("가".repeat(500))).toBeNull();
   });
 });
 
