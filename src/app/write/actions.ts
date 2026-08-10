@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { validateSentenceBody, validateSource, validateCommentary } from "@/lib/validation";
+import { validateSentenceBody, validateSource, validateCommentary, validateEmotionTag } from "@/lib/validation";
 
 export type CreateSentenceState = {
   error: string | null;
@@ -16,12 +16,16 @@ export async function createSentence(
   const body = String(formData.get("body") ?? "");
   const source = String(formData.get("source") ?? "");
   const commentary = String(formData.get("commentary") ?? "");
+  const emotionTag = String(formData.get("emotionTag") ?? "");
 
   const bodyError = validateSentenceBody(body);
   if (bodyError) return { error: bodyError };
 
   const sourceError = validateSource(source);
   if (sourceError) return { error: sourceError };
+
+  const emotionTagError = validateEmotionTag(emotionTag);
+  if (emotionTagError) return { error: emotionTagError };
 
   const commentaryError = validateCommentary(commentary);
   if (commentaryError) return { error: commentaryError };
@@ -39,7 +43,8 @@ export async function createSentence(
     author_id: user.id,
     body: body.trim(),
     source: source.trim() || null,
-    commentary: commentary.trim(),
+    commentary: commentary.trim() || null,
+    emotion_tag: emotionTag,
   });
 
   if (error) {

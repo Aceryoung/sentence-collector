@@ -5,6 +5,7 @@ import {
   validateSentenceBody,
   validateSource,
   validateCommentary,
+  validateEmotionTag,
 } from "./validation";
 
 describe("isValidEmail", () => {
@@ -89,27 +90,27 @@ describe("validatePassword", () => {
 });
 
 describe("validateCommentary", () => {
-  it("rejects an empty string", () => {
-    expect(validateCommentary("")).toBe("나의 감상을 입력해주세요.");
+  it("accepts an empty string (optional field)", () => {
+    expect(validateCommentary("")).toBeNull();
   });
 
-  it("rejects whitespace-only input", () => {
-    expect(validateCommentary("   ")).toBe("나의 감상을 입력해주세요.");
+  it("accepts whitespace-only input (treated as empty)", () => {
+    expect(validateCommentary("   ")).toBeNull();
   });
 
-  it("rejects commentary shorter than 30 characters", () => {
-    expect(validateCommentary("짧은 감상")).toBe(
-      "감상은 30자 이상 입력해주세요.",
+  it("rejects commentary shorter than 10 characters", () => {
+    expect(validateCommentary("짧은감상")).toBe(
+      "감상은 10자 이상 입력해주세요.",
     );
   });
 
-  it("accepts commentary at exactly 30 characters", () => {
-    expect(validateCommentary("가".repeat(30))).toBeNull();
+  it("accepts commentary at exactly 10 characters", () => {
+    expect(validateCommentary("가".repeat(10))).toBeNull();
   });
 
   it("accepts a normal commentary", () => {
     expect(
-      validateCommentary("이 문장은 삶에서 선택의 순간마다 떠오르는 말이다. 완벽을 쫓기보다 솔직한 게 낫다는 뜻으로 읽힌다."),
+      validateCommentary("이 문장은 삶에서 선택의 순간마다 떠오르는 말이다."),
     ).toBeNull();
   });
 
@@ -121,6 +122,22 @@ describe("validateCommentary", () => {
 
   it("accepts commentary at exactly 500 characters", () => {
     expect(validateCommentary("가".repeat(500))).toBeNull();
+  });
+});
+
+describe("validateEmotionTag", () => {
+  it("rejects an empty string", () => {
+    expect(validateEmotionTag("")).toBe("감정 태그를 선택해주세요.");
+  });
+
+  it("accepts a valid emotion tag", () => {
+    expect(validateEmotionTag("위로")).toBeNull();
+    expect(validateEmotionTag("동기부여")).toBeNull();
+    expect(validateEmotionTag("성찰")).toBeNull();
+  });
+
+  it("rejects an unknown tag", () => {
+    expect(validateEmotionTag("분노")).toBe("올바른 감정 태그를 선택해주세요.");
   });
 });
 

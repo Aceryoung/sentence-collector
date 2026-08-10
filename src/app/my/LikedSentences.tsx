@@ -95,6 +95,7 @@ export function LikedSentences() {
           body={sentence.body}
           source={sentence.source}
           commentary={sentence.commentary}
+          emotionTag={sentence.emotionTag}
           likeCount={sentence.likeCount}
         />
       ))}

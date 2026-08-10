@@ -61,6 +61,7 @@ export default async function RankingPage({
                   body={sentence.body}
                   source={sentence.source}
                   commentary={sentence.commentary}
+                  emotionTag={sentence.emotionTag}
                   likeCount={sentence.likeCount}
                 />
               </div>

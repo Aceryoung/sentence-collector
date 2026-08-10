@@ -43,6 +43,7 @@ export default async function HomePage() {
             body={dailyPick.body}
             source={dailyPick.source}
             commentary={dailyPick.commentary}
+            emotionTag={dailyPick.emotionTag}
             likeCount={dailyPick.likeCount}
           />
         </section>
@@ -66,6 +67,7 @@ export default async function HomePage() {
             body={sentence.body}
             source={sentence.source}
             commentary={sentence.commentary}
+            emotionTag={sentence.emotionTag}
             likeCount={sentence.likeCount}
           />
         ))

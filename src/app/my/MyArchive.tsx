@@ -10,6 +10,7 @@ type Sentence = {
   body: string;
   source: string | null;
   commentary: string | null;
+  emotionTag: string | null;
   likeCount: number;
 };
 
@@ -64,6 +65,7 @@ export function MyArchive({ sentences }: { sentences: Sentence[] }) {
             body={sentence.body}
             source={sentence.source}
             commentary={sentence.commentary}
+            emotionTag={sentence.emotionTag}
             likeCount={sentence.likeCount}
           />
         ))

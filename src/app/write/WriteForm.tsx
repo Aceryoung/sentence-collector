@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { createSentence, type CreateSentenceState } from "./actions";
-import { SENTENCE_BODY_MAX_LENGTH, SOURCE_MAX_LENGTH, COMMENTARY_MIN_LENGTH, COMMENTARY_MAX_LENGTH } from "@/lib/validation";
+import { SENTENCE_BODY_MAX_LENGTH, SOURCE_MAX_LENGTH, COMMENTARY_MIN_LENGTH, COMMENTARY_MAX_LENGTH, EMOTION_TAGS } from "@/lib/validation";
 
 const initialState: CreateSentenceState = { error: null };
 
@@ -16,6 +16,7 @@ export function WriteForm() {
   const [commentaryLength, setCommentaryLength] = useState(0);
   const commentaryShort = commentaryLength > 0 && commentaryLength < COMMENTARY_MIN_LENGTH;
   const commentaryNearLimit = commentaryLength > COMMENTARY_MAX_LENGTH - 20;
+  const [selectedTag, setSelectedTag] = useState("");
 
   return (
     <form action={formAction} className="flex flex-col gap-3">
@@ -54,11 +55,34 @@ export function WriteForm() {
         placeholder="예: 보르헤스"
       />
 
+      <label className="font-mono text-xs uppercase tracking-wide text-stone">
+        이 문장에서 느낀 감정
+      </label>
+      <input type="hidden" name="emotionTag" value={selectedTag} />
+      <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="감정 태그 선택">
+        {EMOTION_TAGS.map((tag) => (
+          <button
+            key={tag}
+            type="button"
+            role="radio"
+            aria-checked={selectedTag === tag}
+            onClick={() => setSelectedTag(selectedTag === tag ? "" : tag)}
+            className={`rounded-[var(--radius-pill)] border px-3 py-1.5 text-sm transition-colors ${
+              selectedTag === tag
+                ? "border-archive bg-archive text-archive-contrast"
+                : "border-hairline-strong bg-surface text-stone hover:border-archive/40 hover:text-ink"
+            }`}
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+
       <label
         htmlFor="commentary"
         className="font-mono text-xs uppercase tracking-wide text-stone"
       >
-        나의 감상 (필수)
+        나의 감상 (선택)
       </label>
       <textarea
         id="commentary"

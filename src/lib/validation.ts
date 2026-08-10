@@ -19,8 +19,21 @@ export function validatePassword(password: string): string | null {
 
 export const SENTENCE_BODY_MAX_LENGTH = 500;
 export const SOURCE_MAX_LENGTH = 200;
-export const COMMENTARY_MIN_LENGTH = 30;
+export const COMMENTARY_MIN_LENGTH = 10;
 export const COMMENTARY_MAX_LENGTH = 500;
+
+/** 감정 태그. 문장에 대한 주관적 분류로 창작적 개입을 구성한다. */
+export const EMOTION_TAGS = [
+  "위로",
+  "동기부여",
+  "사랑",
+  "깨달음",
+  "유머",
+  "그리움",
+  "용기",
+  "성찰",
+] as const;
+export type EmotionTag = (typeof EMOTION_TAGS)[number];
 
 export function validateSentenceBody(body: string): string | null {
   const trimmed = body.trim();
@@ -43,12 +56,23 @@ export function validateSource(source: string): string | null {
  * 해석·비평·감상을 30자 이상 필수로 받는다. 원문 인용이 주(主)이고 이용자
  * 창작이 종(從)이 되는 상황을 방지한다.
  */
+/**
+ * 감상 텍스트는 선택이지만, 입력하면 10자 이상이어야 한다.
+ * 감정 태그가 필수이므로 감상이 비어 있어도 창작적 개입은 존재한다.
+ */
 export function validateCommentary(commentary: string): string | null {
   const trimmed = commentary.trim();
-  if (trimmed.length === 0) return "나의 감상을 입력해주세요.";
+  if (trimmed.length === 0) return null; // 선택 필드
   if (trimmed.length < COMMENTARY_MIN_LENGTH)
     return `감상은 ${COMMENTARY_MIN_LENGTH}자 이상 입력해주세요.`;
   if (trimmed.length > COMMENTARY_MAX_LENGTH)
     return `감상은 ${COMMENTARY_MAX_LENGTH}자 이내로 입력해주세요.`;
+  return null;
+}
+
+export function validateEmotionTag(tag: string): string | null {
+  if (!tag) return "감정 태그를 선택해주세요.";
+  if (!(EMOTION_TAGS as readonly string[]).includes(tag))
+    return "올바른 감정 태그를 선택해주세요.";
   return null;
 }
