@@ -25,7 +25,7 @@ export default async function PracticePage() {
         <div className="flex w-full flex-col items-center gap-8 text-center">
           {/* 문장 카드 — 종이 질감 강조 */}
           <div className="w-full rounded-[var(--radius-card)] border border-hairline bg-surface px-8 py-10 shadow-[var(--shadow-card)]">
-            <p className="font-serif text-2xl leading-loose break-words text-ink text-balance">
+            <p className="user-text font-serif text-2xl leading-loose text-ink">
               {sentence.body}
             </p>
           </div>

@@ -40,7 +40,7 @@ export default async function SentenceDetailPage({
     <main className="mx-auto flex w-full max-w-xl flex-col gap-8 px-4 py-12">
       {/* 문장 본문 — 큰 화면 감상 */}
       <section className="flex flex-col items-center gap-6 text-center">
-        <p className="font-serif text-2xl leading-loose font-semibold break-words text-ink text-balance sm:text-3xl">
+        <p className="user-text font-serif text-2xl leading-loose font-semibold text-ink sm:text-3xl">
           {sentence.body}
         </p>
 
@@ -87,7 +87,7 @@ export default async function SentenceDetailPage({
                 key={r.id}
                 className="rounded-[var(--radius-card)] border border-hairline bg-surface px-5 py-4"
               >
-                <p className="leading-relaxed break-words text-ink">
+                <p className="user-text leading-relaxed text-ink">
                   {r.body}
                 </p>
                 <time className="mt-2 block text-xs text-stone-faint">

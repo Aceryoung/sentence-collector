@@ -66,7 +66,7 @@ export default async function NotificationsPage() {
                   <span className="font-semibold text-ink">{n.title}</span>
                 )}
                 {n.body ? (
-                  <p className="text-sm break-words text-stone">{n.body}</p>
+                  <p className="user-text text-sm text-stone">{n.body}</p>
                 ) : null}
                 <time className="text-xs text-stone-faint">
                   {new Date(n.created_at).toLocaleDateString("ko-KR")}

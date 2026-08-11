@@ -78,7 +78,7 @@ export default async function MyPage() {
         {recap.topSentence ? (
           <div className="rounded-[var(--radius-input)] border-l-2 border-archive pl-3">
             <p className="text-xs text-stone">최고 인기 문장</p>
-            <p className="break-words text-ink">{recap.topSentence.body}</p>
+            <p className="user-text text-ink">{recap.topSentence.body}</p>
           </div>
         ) : null}
       </section>
