@@ -41,7 +41,7 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label={isDark ? "라이트 모드로 전환" : "다크 모드로 전환"}
       title={isDark ? "라이트 모드로 전환" : "다크 모드로 전환"}
-      className="border border-hairline-strong px-2 py-1 text-sm hover:border-archive hover:text-ink"
+      className="rounded-[var(--radius-input)] border border-hairline-strong px-2 py-1 text-sm hover:border-archive hover:text-ink"
     >
       {isDark ? "☀" : "☾"}
     </button>

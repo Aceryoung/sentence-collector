@@ -42,13 +42,27 @@ export function NavMenu() {
         ⋯
       </button>
       {open ? (
-        <div className="absolute top-full right-0 z-20 mt-2 flex w-40 flex-col overflow-hidden rounded-[var(--radius-card)] border border-hairline-strong bg-surface py-1 font-mono text-xs text-stone shadow-[var(--shadow-card)]">
+        <div className="absolute top-full right-0 z-20 mt-2 flex w-40 flex-col overflow-hidden rounded-[var(--radius-card)] border border-hairline-strong bg-surface py-1 text-xs text-stone shadow-[var(--shadow-card)]">
           <Link
             href="/ranking"
             className="px-3 py-2 hover:bg-paper hover:text-ink"
             onClick={() => setOpen(false)}
           >
             랭킹
+          </Link>
+          <Link
+            href="/challenges"
+            className="px-3 py-2 hover:bg-paper hover:text-ink"
+            onClick={() => setOpen(false)}
+          >
+            챌린지
+          </Link>
+          <Link
+            href="/my/journey"
+            className="px-3 py-2 hover:bg-paper hover:text-ink"
+            onClick={() => setOpen(false)}
+          >
+            나의 여정
           </Link>
           <div className="flex items-center justify-between px-3 py-2">
             <span>테마</span>

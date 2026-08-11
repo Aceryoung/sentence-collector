@@ -17,12 +17,12 @@ export function PracticeCompleteButton({ sentenceId }: { sentenceId: string }) {
       <button
         type="submit"
         disabled={isPending}
-        className="rounded-[var(--radius-pill)] border-none bg-archive px-4 py-2 font-mono text-sm text-archive-contrast disabled:opacity-60"
+        className="rounded-[var(--radius-pill)] border-none bg-archive px-4 py-2 text-sm text-archive-contrast disabled:opacity-60"
       >
         {isPending ? "기록하는 중…" : "필사 완료로 표시"}
       </button>
       {state.error ? (
-        <p className="font-mono text-xs text-archive">{state.error}</p>
+        <p className="text-xs text-archive">{state.error}</p>
       ) : null}
     </form>
   );

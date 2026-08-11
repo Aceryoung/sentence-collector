@@ -8,7 +8,7 @@ import { LEGAL } from "@/lib/legal";
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-hairline px-4 py-6 sm:px-6">
-      <div className="mx-auto flex w-full max-w-xl flex-col gap-2 font-mono text-xs text-stone-faint">
+      <div className="mx-auto flex w-full max-w-xl flex-col gap-2 text-xs text-stone-faint">
         <div className="flex flex-wrap gap-x-4 gap-y-1">
           <Link href="/terms" className="hover:text-ink">
             이용약관

@@ -35,7 +35,7 @@ export default async function HomePage() {
     <main className="mx-auto flex w-full max-w-xl flex-col gap-3 px-4 py-8">
       {dailyPick && (
         <section className="flex flex-col gap-2">
-          <span className="font-mono text-xs text-archive">
+          <span className="text-xs italic text-archive">
             오늘 다시 보는 문장
           </span>
           <SentenceCard
@@ -52,9 +52,9 @@ export default async function HomePage() {
         href="/practice"
         className="flex items-center justify-between rounded-[var(--radius-card)] border border-hairline-strong bg-surface px-4 py-3 transition-colors hover:border-archive/40"
       >
-        <span className="font-mono text-sm text-ink">오늘의 필사 보러가기 →</span>
+        <span className="text-sm text-ink">오늘의 필사 보러가기 →</span>
         {userStreak && userStreak.streak > 0 ? (
-          <span className="rounded-[var(--radius-pill)] border border-archive px-2.5 py-0.5 font-mono text-xs text-archive">
+          <span className="rounded-[var(--radius-pill)] border border-archive px-2.5 py-0.5 text-xs text-archive">
             {userStreak.streak}일째
           </span>
         ) : null}
@@ -78,7 +78,7 @@ export default async function HomePage() {
           action={
             <Link
               href="/write"
-              className="rounded-[var(--radius-pill)] bg-archive px-4 py-2 font-mono text-sm text-archive-contrast"
+              className="rounded-[var(--radius-pill)] bg-archive px-4 py-2 text-sm text-archive-contrast"
             >
               첫 문장 남기기
             </Link>

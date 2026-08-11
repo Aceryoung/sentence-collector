@@ -17,12 +17,12 @@ export function EmptyState({
 }) {
   return (
     <div className="flex flex-col items-center gap-4 py-16">
-      {/* 마스코트를 아카이브 브라운으로 두면 아래 CTA 버튼과 강조가 둘로 갈린다.
+      {/* 마스코트를 액센트로 두면 아래 CTA 버튼과 강조가 둘로 갈린다.
           중립색으로 두고 강조는 버튼 하나만 가져간다. */}
       {withMascot ? (
         <BrandMascot className="h-24 w-[71px] text-stone" />
       ) : null}
-      <p className="text-center font-mono text-sm text-stone">{message}</p>
+      <p className="text-center text-sm text-stone">{message}</p>
       {action}
     </div>
   );

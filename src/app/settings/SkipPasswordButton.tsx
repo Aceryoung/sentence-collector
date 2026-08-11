@@ -20,7 +20,7 @@ export function SkipPasswordButton() {
       type="button"
       onClick={handleSkip}
       disabled={leaving}
-      className="self-start font-mono text-xs text-stone underline underline-offset-4 hover:text-ink disabled:opacity-60"
+      className="self-start text-xs text-stone underline underline-offset-4 hover:text-ink disabled:opacity-60"
     >
       {leaving ? "이동하는 중…" : "나중에 할게요"}
     </button>

@@ -29,8 +29,8 @@ export default async function RankingPage({
 
   return (
     <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-8">
-      <h1 className="font-serif text-xl text-ink">랭킹</h1>
-      <nav className="flex gap-2 font-mono text-xs">
+      <h1 className="font-serif text-xl font-bold text-ink">랭킹</h1>
+      <nav className="flex gap-2 text-xs">
         {PERIODS.map((p) => (
           <Link
             key={p.value}
@@ -45,14 +45,14 @@ export default async function RankingPage({
           </Link>
         ))}
       </nav>
-      <p className="font-mono text-xs text-stone">
+      <p className="text-xs text-stone">
         {formatKstDateDisplay(periodStart)} - {formatKstDateDisplay(now)}
       </p>
       {ranking.length > 0 ? (
         <ol className="flex flex-col gap-3">
           {ranking.map((sentence, index) => (
             <li key={sentence.id} className="flex items-start gap-3">
-              <span className="w-6 shrink-0 pt-5 text-right font-mono text-sm text-stone tabular-nums">
+              <span className="w-6 shrink-0 pt-5 text-right text-sm text-stone tabular-nums">
                 {index + 1}
               </span>
               <div className="flex-1">
@@ -70,12 +70,12 @@ export default async function RankingPage({
         </ol>
       ) : (
         <div className="flex flex-col items-center gap-4 py-16">
-          <p className="text-center font-mono text-sm text-stone">
+          <p className="text-center text-sm text-stone">
             아직 이 기간의 랭킹이 없어요.
           </p>
           <Link
             href="/"
-            className="rounded-[var(--radius-pill)] border border-hairline-strong px-4 py-2 font-mono text-sm text-ink hover:border-archive"
+            className="rounded-[var(--radius-pill)] border border-hairline-strong px-4 py-2 text-sm text-ink hover:border-archive"
           >
             문장 둘러보고 좋아요 남기기 →
           </Link>

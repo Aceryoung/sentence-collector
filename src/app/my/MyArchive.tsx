@@ -35,7 +35,7 @@ export function MyArchive({ sentences }: { sentences: Sentence[] }) {
         action={
           <Link
             href="/write"
-            className="rounded-[var(--radius-pill)] bg-archive px-4 py-2 font-mono text-sm text-archive-contrast"
+            className="rounded-[var(--radius-pill)] bg-archive px-4 py-2 text-sm text-archive-contrast"
           >
             첫 문장 남기기
           </Link>
@@ -51,10 +51,10 @@ export function MyArchive({ sentences }: { sentences: Sentence[] }) {
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         placeholder="문장이나 출처로 검색"
-        className="rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus-visible:border-archive"
+        className="rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 text-sm text-ink outline-none focus-visible:border-archive"
       />
       {filtered.length === 0 ? (
-        <p className="py-10 text-center font-mono text-sm text-stone">
+        <p className="py-10 text-center text-sm text-stone">
           &apos;{query}&apos;와 일치하는 문장이 없어요.
         </p>
       ) : (

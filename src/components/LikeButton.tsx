@@ -57,12 +57,12 @@ export function LikeButton({ sentenceId, initialCount }: Props) {
         onClick={handleClick}
         aria-pressed={state.liked}
         aria-label={state.liked ? "좋아요 취소" : "좋아요"}
-        className="flex min-h-11 min-w-11 items-center justify-center gap-1.5 px-2 font-mono text-sm text-stone tabular-nums hover:text-ink"
+        className="flex min-h-11 min-w-11 items-center justify-center gap-1.5 px-2 text-sm text-stone tabular-nums hover:text-ink"
       >
         <span aria-hidden="true">{state.liked ? "♥" : "♡"}</span>
         {state.count.toLocaleString("ko-KR")}
       </button>
-      {error ? <p className="font-mono text-xs text-archive">{error}</p> : null}
+      {error ? <p className="text-xs text-archive">{error}</p> : null}
     </div>
   );
 }

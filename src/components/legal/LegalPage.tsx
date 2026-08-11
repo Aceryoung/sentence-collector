@@ -17,8 +17,8 @@ export function LegalPage({
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-6 py-12">
       <div className="flex flex-col gap-1">
-        <h1 className="font-serif text-2xl text-ink">{title}</h1>
-        <p className="font-mono text-xs text-stone-faint">
+        <h1 className="font-serif text-2xl font-bold text-ink">{title}</h1>
+        <p className="text-xs text-stone-faint">
           시행일 {effectiveDate}
         </p>
       </div>
@@ -29,7 +29,7 @@ export function LegalPage({
 
       <Link
         href="/"
-        className="mt-4 self-start font-mono text-xs text-stone underline underline-offset-4 hover:text-ink"
+        className="mt-4 self-start text-xs text-stone underline underline-offset-4 hover:text-ink"
       >
         ← 글적으로 돌아가기
       </Link>
@@ -46,7 +46,7 @@ export function Article({
 }) {
   return (
     <section className="flex flex-col gap-2">
-      <h2 className="font-serif text-lg text-ink">{heading}</h2>
+      <h2 className="font-serif text-lg font-bold text-ink">{heading}</h2>
       {children}
     </section>
   );
@@ -76,7 +76,7 @@ export function Table({
 }) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-lg border-collapse text-left font-mono text-xs">
+      <table className="w-full min-w-lg border-collapse text-left text-xs">
         <thead>
           <tr className="border-b border-hairline-strong">
             {headers.map((header) => (

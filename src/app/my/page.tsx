@@ -38,9 +38,9 @@ export default async function MyPage() {
   return (
     <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-8">
       <div className="flex items-center justify-between">
-        <h1 className="font-serif text-xl text-ink">내 보관함</h1>
+        <h1 className="font-serif text-xl font-bold text-ink">내 보관함</h1>
         {userStreak.streak > 0 ? (
-          <span className="rounded-[var(--radius-pill)] border border-archive px-2.5 py-0.5 font-mono text-xs text-archive">
+          <span className="rounded-[var(--radius-pill)] border border-archive px-2.5 py-0.5 text-xs text-archive">
             {userStreak.streak}일째 필사 중
           </span>
         ) : null}
@@ -48,10 +48,10 @@ export default async function MyPage() {
 
       <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-hairline-strong bg-surface px-6 py-5 shadow-[var(--shadow-card)]">
         <div className="flex items-center justify-between">
-          <h2 className="font-mono text-xs uppercase tracking-wide text-stone">
+          <h2 className="text-xs uppercase tracking-wide text-stone">
             이번 달 요약
           </h2>
-          <span className="font-mono text-xs text-stone-faint">
+          <span className="text-xs text-stone-faint">
             {formatKstDateDisplay(periodStart)} - {formatKstDateDisplay(now)}
           </span>
         </div>
@@ -59,25 +59,25 @@ export default async function MyPage() {
         {hasActivity ? (
           <div className="flex gap-8">
             <div>
-              <p className="font-mono text-xs text-stone">등록한 문장</p>
+              <p className="text-xs text-stone">등록한 문장</p>
               <p className="font-serif text-lg text-ink">
                 {recap.sentenceCountThisPeriod}개
               </p>
             </div>
             <div>
-              <p className="font-mono text-xs text-stone">받은 좋아요</p>
+              <p className="text-xs text-stone">받은 좋아요</p>
               <p className="font-serif text-lg text-ink">{recap.totalLikes}개</p>
             </div>
           </div>
         ) : (
-          <p className="font-mono text-sm text-stone">
+          <p className="text-sm text-stone">
             이번 달엔 아직 활동이 없어요.
           </p>
         )}
 
         {recap.topSentence ? (
           <div className="rounded-[var(--radius-input)] border-l-2 border-archive pl-3">
-            <p className="font-mono text-xs text-stone">최고 인기 문장</p>
+            <p className="text-xs text-stone">최고 인기 문장</p>
             <p className="break-words text-ink">{recap.topSentence.body}</p>
           </div>
         ) : null}
@@ -86,19 +86,27 @@ export default async function MyPage() {
       <MyArchive sentences={sentences} />
 
       <div className="mt-4 flex flex-col gap-1">
-        <h2 className="font-serif text-lg text-ink">내가 좋아요한 문장</h2>
-        <p className="font-mono text-xs text-stone-faint">
+        <h2 className="font-serif text-lg font-bold text-ink">내가 좋아요한 문장</h2>
+        <p className="text-xs text-stone-faint">
           이 기기에서 누른 좋아요만 보여요
         </p>
       </div>
       <LikedSentences />
 
-      <Link
-        href="/settings"
-        className="mt-6 self-start font-mono text-xs text-stone underline underline-offset-4 hover:text-ink"
-      >
-        계정 설정 (비밀번호) →
-      </Link>
+      <div className="mt-6 flex flex-col gap-2">
+        <Link
+          href="/my/journey"
+          className="flex items-center justify-between rounded-[var(--radius-card)] border border-hairline-strong bg-surface px-4 py-3 transition-colors hover:border-archive/40"
+        >
+          <span className="text-sm text-ink">나의 여정 — 통계 및 성취 →</span>
+        </Link>
+        <Link
+          href="/settings"
+          className="self-start text-xs text-stone underline underline-offset-4 hover:text-ink"
+        >
+          계정 설정 (비밀번호) →
+        </Link>
+      </div>
     </main>
   );
 }

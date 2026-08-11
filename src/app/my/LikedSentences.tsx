@@ -64,7 +64,7 @@ export function LikedSentences() {
 
   if (state.status === "loading") {
     return (
-      <p className="py-6 text-center font-mono text-sm text-stone">
+      <p className="py-6 text-center text-sm text-stone">
         불러오는 중…
       </p>
     );
@@ -72,7 +72,7 @@ export function LikedSentences() {
 
   if (state.status === "error") {
     return (
-      <p className="py-6 text-center font-mono text-sm text-stone">
+      <p className="py-6 text-center text-sm text-stone">
         좋아요한 문장을 불러오지 못했어요.
       </p>
     );
@@ -80,7 +80,7 @@ export function LikedSentences() {
 
   if (state.sentences.length === 0) {
     return (
-      <p className="py-6 text-center font-mono text-sm text-stone">
+      <p className="py-6 text-center text-sm text-stone">
         아직 좋아요한 문장이 없어요.
       </p>
     );

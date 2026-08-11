@@ -153,13 +153,13 @@ export function LoginForm({ initialError }: { initialError?: string }) {
   if (status === "sent") {
     return (
       <div className="flex flex-col gap-5">
-        <p className="font-mono text-sm text-stone">
+        <p className="text-sm text-stone">
           메일함을 확인해주세요. {email}로 로그인 링크와 인증 코드를 보냈어요.
         </p>
         <form onSubmit={handleVerifyCode} className="flex flex-col gap-3">
           <label
             htmlFor="code"
-            className="font-mono text-xs uppercase tracking-wide text-stone"
+            className="text-xs uppercase tracking-wide text-stone"
           >
             다른 기기/브라우저라면 인증 코드 입력
           </label>
@@ -179,14 +179,14 @@ export function LoginForm({ initialError }: { initialError?: string }) {
           <p
             role="status"
             aria-live="polite"
-            className="min-h-4 font-mono text-xs text-archive"
+            className="min-h-4 text-xs text-archive"
           >
             {codeError}
           </p>
           <button
             type="submit"
             disabled={verifying}
-            className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-3 font-mono text-sm text-archive-contrast disabled:opacity-60"
+            className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-3 text-sm text-archive-contrast disabled:opacity-60"
           >
             {verifying ? "확인하는 중…" : "코드로 로그인"}
           </button>
@@ -200,7 +200,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
             setCode("");
             setCodeError(null);
           }}
-          className="self-start font-mono text-xs text-stone underline underline-offset-4 hover:text-ink"
+          className="self-start text-xs text-stone underline underline-offset-4 hover:text-ink"
         >
           메일이 안 왔거나 주소를 잘못 썼나요? 다시 받기
         </button>
@@ -222,7 +222,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
       >
         <label
           htmlFor="email-local"
-          className="font-mono text-xs uppercase tracking-wide text-stone"
+          className="text-xs uppercase tracking-wide text-stone"
         >
           이메일
         </label>
@@ -239,7 +239,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
             className="w-full min-w-0 flex-1 rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
             disabled={status === "sending"}
           />
-          <span aria-hidden="true" className="font-mono text-sm text-stone">
+          <span aria-hidden="true" className="text-sm text-stone">
             @
           </span>
           <input
@@ -261,7 +261,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
             // 직접입력을 고르면 칸을 비워 사용자가 바로 칠 수 있게 한다.
             setDomain(picked === DIRECT_INPUT ? "" : picked);
           }}
-          className="rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus-visible:border-archive"
+          className="rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 text-sm text-ink outline-none focus-visible:border-archive"
           disabled={status === "sending"}
         >
           <option value={DIRECT_INPUT}>{DIRECT_INPUT}</option>
@@ -276,7 +276,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
           <>
             <label
               htmlFor="password"
-              className="font-mono text-xs uppercase tracking-wide text-stone"
+              className="text-xs uppercase tracking-wide text-stone"
             >
               비밀번호
             </label>
@@ -324,7 +324,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
         <p
           role="status"
           aria-live="polite"
-          className="min-h-4 font-mono text-xs text-archive"
+          className="min-h-4 text-xs text-archive"
         >
           {resetSent
             ? "비밀번호 재설정 메일을 보냈어요. 메일함을 확인해주세요."
@@ -333,7 +333,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
         <button
           type="submit"
           disabled={status === "sending"}
-          className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-3 font-mono text-sm text-archive-contrast disabled:opacity-60"
+          className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-3 text-sm text-archive-contrast disabled:opacity-60"
         >
           {status === "sending"
             ? isPasswordMode
@@ -347,7 +347,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
 
       {/* 매직링크를 기본으로 두고 비밀번호는 선택 경로로 남긴다 — 비밀번호는
           설정한 사람만 쓸 수 있고, 처음 오는 사람에게는 계정이 없기 때문이다. */}
-      <div className="flex flex-col items-start gap-2 font-mono text-xs text-stone">
+      <div className="flex flex-col items-start gap-2 text-xs text-stone">
         <button
           type="button"
           onClick={() => {

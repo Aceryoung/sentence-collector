@@ -22,7 +22,7 @@ export function WriteForm() {
     <form action={formAction} className="flex flex-col gap-3">
       <label
         htmlFor="body"
-        className="font-mono text-xs uppercase tracking-wide text-stone"
+        className="text-xs uppercase tracking-wide text-stone"
       >
         문장
       </label>
@@ -36,14 +36,14 @@ export function WriteForm() {
         placeholder="마음에 드는 문장을 나눠주세요"
       />
       <p
-        className={`self-end font-mono text-xs ${nearLimit ? "text-archive" : "text-stone-faint"}`}
+        className={`self-end text-xs ${nearLimit ? "text-archive" : "text-stone-faint"}`}
       >
         {bodyLength}/{SENTENCE_BODY_MAX_LENGTH}
       </p>
 
       <label
         htmlFor="source"
-        className="font-mono text-xs uppercase tracking-wide text-stone"
+        className="text-xs uppercase tracking-wide text-stone"
       >
         출처 (선택)
       </label>
@@ -55,7 +55,7 @@ export function WriteForm() {
         placeholder="예: 보르헤스"
       />
 
-      <label className="font-mono text-xs uppercase tracking-wide text-stone">
+      <label className="text-xs uppercase tracking-wide text-stone">
         이 문장에서 느낀 감정
       </label>
       <input type="hidden" name="emotionTag" value={selectedTag} />
@@ -80,7 +80,7 @@ export function WriteForm() {
 
       <label
         htmlFor="commentary"
-        className="font-mono text-xs uppercase tracking-wide text-stone"
+        className="text-xs uppercase tracking-wide text-stone"
       >
         나의 감상 (선택)
       </label>
@@ -94,7 +94,7 @@ export function WriteForm() {
         placeholder="이 문장이 마음에 든 이유, 나만의 해석이나 느낀 점을 적어주세요"
       />
       <p
-        className={`self-end font-mono text-xs ${
+        className={`self-end text-xs ${
           commentaryShort
             ? "text-archive"
             : commentaryNearLimit
@@ -107,13 +107,13 @@ export function WriteForm() {
       </p>
 
       {state.error ? (
-        <p className="font-mono text-xs text-archive">{state.error}</p>
+        <p className="text-xs text-archive">{state.error}</p>
       ) : null}
 
       <button
         type="submit"
         disabled={isPending}
-        className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-2 font-mono text-sm text-archive-contrast disabled:opacity-60"
+        className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-2 text-sm text-archive-contrast disabled:opacity-60"
       >
         {isPending ? "등록하는 중…" : "등록하기"}
       </button>

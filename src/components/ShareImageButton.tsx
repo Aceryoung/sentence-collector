@@ -84,12 +84,12 @@ export function ShareImageButton({ body, source }: Props) {
       <button
         type="button"
         onClick={handleClick}
-        className="border border-hairline-strong px-2 py-1 font-mono text-xs text-stone hover:border-archive hover:text-ink"
+        className="rounded-[var(--radius-input)] border border-hairline-strong px-2 py-1 text-xs text-stone hover:border-archive hover:text-ink"
       >
         {canShareFiles ? "이미지로 공유" : "이미지로 저장"}
       </button>
       {error ? (
-        <p className="font-mono text-xs text-archive">{error}</p>
+        <p className="text-xs text-archive">{error}</p>
       ) : null}
     </div>
   );
