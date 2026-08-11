@@ -22,7 +22,7 @@ export function WriteForm() {
     <form action={formAction} className="flex flex-col gap-3">
       <label
         htmlFor="body"
-        className="text-xs uppercase tracking-wide text-stone"
+        className="text-xs font-bold uppercase tracking-widest text-stone"
       >
         문장
       </label>
@@ -32,7 +32,7 @@ export function WriteForm() {
         rows={5}
         maxLength={SENTENCE_BODY_MAX_LENGTH}
         onChange={(event) => setBodyLength(event.target.value.length)}
-        className="resize-none rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
+        className="resize-none rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-4 py-3 text-ink leading-relaxed outline-none transition-colors focus-visible:border-cta focus-visible:shadow-[0_0_0_1px_var(--cta)]"
         placeholder="마음에 드는 문장을 나눠주세요"
       />
       <p
@@ -43,7 +43,7 @@ export function WriteForm() {
 
       <label
         htmlFor="source"
-        className="text-xs uppercase tracking-wide text-stone"
+        className="text-xs font-bold uppercase tracking-widest text-stone"
       >
         출처 (선택)
       </label>
@@ -51,11 +51,11 @@ export function WriteForm() {
         id="source"
         name="source"
         maxLength={SOURCE_MAX_LENGTH}
-        className="rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
+        className="rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-4 py-3 text-ink outline-none transition-colors focus-visible:border-cta focus-visible:shadow-[0_0_0_1px_var(--cta)]"
         placeholder="예: 보르헤스"
       />
 
-      <label className="text-xs uppercase tracking-wide text-stone">
+      <label className="text-xs font-bold uppercase tracking-widest text-stone">
         이 문장에서 느낀 감정
       </label>
       <input type="hidden" name="emotionTag" value={selectedTag} />
@@ -80,7 +80,7 @@ export function WriteForm() {
 
       <label
         htmlFor="commentary"
-        className="text-xs uppercase tracking-wide text-stone"
+        className="text-xs font-bold uppercase tracking-widest text-stone"
       >
         나의 감상 (선택)
       </label>
@@ -90,7 +90,7 @@ export function WriteForm() {
         rows={3}
         maxLength={COMMENTARY_MAX_LENGTH}
         onChange={(event) => setCommentaryLength(event.target.value.length)}
-        className="resize-none rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 text-ink outline-none focus-visible:border-archive"
+        className="resize-none rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-4 py-3 text-ink italic leading-relaxed outline-none transition-colors focus-visible:border-cta focus-visible:shadow-[0_0_0_1px_var(--cta)]"
         placeholder="이 문장이 마음에 든 이유, 나만의 해석이나 느낀 점을 적어주세요"
       />
       <p
@@ -113,7 +113,7 @@ export function WriteForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-2 text-sm text-archive-contrast disabled:opacity-60"
+        className="rounded-[var(--radius-pill)] border-none bg-cta px-4 py-2.5 text-sm font-bold text-cta-contrast transition-colors hover:bg-cta-hover disabled:opacity-60"
       >
         {isPending ? "등록하는 중…" : "등록하기"}
       </button>

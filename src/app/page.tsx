@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { SentenceCard } from "@/components/SentenceCard";
 import { EmptyState } from "@/components/EmptyState";
+import { BrandMascot } from "@/components/BrandMascot";
 import {
   SENTENCE_WITH_LIKE_COUNT_SELECT,
   getPersonalDailyPick,
@@ -25,19 +26,51 @@ export default async function HomePage() {
     user ? getUserStreak(supabase, user.id) : Promise.resolve(null),
   ]);
 
-  // 다시보기 카드로 이미 위에 노출된 문장은 피드에서 제외 — 같은 카드가 한 화면에
-  // 두 번 보이는 중복을 없앤다.
+  // 다시보기 카드로 이미 위에 노출된 문장은 피드에서 제외
   const sentences = (data ?? [])
     .map(toSentenceCardData)
     .filter((sentence) => sentence.id !== dailyPick?.id);
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-3 px-4 py-8">
-      {dailyPick && (
-        <section className="flex flex-col gap-2">
-          <span className="text-xs italic text-archive">
-            오늘 다시 보는 문장
+    <main className="mx-auto flex w-full max-w-xl flex-col gap-5 px-4 py-8">
+      {/* 히어로 섹션 — 슬로건 + 마스코트 */}
+      <section className="flex items-center gap-5 rounded-[var(--radius-card)] border border-hairline bg-surface px-6 py-6 shadow-[var(--shadow-card)]">
+        <BrandMascot className="hidden h-16 w-[47px] shrink-0 text-archive sm:block" />
+        <div className="flex flex-col gap-1.5">
+          <h1 className="font-serif text-lg font-bold text-ink sm:text-xl">
+            마음에 닿은 문장을 모으다
+          </h1>
+          <p className="text-sm leading-relaxed text-stone">
+            읽고, 쓰고, 필사하며 나만의 문장 아카이브를 만들어보세요.
+          </p>
+        </div>
+      </section>
+
+      {/* 오늘의 필사 CTA — Deep Ink Blue solid */}
+      <Link
+        href="/practice"
+        className="group flex items-center justify-between rounded-[var(--radius-card)] bg-cta px-5 py-3.5 transition-colors hover:bg-cta-hover"
+      >
+        <span className="text-sm font-bold text-cta-contrast">
+          오늘의 필사 보러가기 →
+        </span>
+        {userStreak && userStreak.streak > 0 ? (
+          <span className="rounded-[var(--radius-pill)] bg-cta-contrast/15 px-2.5 py-0.5 text-xs font-bold text-cta-contrast">
+            🔥 {userStreak.streak}일째
           </span>
+        ) : null}
+      </Link>
+
+      {/* 오늘 다시 보는 문장 — 큐레이션 */}
+      {dailyPick && (
+        <section className="flex flex-col gap-2.5">
+          <div className="flex items-center gap-2">
+            <span className="h-px flex-1 bg-hairline" />
+            <span className="text-xs font-bold uppercase tracking-widest text-coral">
+              오늘 다시 보는 문장
+            </span>
+            <span className="h-px flex-1 bg-hairline" />
+          </div>
           <SentenceCard
             id={dailyPick.id}
             body={dailyPick.body}
@@ -48,29 +81,25 @@ export default async function HomePage() {
           />
         </section>
       )}
-      <Link
-        href="/practice"
-        className="flex items-center justify-between rounded-[var(--radius-card)] border border-hairline-strong bg-surface px-4 py-3 transition-colors hover:border-archive/40"
-      >
-        <span className="text-sm text-ink">오늘의 필사 보러가기 →</span>
-        {userStreak && userStreak.streak > 0 ? (
-          <span className="rounded-[var(--radius-pill)] border border-archive px-2.5 py-0.5 text-xs text-archive">
-            {userStreak.streak}일째
-          </span>
-        ) : null}
-      </Link>
+
+      {/* 발견하기 — 문장 피드 */}
       {sentences.length > 0 ? (
-        sentences.map((sentence) => (
-          <SentenceCard
-            key={sentence.id}
-            id={sentence.id}
-            body={sentence.body}
-            source={sentence.source}
-            commentary={sentence.commentary}
-            emotionTag={sentence.emotionTag}
-            likeCount={sentence.likeCount}
-          />
-        ))
+        <section className="flex flex-col gap-3">
+          <h2 className="text-xs font-bold uppercase tracking-widest text-stone">
+            발견하기
+          </h2>
+          {sentences.map((sentence) => (
+            <SentenceCard
+              key={sentence.id}
+              id={sentence.id}
+              body={sentence.body}
+              source={sentence.source}
+              commentary={sentence.commentary}
+              emotionTag={sentence.emotionTag}
+              likeCount={sentence.likeCount}
+            />
+          ))}
+        </section>
       ) : (
         <EmptyState
           withMascot
@@ -78,7 +107,7 @@ export default async function HomePage() {
           action={
             <Link
               href="/write"
-              className="rounded-[var(--radius-pill)] bg-archive px-4 py-2 text-sm text-archive-contrast"
+              className="rounded-[var(--radius-pill)] bg-cta px-5 py-2.5 text-sm font-bold text-cta-contrast transition-colors hover:bg-cta-hover"
             >
               첫 문장 남기기
             </Link>

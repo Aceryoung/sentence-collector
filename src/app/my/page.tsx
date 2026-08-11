@@ -46,9 +46,9 @@ export default async function MyPage() {
         ) : null}
       </div>
 
-      <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-hairline-strong bg-surface px-6 py-5 shadow-[var(--shadow-card)]">
+      <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-hairline bg-surface px-6 py-5 shadow-[var(--shadow-card)]">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs uppercase tracking-wide text-stone">
+          <h2 className="text-xs font-bold uppercase tracking-widest text-stone">
             이번 달 요약
           </h2>
           <span className="text-xs text-stone-faint">
@@ -93,12 +93,13 @@ export default async function MyPage() {
       </div>
       <LikedSentences />
 
-      <div className="mt-6 flex flex-col gap-2">
+      <div className="mt-6 flex flex-col gap-3">
         <Link
           href="/my/journey"
-          className="flex items-center justify-between rounded-[var(--radius-card)] border border-hairline-strong bg-surface px-4 py-3 transition-colors hover:border-archive/40"
+          className="group flex items-center justify-between rounded-[var(--radius-card)] border border-coral/20 bg-coral-soft px-5 py-3.5 transition-all hover:border-coral/40 hover:shadow-[var(--shadow-card)]"
         >
-          <span className="text-sm text-ink">나의 여정 — 통계 및 성취 →</span>
+          <span className="text-sm font-bold text-ink">나의 여정 — 통계 및 성취</span>
+          <span className="text-coral transition-transform group-hover:translate-x-0.5">→</span>
         </Link>
         <Link
           href="/settings"

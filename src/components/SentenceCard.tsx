@@ -13,7 +13,7 @@ type Props = {
 
 export function SentenceCard({ id, body, source, commentary, emotionTag, likeCount }: Props) {
   return (
-    <article className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-hairline bg-surface px-6 py-5 shadow-[var(--shadow-card)] transition-colors hover:border-archive/40">
+    <article className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-hairline bg-surface px-6 py-5 shadow-[var(--shadow-card)] transition-all hover:border-archive/40 hover:shadow-[var(--shadow-card-hover)]">
       <Link href={`/sentences/${id}`} className="flex flex-col gap-4">
         <p className="text-lg leading-relaxed font-semibold break-words text-ink text-balance">
           {body}

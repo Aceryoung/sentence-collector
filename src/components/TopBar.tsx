@@ -48,7 +48,7 @@ export async function TopBar() {
             <NotificationBadge count={unreadCount} />
             <Link
               href="/write"
-              className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-1.5 text-archive-contrast"
+              className="rounded-[var(--radius-pill)] border-none bg-cta px-3 py-1.5 font-bold text-cta-contrast transition-colors hover:bg-cta-hover"
             >
               <span aria-hidden="true">+</span>
               <span className="sr-only sm:not-sr-only sm:ml-1">등록</span>

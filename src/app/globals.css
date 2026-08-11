@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 /* Ink Note Narrative (light) / Nocturnal Inkwell (dark)
-   Literata 세리프 중심, 종이와 잉크의 아날로그 질감을 디지털로 옮긴다. */
+   Literata 세리프 중심, 종이와 잉크의 아날로그 질감을 디지털로 옮긴다.
+   v2: Deep Ink Blue CTA + Accented Coral 포인트 컬러 추가. */
 :root {
   --paper: #fbf9f5;
   --surface: #f5f3ef;
@@ -13,10 +14,23 @@
   --hairline: #dbdad6;
   --hairline-strong: #c8c7c3;
 
+  /* Deep Ink Blue — CTA와 핵심 행동 유도 */
+  --cta: #1e3a5f;
+  --cta-hover: #15304f;
+  --cta-contrast: #f5f3ef;
+
+  /* Accented Coral — 포인트, 알림, 성취 강조 */
+  --coral: #c4654a;
+  --coral-soft: rgba(196, 101, 74, 0.12);
+
   --radius-card: 8px;
   --radius-input: 8px;
   --radius-pill: 9999px;
-  --shadow-card: 0 1px 4px rgba(26, 42, 58, 0.06);
+  --shadow-card: 0 1px 3px rgba(26, 42, 58, 0.05), 0 4px 12px rgba(26, 42, 58, 0.04);
+  --shadow-card-hover: 0 2px 6px rgba(26, 42, 58, 0.08), 0 8px 24px rgba(26, 42, 58, 0.06);
+
+  /* 종이 질감 — 의도된 여백의 미세 노이즈 */
+  --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
 
   --font-serif: var(--font-literata), "Noto Serif KR", Batang, serif;
   --font-sans:
@@ -37,7 +51,14 @@
     --archive-contrast: #141313;
     --hairline: #3a3939;
     --hairline-strong: #4a4949;
-    --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.25);
+    --cta: #7ab0d9;
+    --cta-hover: #8fc0e5;
+    --cta-contrast: #141313;
+    --coral: #e8836a;
+    --coral-soft: rgba(232, 131, 106, 0.15);
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-card-hover: 0 2px 6px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2);
+    --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
   }
 }
 
@@ -51,7 +72,14 @@
   --archive-contrast: #141313;
   --hairline: #3a3939;
   --hairline-strong: #4a4949;
-  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.25);
+  --cta: #7ab0d9;
+  --cta-hover: #8fc0e5;
+  --cta-contrast: #141313;
+  --coral: #e8836a;
+  --coral-soft: rgba(232, 131, 106, 0.15);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-card-hover: 0 2px 6px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2);
+  --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
 }
 
 :root[data-theme="light"] {
@@ -64,7 +92,14 @@
   --archive-contrast: #fbf9f5;
   --hairline: #dbdad6;
   --hairline-strong: #c8c7c3;
-  --shadow-card: 0 1px 4px rgba(26, 42, 58, 0.06);
+  --cta: #1e3a5f;
+  --cta-hover: #15304f;
+  --cta-contrast: #f5f3ef;
+  --coral: #c4654a;
+  --coral-soft: rgba(196, 101, 74, 0.12);
+  --shadow-card: 0 1px 3px rgba(26, 42, 58, 0.05), 0 4px 12px rgba(26, 42, 58, 0.04);
+  --shadow-card-hover: 0 2px 6px rgba(26, 42, 58, 0.08), 0 8px 24px rgba(26, 42, 58, 0.06);
+  --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
 @theme inline {
@@ -77,6 +112,11 @@
   --color-archive-contrast: var(--archive-contrast);
   --color-hairline: var(--hairline);
   --color-hairline-strong: var(--hairline-strong);
+  --color-cta: var(--cta);
+  --color-cta-hover: var(--cta-hover);
+  --color-cta-contrast: var(--cta-contrast);
+  --color-coral: var(--coral);
+  --color-coral-soft: var(--coral-soft);
   --font-serif: var(--font-serif);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
@@ -84,6 +124,28 @@
 
 body {
   background: var(--paper);
+  background-image: var(--grain);
+  background-size: 256px 256px;
   color: var(--ink-black);
   font-family: var(--font-serif);
+  letter-spacing: -0.01em;
+  line-height: 1.7;
+}
+
+/* 타이포그래피 위계 — 프리미엄 문장 아카이브 인상 */
+h1, h2, h3 {
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+
+/* 잉크가 채워지는 진행률 인디케이터 */
+@keyframes ink-fill {
+  from { background-position: 100% center; }
+  to { background-position: 0% center; }
+}
+
+.ink-progress-bar {
+  background: linear-gradient(90deg, var(--cta) 50%, var(--hairline) 50%);
+  background-size: 200% 100%;
+  animation: ink-fill 0.6s ease-out forwards;
 }

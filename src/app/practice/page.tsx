@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { getPublicDailyPick } from "@/lib/sentences";
 import { getUserStreak } from "@/lib/streak";
+import { BrandMascot } from "@/components/BrandMascot";
 import { PracticeCompleteButton } from "./PracticeCompleteButton";
 import { EmptyState } from "@/components/EmptyState";
 
@@ -17,27 +18,51 @@ export default async function PracticePage() {
 
   return (
     <main className="mx-auto flex min-h-[70vh] w-full max-w-xl flex-col items-center justify-center gap-10 px-4 py-16">
-      <span className="text-xs italic text-stone">오늘의 필사</span>
+      <span className="text-xs font-bold uppercase tracking-widest text-coral">
+        오늘의 필사
+      </span>
       {sentence ? (
-        <div className="flex flex-col items-center gap-8 text-center">
-          <p className="font-serif text-2xl leading-loose break-words text-ink text-balance">
-            {sentence.body}
-          </p>
+        <div className="flex w-full flex-col items-center gap-8 text-center">
+          {/* 문장 카드 — 종이 질감 강조 */}
+          <div className="w-full rounded-[var(--radius-card)] border border-hairline bg-surface px-8 py-10 shadow-[var(--shadow-card)]">
+            <p className="font-serif text-2xl leading-loose break-words text-ink text-balance">
+              {sentence.body}
+            </p>
+          </div>
           <span className="max-w-full rounded-[var(--radius-pill)] border border-hairline-strong px-3 py-1 text-sm break-words text-stone">
             {sentence.source || "출처 미상"}
           </span>
 
           {user ? (
-            <div className="flex flex-col items-center gap-3">
+            <div className="flex flex-col items-center gap-4">
+              {/* 잉크 진행률 인디케이터 */}
               {streak > 0 ? (
-                <span className="rounded-[var(--radius-pill)] border border-archive px-3 py-1 text-xs text-archive">
-                  {streak}일째 필사 중
-                </span>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-coral">
+                      🔥 {streak}일째 필사 중
+                    </span>
+                  </div>
+                  <div className="h-1.5 w-32 overflow-hidden rounded-full bg-hairline">
+                    <div
+                      className="ink-progress-bar h-full rounded-full"
+                      style={{
+                        backgroundPosition: `${100 - Math.min(100, (streak / 30) * 100)}% center`,
+                      }}
+                    />
+                  </div>
+                  <span className="text-[10px] text-stone-faint">
+                    30일 목표
+                  </span>
+                </div>
               ) : null}
               {completedToday ? (
-                <span className="text-xs text-stone">
-                  오늘의 필사를 완료했어요
-                </span>
+                <div className="flex flex-col items-center gap-2">
+                  <BrandMascot className="h-10 w-[29px] text-archive" />
+                  <span className="text-sm text-archive">
+                    오늘의 필사를 완료했어요 ✨
+                  </span>
+                </div>
               ) : (
                 <PracticeCompleteButton sentenceId={sentence.id} />
               )}
