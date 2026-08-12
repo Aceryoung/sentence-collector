@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { BrandMascot } from "@/components/BrandMascot";
+import { EmptyState } from "@/components/EmptyState";
 
 export default async function ChallengesPage() {
   const supabase = await createClient();
@@ -32,11 +33,9 @@ export default async function ChallengesPage() {
           ))}
         </section>
       ) : (
-        <div className="flex flex-col items-center gap-3 py-10">
-          <p className="text-center text-sm text-stone">
-            현재 진행 중인 챌린지가 없어요.
-          </p>
-        </div>
+        <EmptyState
+          message="현재 진행 중인 챌린지가 없어요."
+        />
       )}
 
       {past.length > 0 ? (

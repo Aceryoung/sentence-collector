@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { SentenceCard } from "@/components/SentenceCard";
+import { EmptyState } from "@/components/EmptyState";
 import { getPeriodStart, getRanking, type Period } from "@/lib/ranking";
 import { formatKstDateDisplay } from "@/lib/kst-date";
 
@@ -69,17 +70,18 @@ export default async function RankingPage({
           ))}
         </ol>
       ) : (
-        <div className="flex flex-col items-center gap-4 py-16">
-          <p className="text-center text-sm text-stone">
-            아직 이 기간의 랭킹이 없어요.
-          </p>
-          <Link
-            href="/"
-            className="rounded-[var(--radius-pill)] border border-hairline-strong px-4 py-2 text-sm text-ink hover:border-archive"
-          >
-            문장 둘러보고 좋아요 남기기 →
-          </Link>
-        </div>
+        <EmptyState
+          withMascot
+          message="아직 이 기간의 랭킹이 없어요."
+          action={
+            <Link
+              href="/"
+              className="rounded-[var(--radius-pill)] bg-cta px-5 py-2.5 text-sm font-bold text-cta-contrast transition-colors hover:bg-cta-hover"
+            >
+              문장 둘러보고 좋아요 남기기 →
+            </Link>
+          }
+        />
       )}
     </main>
   );

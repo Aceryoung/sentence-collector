@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { EmptyState } from "@/components/EmptyState";
 import { MarkAllReadButton } from "./MarkAllReadButton";
 
 const TYPE_ICONS: Record<string, string> = {
@@ -76,9 +77,7 @@ export default async function NotificationsPage() {
           ))}
         </ul>
       ) : (
-        <p className="py-16 text-center text-sm text-stone">
-          아직 알림이 없어요.
-        </p>
+        <EmptyState message="아직 알림이 없어요." />
       )}
 
       <Link
