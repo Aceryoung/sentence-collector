@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { getDeviceId } from "@/lib/device-id";
 import { resolveLikeOutcome, toggleLikeState, type LikeState } from "@/lib/likes";
+import { useToast } from "@/components/Toast";
 
 type Props = {
   sentenceId: string;
@@ -15,10 +16,9 @@ export function LikeButton({ sentenceId, initialCount }: Props) {
     liked: false,
     count: initialCount,
   });
-  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   async function handleClick() {
-    setError(null);
     const original = state;
     const action = original.liked ? "unlike" : "like";
     setState(toggleLikeState(original));
@@ -46,23 +46,22 @@ export function LikeButton({ sentenceId, initialCount }: Props) {
 
     const isDuplicateLike = action === "like" && dbError?.code === "23505";
     if (dbError && !isDuplicateLike) {
-      setError("좋아요 반영에 실패했어요.");
+      toast("좋아요 반영에 실패했어요.", "error");
+    } else if (action === "like") {
+      toast("좋아요를 눌렀어요 ♥");
     }
   }
 
   return (
-    <div className="flex flex-col items-end gap-1">
-      <button
-        type="button"
-        onClick={handleClick}
-        aria-pressed={state.liked}
-        aria-label={state.liked ? "좋아요 취소" : "좋아요"}
-        className="flex min-h-11 min-w-11 items-center justify-center gap-1.5 px-2 text-sm text-stone tabular-nums hover:text-ink"
-      >
-        <span aria-hidden="true">{state.liked ? "♥" : "♡"}</span>
-        {state.count.toLocaleString("ko-KR")}
-      </button>
-      {error ? <p className="text-xs text-archive">{error}</p> : null}
-    </div>
+    <button
+      type="button"
+      onClick={handleClick}
+      aria-pressed={state.liked}
+      aria-label={state.liked ? "좋아요 취소" : "좋아요"}
+      className="flex min-h-11 min-w-11 items-center justify-center gap-1.5 px-2 text-sm text-stone tabular-nums hover:text-ink"
+    >
+      <span aria-hidden="true">{state.liked ? "♥" : "♡"}</span>
+      {state.count.toLocaleString("ko-KR")}
+    </button>
   );
 }

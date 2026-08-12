@@ -13,19 +13,27 @@ type Props = {
 
 export function SentenceCard({ id, body, source, commentary, emotionTag, likeCount }: Props) {
   return (
-    <article className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-hairline bg-surface px-6 py-5 shadow-[var(--shadow-card)] transition-all hover:border-archive/40 hover:shadow-[var(--shadow-card-hover)]">
-      <Link href={`/sentences/${id}`} className="flex flex-col gap-4">
-        <p className="user-text text-lg leading-relaxed font-semibold text-ink">
+    <article className="group relative flex flex-col gap-4 rounded-[var(--radius-card)] border border-hairline bg-surface px-6 py-5 shadow-[var(--shadow-card)] transition-all hover:border-archive/40 hover:shadow-[var(--shadow-card-hover)]">
+      {/* 카드 전체 클릭 영역 — stretched link 패턴 */}
+      <Link
+        href={`/sentences/${id}`}
+        className="absolute inset-0 z-0 rounded-[var(--radius-card)]"
+        aria-label={body.slice(0, 40)}
+      />
+
+      <div className="pointer-events-none relative z-[1] flex flex-col gap-4">
+        <p className="user-text line-clamp-3 text-lg font-semibold leading-relaxed text-ink">
           {body}
         </p>
         {commentary ? (
-          <p className="user-text text-sm italic leading-relaxed text-stone">
+          <p className="user-text line-clamp-2 text-sm italic leading-relaxed text-stone">
             {commentary}
           </p>
         ) : null}
-      </Link>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2">
+      </div>
+
+      <div className="relative z-[1] flex flex-wrap items-center justify-between gap-3">
+        <div className="pointer-events-none flex flex-wrap items-center gap-2">
           <span
             className={`max-w-full rounded-[var(--radius-pill)] border px-3 py-0.5 text-xs break-words ${
               source
@@ -41,7 +49,7 @@ export function SentenceCard({ id, body, source, commentary, emotionTag, likeCou
             </span>
           ) : null}
         </div>
-        <div className="flex items-center gap-1">
+        <div className="pointer-events-auto flex items-center gap-1">
           <LikeButton sentenceId={id} initialCount={likeCount} />
           <ShareImageButton body={body} source={source} />
         </div>

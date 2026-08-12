@@ -37,7 +37,7 @@ export function NavMenu() {
         onClick={() => setOpen((value) => !value)}
         aria-label="메뉴 열기"
         aria-expanded={open}
-        className="rounded-[var(--radius-input)] border border-hairline-strong px-2 py-1 text-sm hover:border-archive hover:text-ink"
+        className="flex min-h-11 min-w-11 items-center justify-center rounded-[var(--radius-input)] border border-hairline-strong px-2 text-sm hover:border-archive hover:text-ink"
       >
         ⋯
       </button>
@@ -45,33 +45,33 @@ export function NavMenu() {
         <div className="absolute top-full right-0 z-20 mt-2 flex w-40 flex-col overflow-hidden rounded-[var(--radius-card)] border border-hairline-strong bg-surface py-1 text-xs text-stone shadow-[var(--shadow-card)]">
           <Link
             href="/ranking"
-            className="px-3 py-2 hover:bg-paper hover:text-ink"
+            className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
             onClick={() => setOpen(false)}
           >
             랭킹
           </Link>
           <Link
             href="/challenges"
-            className="px-3 py-2 hover:bg-paper hover:text-ink"
+            className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
             onClick={() => setOpen(false)}
           >
             챌린지
           </Link>
           <Link
             href="/my/journey"
-            className="px-3 py-2 hover:bg-paper hover:text-ink"
+            className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
             onClick={() => setOpen(false)}
           >
             나의 여정
           </Link>
-          <div className="flex items-center justify-between px-3 py-2">
+          <div className="flex min-h-11 items-center justify-between px-3 py-3">
             <span>테마</span>
             <ThemeToggle />
           </div>
           <form action={signOut}>
             <button
               type="submit"
-              className="w-full px-3 py-2 text-left hover:bg-paper hover:text-ink"
+              className="min-h-11 w-full px-3 py-3 text-left hover:bg-paper hover:text-ink"
             >
               로그아웃
             </button>

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Literata } from "next/font/google";
 import { TopBar } from "@/components/TopBar";
 import { SiteFooter } from "@/components/SiteFooter";
+import { BottomNav } from "@/components/BottomNav";
+import { ToastProvider } from "@/components/Toast";
 import "./globals.css";
 
 const literata = Literata({
@@ -45,9 +47,14 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`h-full antialiased ${literata.variable}`}>
       <body className="flex min-h-full flex-col">
-        <TopBar />
-        {children}
-        <SiteFooter />
+        <ToastProvider>
+          <TopBar />
+          <div className="pb-16 sm:pb-0">
+            {children}
+          </div>
+          <SiteFooter />
+          <BottomNav />
+        </ToastProvider>
       </body>
     </html>
   );
