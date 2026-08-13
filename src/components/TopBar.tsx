@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { signOut } from "@/lib/auth-actions";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { NavMenu } from "@/components/NavMenu";
 import { NotificationBadge } from "@/components/NotificationBadge";
@@ -23,55 +22,108 @@ export async function TopBar() {
   }
 
   return (
-    <header className="bg-paper/90 sticky top-0 z-10 flex items-center justify-between gap-2 border-b border-hairline px-4 py-4 backdrop-blur sm:px-6">
-      <Link href="/" className="shrink-0 font-serif text-base font-bold text-ink sm:text-lg">
-        글적<span className="text-archive">.</span>
-      </Link>
-      <nav className="flex items-center gap-2 text-xs whitespace-nowrap text-stone sm:gap-4">
+    <header className="sticky top-0 z-10 border-b border-hairline bg-paper/90 backdrop-blur">
+      <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4 sm:px-6">
+        {/* 로고 */}
         <Link
-          href="/ranking"
-          className={user ? "hidden hover:text-ink sm:inline" : "hover:text-ink"}
+          href="/"
+          className="shrink-0 font-serif text-lg font-bold tracking-tight text-ink"
         >
-          랭킹
+          글적<span className="text-archive">.</span>
         </Link>
-        <Link
-          href="/challenges"
-          className={user ? "hidden hover:text-ink sm:inline" : "hover:text-ink"}
-        >
-          챌린지
-        </Link>
-        {user ? (
-          <>
-            <Link href="/my" className="hover:text-ink">
-              보관함
-            </Link>
-            <NotificationBadge count={unreadCount} />
-            <Link
-              href="/write"
-              className="rounded-[var(--radius-pill)] border-none bg-cta px-3 py-1.5 font-bold text-cta-contrast transition-colors hover:bg-cta-hover"
-            >
-              <span aria-hidden="true">+</span>
-              <span className="sr-only sm:not-sr-only sm:ml-1">등록</span>
-            </Link>
-            <form action={signOut} className="hidden sm:block">
-              <button type="submit" className="hover:text-ink">
-                로그아웃
-              </button>
-            </form>
-            <span className="hidden sm:inline-flex">
+
+        {/* 데스크탑 네비게이션 */}
+        <nav className="hidden items-center gap-1 sm:flex">
+          <NavLink href="/practice">필사</NavLink>
+          <NavLink href="/ranking">랭킹</NavLink>
+          <NavLink href="/challenges">챌린지</NavLink>
+        </nav>
+
+        {/* 액션 영역 */}
+        <div className="flex items-center gap-1">
+          {user ? (
+            <>
+              {/* 데스크탑 전용 액션 */}
+              <NavLink href="/my" className="hidden sm:inline-flex">
+                보관함
+              </NavLink>
+
+              <span className="mx-1 hidden h-4 w-px bg-hairline sm:inline-block" aria-hidden="true" />
+
+              <NotificationBadge count={unreadCount} />
+
+              <Link
+                href="/write"
+                className="ml-1 inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] bg-cta px-3.5 py-1.5 text-xs font-bold text-cta-contrast transition-colors hover:bg-cta-hover"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 20h9" />
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                </svg>
+                <span className="hidden sm:inline">등록</span>
+              </Link>
+
+              <span className="mx-1 hidden h-4 w-px bg-hairline sm:inline-block" aria-hidden="true" />
+
+              <span className="hidden sm:inline-flex">
+                <ThemeToggle />
+              </span>
+
+              {/* 모바일 햄버거 */}
+              <NavMenu />
+            </>
+          ) : (
+            <>
+              {/* 비로그인 — 모바일에서도 핵심 링크 표시 */}
+              <NavLink href="/ranking" className="sm:hidden">
+                랭킹
+              </NavLink>
+              <NavLink href="/challenges" className="sm:hidden">
+                챌린지
+              </NavLink>
+
+              <span className="mx-1 hidden h-4 w-px bg-hairline sm:inline-block" aria-hidden="true" />
+
+              <Link
+                href="/login"
+                className="rounded-[var(--radius-pill)] border border-hairline-strong px-3.5 py-1.5 text-xs font-bold text-ink transition-colors hover:border-archive hover:text-archive"
+              >
+                로그인
+              </Link>
               <ThemeToggle />
-            </span>
-            <NavMenu />
-          </>
-        ) : (
-          <>
-            <Link href="/login" className="hover:text-ink">
-              로그인
-            </Link>
-            <ThemeToggle />
-          </>
-        )}
-      </nav>
+            </>
+          )}
+        </div>
+      </div>
     </header>
+  );
+}
+
+function NavLink({
+  href,
+  className = "",
+  children,
+}: {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`relative px-2.5 py-1.5 text-xs text-stone transition-colors hover:text-ink ${className}`}
+    >
+      {children}
+    </Link>
   );
 }
