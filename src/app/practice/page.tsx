@@ -3,6 +3,7 @@ import { getPublicDailyPick } from "@/lib/sentences";
 import { getUserStreak } from "@/lib/streak";
 import { BrandMascot } from "@/components/BrandMascot";
 import { PracticeCompleteButton } from "./PracticeCompleteButton";
+import { TypingPractice } from "./TypingPractice";
 import { EmptyState } from "@/components/EmptyState";
 
 export default async function PracticePage() {
@@ -64,7 +65,18 @@ export default async function PracticePage() {
                   </span>
                 </div>
               ) : (
-                <PracticeCompleteButton sentenceId={sentence.id} />
+                <div className="flex w-full flex-col gap-6">
+                  <TypingPractice
+                    sentenceId={sentence.id}
+                    originalText={sentence.body}
+                  />
+                  <div className="flex items-center gap-2">
+                    <span className="h-px flex-1 bg-hairline" />
+                    <span className="text-xs text-stone-faint">또는</span>
+                    <span className="h-px flex-1 bg-hairline" />
+                  </div>
+                  <PracticeCompleteButton sentenceId={sentence.id} />
+                </div>
               )}
             </div>
           ) : (

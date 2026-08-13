@@ -5,6 +5,7 @@ import { SENTENCE_WITH_LIKE_COUNT_SELECT, toSentenceCardData } from "@/lib/sente
 import { LikeButton } from "@/components/LikeButton";
 import { ShareImageButton } from "@/components/ShareImageButton";
 import { ReflectionForm } from "./ReflectionForm";
+import { ThoughtSection } from "./ThoughtSection";
 
 export default async function SentenceDetailPage({
   params,
@@ -28,6 +29,15 @@ export default async function SentenceDetailPage({
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // 비공개 내 생각 — 로그인 사용자 본인 것만 (RLS가 보장)
+  const { data: thoughts } = user
+    ? await supabase
+        .from("thoughts")
+        .select("id, body, created_at, updated_at")
+        .eq("sentence_id", id)
+        .order("created_at", { ascending: false })
+    : { data: null };
 
   const { data: reflections } = await supabase
     .from("reflections")
@@ -66,6 +76,14 @@ export default async function SentenceDetailPage({
           <ShareImageButton body={sentence.body} source={sentence.source} />
         </div>
       </section>
+
+      {/* 내 생각 — 비공개, 로그인 사용자만 */}
+      {user ? (
+        <>
+          <hr className="border-hairline" />
+          <ThoughtSection sentenceId={id} thoughts={thoughts ?? []} />
+        </>
+      ) : null}
 
       <hr className="border-hairline" />
 

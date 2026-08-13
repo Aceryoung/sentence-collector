@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import { SentenceCard } from "@/components/SentenceCard";
 import { EmptyState } from "@/components/EmptyState";
 import { BrandMascot } from "@/components/BrandMascot";
+import { TagFilter } from "@/components/TagFilter";
+import { MoodPicker } from "@/components/MoodPicker";
 import {
   SENTENCE_WITH_LIKE_COUNT_SELECT,
   getPersonalDailyPick,
@@ -10,18 +12,26 @@ import {
 } from "@/lib/sentences";
 import { getUserStreak } from "@/lib/streak";
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tag?: string }>;
+}) {
+  const { tag } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  let feedQuery = supabase
+    .from("sentences")
+    .select(SENTENCE_WITH_LIKE_COUNT_SELECT)
+    .is("deleted_at", null);
+  if (tag) feedQuery = feedQuery.eq("emotion_tag", tag);
+  feedQuery = feedQuery.order("created_at", { ascending: false }).limit(30);
+
   const [{ data }, dailyPick, userStreak] = await Promise.all([
-    supabase
-      .from("sentences")
-      .select(SENTENCE_WITH_LIKE_COUNT_SELECT)
-      .order("created_at", { ascending: false })
-      .limit(30),
+    feedQuery,
     user ? getPersonalDailyPick(supabase, user.id) : Promise.resolve(null),
     user ? getUserStreak(supabase, user.id) : Promise.resolve(null),
   ]);
@@ -45,6 +55,9 @@ export default async function HomePage() {
           </p>
         </div>
       </section>
+
+      {/* 지금 필요한 문장 — 감정 기반 추천 */}
+      <MoodPicker />
 
       {/* 오늘의 필사 CTA — Deep Ink Blue solid */}
       <Link
@@ -83,22 +96,29 @@ export default async function HomePage() {
       )}
 
       {/* 발견하기 — 문장 피드 */}
-      {sentences.length > 0 ? (
+      {sentences.length > 0 || tag ? (
         <section className="flex flex-col gap-3">
           <h2 className="text-xs font-bold uppercase tracking-widest text-stone">
             발견하기
           </h2>
-          {sentences.map((sentence) => (
-            <SentenceCard
-              key={sentence.id}
-              id={sentence.id}
-              body={sentence.body}
-              source={sentence.source}
-              commentary={sentence.commentary}
-              emotionTag={sentence.emotionTag}
-              likeCount={sentence.likeCount}
-            />
-          ))}
+          <TagFilter activeTag={tag ?? null} />
+          {sentences.length > 0 ? (
+            sentences.map((sentence) => (
+              <SentenceCard
+                key={sentence.id}
+                id={sentence.id}
+                body={sentence.body}
+                source={sentence.source}
+                commentary={sentence.commentary}
+                emotionTag={sentence.emotionTag}
+                likeCount={sentence.likeCount}
+              />
+            ))
+          ) : (
+            <p className="py-6 text-center text-sm text-stone">
+              &lsquo;{tag}&rsquo; 태그의 문장이 아직 없어요.
+            </p>
+          )}
         </section>
       ) : (
         <EmptyState

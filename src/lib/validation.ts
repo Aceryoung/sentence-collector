@@ -72,7 +72,7 @@ export function validateCommentary(commentary: string): string | null {
 
 export function validateEmotionTag(tag: string): string | null {
   if (!tag) return "감정 태그를 선택해주세요.";
-  if (!(EMOTION_TAGS as readonly string[]).includes(tag))
-    return "올바른 감정 태그를 선택해주세요.";
+  // 프리셋 태그 또는 사용자 커스텀 태그 모두 허용 (20자 이내)
+  if (tag.length > 20) return "태그는 20자 이내로 입력해주세요.";
   return null;
 }

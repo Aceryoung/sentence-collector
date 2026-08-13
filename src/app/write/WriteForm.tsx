@@ -77,6 +77,43 @@ export function WriteForm() {
           </button>
         ))}
       </div>
+      {/* 커스텀 태그 직접 입력 */}
+      {!EMOTION_TAGS.includes(selectedTag as typeof EMOTION_TAGS[number]) && selectedTag !== "" ? null : (
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="또는 직접 입력"
+            maxLength={20}
+            className="w-32 rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-1.5 text-sm text-ink outline-none transition-colors focus-visible:border-cta focus-visible:shadow-[0_0_0_1px_var(--cta)]"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                const val = e.currentTarget.value.trim();
+                if (val) {
+                  setSelectedTag(val);
+                  e.currentTarget.value = "";
+                }
+              }
+            }}
+          />
+          <span className="text-xs text-stone-faint">Enter로 추가</span>
+        </div>
+      )}
+      {/* 커스텀 태그가 선택된 경우 표시 */}
+      {selectedTag && !EMOTION_TAGS.includes(selectedTag as typeof EMOTION_TAGS[number]) ? (
+        <div className="flex items-center gap-2">
+          <span className="rounded-[var(--radius-pill)] border border-archive bg-archive px-3 py-1.5 text-sm text-archive-contrast">
+            {selectedTag}
+          </span>
+          <button
+            type="button"
+            onClick={() => setSelectedTag("")}
+            className="text-xs text-stone hover:text-ink"
+          >
+            ✕
+          </button>
+        </div>
+      ) : null}
 
       <label
         htmlFor="commentary"

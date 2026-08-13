@@ -66,6 +66,14 @@ export default async function JourneyPage() {
     activityMap[d] = (activityMap[d] ?? 0) + 1;
   }
 
+  // 최근 필사 기록 (타이핑 정보 포함)
+  const { data: typingHistory } = await supabase
+    .from("practice_logs")
+    .select("date, accuracy, duration_seconds, sentences(body)")
+    .eq("user_id", user.id)
+    .order("date", { ascending: false })
+    .limit(10);
+
   // 총 좋아요 (내 문장에 달린)
   const { data: likeData } = await supabase
     .from("sentences")
@@ -124,6 +132,47 @@ export default async function JourneyPage() {
         </h2>
         <ActivityHeatmap data={activityMap} />
       </section>
+
+      {/* 필사 기록 */}
+      {typingHistory && typingHistory.length > 0 ? (
+        <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-hairline bg-surface px-5 py-4 shadow-[var(--shadow-card)]">
+          <h2 className="text-xs font-bold uppercase tracking-widest text-stone">
+            📝 필사 기록
+          </h2>
+          <ul className="flex flex-col gap-2">
+            {typingHistory.map((log, i) => {
+              const sentence = Array.isArray(log.sentences)
+                ? log.sentences[0]
+                : log.sentences;
+              return (
+                <li
+                  key={i}
+                  className="flex items-center justify-between gap-3 border-b border-hairline py-2 last:border-0"
+                >
+                  <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <p className="line-clamp-1 text-sm text-ink">
+                      {(sentence as { body: string } | null)?.body ?? "삭제된 문장"}
+                    </p>
+                    <span className="text-xs text-stone-faint">{log.date}</span>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-3 text-xs tabular-nums text-stone">
+                    {log.accuracy != null ? (
+                      <span className={log.accuracy >= 0.95 ? "font-bold text-coral" : ""}>
+                        {Math.round(log.accuracy * 100)}%
+                      </span>
+                    ) : (
+                      <span className="text-stone-faint">완료</span>
+                    )}
+                    {log.duration_seconds != null && log.duration_seconds > 0 ? (
+                      <span>{formatJourneyDuration(log.duration_seconds)}</span>
+                    ) : null}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ) : null}
 
       {/* 성취 배지 */}
       <section className="flex flex-col gap-3">
@@ -195,6 +244,13 @@ function StatCard({
       </span>
     </div>
   );
+}
+
+function formatJourneyDuration(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  if (m === 0) return `${s}초`;
+  return `${m}분 ${s}초`;
 }
 
 function Badge({

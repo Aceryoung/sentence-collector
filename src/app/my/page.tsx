@@ -8,6 +8,7 @@ import { formatKstDateDisplay } from "@/lib/kst-date";
 import { getUserStreak } from "@/lib/streak";
 import { MyArchive } from "./MyArchive";
 import { LikedSentences } from "./LikedSentences";
+import { MyThoughts } from "./MyThoughts";
 
 export default async function MyPage() {
   const supabase = await createClient();
@@ -26,6 +27,13 @@ export default async function MyPage() {
     .order("created_at", { ascending: false });
 
   const sentences = (data ?? []).map(toSentenceCardData);
+
+  const { data: myThoughts } = await supabase
+    .from("thoughts")
+    .select("id, body, created_at, sentences(id, body)")
+    .eq("author_id", user.id)
+    .order("created_at", { ascending: false })
+    .limit(20);
 
   const now = new Date();
   const [recap, userStreak] = await Promise.all([
@@ -84,6 +92,21 @@ export default async function MyPage() {
       </section>
 
       <MyArchive sentences={sentences} />
+
+      <div className="mt-4 flex flex-col gap-1">
+        <h2 className="font-serif text-lg font-bold text-ink">
+          ✏️ 내가 쓴 글
+          {myThoughts && myThoughts.length > 0 ? (
+            <span className="ml-2 text-sm font-normal text-stone">
+              {myThoughts.length}
+            </span>
+          ) : null}
+        </h2>
+      </div>
+      <MyThoughts thoughts={(myThoughts ?? []).map((t) => ({
+        ...t,
+        sentences: Array.isArray(t.sentences) ? t.sentences[0] ?? null : t.sentences,
+      }))} />
 
       <div className="mt-4 flex flex-col gap-1">
         <h2 className="font-serif text-lg font-bold text-ink">내가 좋아요한 문장</h2>

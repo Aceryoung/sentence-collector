@@ -136,8 +136,13 @@ describe("validateEmotionTag", () => {
     expect(validateEmotionTag("성찰")).toBeNull();
   });
 
-  it("rejects an unknown tag", () => {
-    expect(validateEmotionTag("분노")).toBe("올바른 감정 태그를 선택해주세요.");
+  it("accepts a custom tag", () => {
+    expect(validateEmotionTag("분노")).toBeNull();
+    expect(validateEmotionTag("평온")).toBeNull();
+  });
+
+  it("rejects a tag longer than 20 characters", () => {
+    expect(validateEmotionTag("a".repeat(21))).toBe("태그는 20자 이내로 입력해주세요.");
   });
 });
 
