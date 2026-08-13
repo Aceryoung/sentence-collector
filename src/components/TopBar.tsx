@@ -36,7 +36,7 @@ export async function TopBar() {
         </Link>
         <Link
           href="/challenges"
-          className="hidden hover:text-ink sm:inline"
+          className={user ? "hidden hover:text-ink sm:inline" : "hover:text-ink"}
         >
           챌린지
         </Link>
