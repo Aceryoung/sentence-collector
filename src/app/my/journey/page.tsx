@@ -35,10 +35,10 @@ export default async function JourneyPage() {
     // 최근 90일 필사 기록
     supabase
       .from("practice_logs")
-      .select("completed_date")
+      .select("date")
       .eq("user_id", user.id)
       .gte(
-        "completed_date",
+        "date",
         new Date(now.getFullYear(), now.getMonth() - 3, now.getDate())
           .toISOString()
           .slice(0, 10),
@@ -58,7 +58,7 @@ export default async function JourneyPage() {
   // 히트맵 데이터: 날짜별 활동 횟수
   const activityMap: Record<string, number> = {};
   for (const row of practiceRows ?? []) {
-    const d = row.completed_date as string;
+    const d = row.date as string;
     activityMap[d] = (activityMap[d] ?? 0) + 1;
   }
   for (const row of sentenceRows ?? []) {
