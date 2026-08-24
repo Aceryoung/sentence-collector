@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/Skeleton";
 /** 필사 페이지 스켈레톤: 라벨 + 문장 카드 + 진행바 */
 export default function PracticeLoading() {
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col items-center gap-6 px-4 py-12">
+    <main className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 px-4 py-12 sm:px-6 lg:px-8">
       {/* 섹션 라벨 */}
       <Skeleton className="h-3.5 w-20 opacity-60" />
 

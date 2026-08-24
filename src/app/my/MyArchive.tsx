@@ -88,13 +88,21 @@ export function MyArchive({ sentences }: { sentences: Sentence[] }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <input
-        type="search"
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-        placeholder="문장, 출처, 감상 검색"
-        className="rounded-[var(--radius-input)] border border-hairline-strong bg-surface px-3 py-2 text-sm text-ink outline-none focus-visible:border-archive"
-      />
+      <div className="flex items-center gap-2">
+        <div className="relative flex-1">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-faint" aria-hidden="true">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="태그, 키워드, 저자로 검색…"
+            className="w-full rounded-[var(--radius-input)] border border-hairline-strong bg-surface py-2.5 pl-9 pr-3 text-sm text-ink outline-none transition-colors focus-visible:border-cta focus-visible:shadow-[0_0_0_1px_var(--cta)]"
+          />
+        </div>
+      </div>
 
       {/* 태그 필터 */}
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none" role="group" aria-label="감정 태그 필터">
@@ -147,17 +155,19 @@ export function MyArchive({ sentences }: { sentences: Sentence[] }) {
               : "문장이 없어요."}
         </p>
       ) : (
-        filtered.map((sentence) => (
-          <SentenceCard
-            key={sentence.id}
-            id={sentence.id}
-            body={sentence.body}
-            source={sentence.source}
-            commentary={sentence.commentary}
-            emotionTag={sentence.emotionTag}
-            likeCount={sentence.likeCount}
-          />
-        ))
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {filtered.map((sentence) => (
+            <SentenceCard
+              key={sentence.id}
+              id={sentence.id}
+              body={sentence.body}
+              source={sentence.source}
+              commentary={sentence.commentary}
+              emotionTag={sentence.emotionTag}
+              likeCount={sentence.likeCount}
+            />
+          ))}
+        </div>
       )}
     </div>
   );

@@ -23,7 +23,7 @@ export function ThoughtSection({ sentenceId, thoughts }: Props) {
   return (
     <section className="flex flex-col gap-4">
       <h2 className="font-serif text-lg font-bold text-ink">
-        ✏️ 내 생각
+        내 생각
         {thoughts.length > 0 ? (
           <span className="ml-2 text-sm font-normal text-stone">
             {thoughts.length}

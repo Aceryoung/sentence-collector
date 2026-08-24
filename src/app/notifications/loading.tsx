@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/Skeleton";
 /** 알림 페이지 스켈레톤: 타이틀 + 알림 목록 */
 export default function NotificationsLoading() {
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-8">
+    <main className="mx-auto flex w-full max-w-5xl flex-col gap-4 px-4 py-8 sm:px-6 lg:px-8">
       {/* 타이틀 + 배지 */}
       <div className="flex items-center justify-between">
         <Skeleton className="h-6 w-12" />

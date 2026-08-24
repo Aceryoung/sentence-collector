@@ -16,7 +16,7 @@ export function EmptyState({
   withMascot?: boolean;
 }) {
   return (
-    <div className="flex flex-col items-center gap-4 py-16">
+    <div className="animate-fade-up flex flex-col items-center gap-4 py-16">
       {/* 마스코트를 액센트로 두면 아래 CTA 버튼과 강조가 둘로 갈린다.
           중립색으로 두고 강조는 버튼 하나만 가져간다. */}
       {withMascot ? (

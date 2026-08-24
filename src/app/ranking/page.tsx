@@ -29,17 +29,17 @@ export default async function RankingPage({
   const periodStart = getPeriodStart(period, now);
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-8">
+    <main className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-8 sm:px-6 lg:px-8">
       <h1 className="font-serif text-xl font-bold text-ink">랭킹</h1>
       <nav className="flex gap-2 text-xs">
         {PERIODS.map((p) => (
           <Link
             key={p.value}
             href={`/ranking?period=${p.value}`}
-            className={`rounded-[var(--radius-pill)] border px-3 py-1.5 ${
+            className={`rounded-[var(--radius-pill)] border px-3 py-1.5 transition-all duration-200 ${
               p.value === period
-                ? "border-archive text-archive"
-                : "border-hairline-strong text-stone hover:text-ink"
+                ? "border-archive bg-archive/5 text-archive shadow-sm"
+                : "border-hairline-strong text-stone hover:text-ink hover:border-archive/40 active:scale-95"
             }`}
           >
             {p.label}
@@ -50,7 +50,7 @@ export default async function RankingPage({
         {formatKstDateDisplay(periodStart)} - {formatKstDateDisplay(now)}
       </p>
       {ranking.length > 0 ? (
-        <ol className="flex flex-col gap-3">
+        <ol className="stagger-grid grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {ranking.map((sentence, index) => (
             <li key={sentence.id} className="flex items-start gap-3">
               <span className="w-6 shrink-0 pt-5 text-right text-sm text-stone tabular-nums">

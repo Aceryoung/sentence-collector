@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/Skeleton";
 /** 챌린지 페이지 스켈레톤: 마스코트 + 타이틀 + 카드 */
 export default function ChallengesLoading() {
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-6 px-4 py-8">
+    <main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
       {/* 헤더 */}
       <div className="flex items-center gap-3">
         <Skeleton className="h-10 w-8 shrink-0" />

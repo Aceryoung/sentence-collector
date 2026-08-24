@@ -1,19 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { SentenceCard } from "@/components/SentenceCard";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import type { SentenceCardData } from "@/lib/sentences";
 
 const MOOD_CHIPS = [
-  { tag: "위로", emoji: "😌" },
-  { tag: "동기부여", emoji: "💪" },
-  { tag: "사랑", emoji: "❤️" },
-  { tag: "깨달음", emoji: "💡" },
-  { tag: "유머", emoji: "😄" },
-  { tag: "그리움", emoji: "🌙" },
-  { tag: "용기", emoji: "🦁" },
-  { tag: "성찰", emoji: "🪞" },
+  "위로",
+  "동기부여",
+  "사랑",
+  "깨달음",
+  "유머",
+  "그리움",
+  "용기",
+  "성찰",
 ] as const;
 
 export function MoodPicker() {
@@ -76,24 +76,24 @@ export function MoodPicker() {
   }
 
   return (
-    <section className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-hairline bg-surface px-5 py-5 shadow-[var(--shadow-card)]">
-      <h2 className="text-center font-serif text-base font-bold text-ink">
+    <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-hairline bg-surface px-4 py-4">
+      <h2 className="font-serif text-sm font-bold text-ink">
         지금 어떤 문장이 필요해요?
       </h2>
 
-      <div className="flex flex-wrap justify-center gap-2">
-        {MOOD_CHIPS.map(({ tag, emoji }) => (
+      <div className="flex flex-wrap gap-1.5">
+        {MOOD_CHIPS.map((tag) => (
           <button
             key={tag}
             type="button"
             onClick={() => handleSelect(tag)}
-            className={`rounded-[var(--radius-pill)] border px-3 py-1.5 text-sm transition-colors ${
+            className={`rounded-[var(--radius-pill)] border px-2.5 py-1 text-xs transition-all duration-200 ${
               selected === tag
                 ? "border-archive bg-archive text-archive-contrast"
-                : "border-hairline-strong bg-paper text-stone hover:border-archive/40 hover:text-ink"
+                : "border-hairline-strong bg-paper text-stone hover:border-archive/40 hover:text-ink active:scale-95"
             }`}
           >
-            {emoji} {tag}
+            {tag}
           </button>
         ))}
       </div>
@@ -104,32 +104,31 @@ export function MoodPicker() {
 
       {!loading && selected && sentences.length > 0 ? (
         <>
-          <div className="flex items-center gap-2">
-            <span className="h-px flex-1 bg-hairline" />
-            <span className="text-xs font-bold uppercase tracking-widest text-coral">
-              {selected}이 필요한 당신에게
-            </span>
-            <span className="h-px flex-1 bg-hairline" />
-          </div>
-          <div className="flex flex-col gap-3">
+          <span className="text-xs font-bold text-coral">
+            {selected}이 필요한 당신에게
+          </span>
+          <div className="flex flex-col gap-2">
             {sentences.map((s) => (
-              <SentenceCard
+              <Link
                 key={s.id}
-                id={s.id}
-                body={s.body}
-                source={s.source}
-                commentary={s.commentary}
-                emotionTag={s.emotionTag}
-                likeCount={s.likeCount}
-              />
+                href={`/sentences/${s.id}`}
+                className="block rounded-[var(--radius-card)] border border-hairline px-3 py-3 transition-all duration-200 hover:border-archive/40 hover:shadow-sm"
+              >
+                <p className="user-text line-clamp-2 text-sm leading-relaxed text-ink">
+                  {s.body}
+                </p>
+                <span className="mt-1 block text-xs text-stone-faint">
+                  {s.source || "출처 미상"}
+                </span>
+              </Link>
             ))}
           </div>
           <button
             type="button"
             onClick={handleRefresh}
-            className="self-center text-xs text-stone underline underline-offset-4 hover:text-ink"
+            className="self-start text-xs text-stone underline underline-offset-4 hover:text-ink"
           >
-            ↻ 다른 문장 보기
+            ↻ 다른 문장
           </button>
         </>
       ) : null}

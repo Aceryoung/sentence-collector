@@ -46,10 +46,25 @@ export default async function SentenceDetailPage({
     .order("created_at", { ascending: false })
     .limit(50);
 
+  // 같은 태그의 관련 문장 (최대 4개)
+  let relatedSentences: { id: string; body: string; source: string | null }[] = [];
+  if (sentence.emotionTag) {
+    const { data: related } = await supabase
+      .from("sentences")
+      .select("id, body, source")
+      .eq("emotion_tag", sentence.emotionTag)
+      .neq("id", id)
+      .is("deleted_at", null)
+      .limit(4);
+    relatedSentences = related ?? [];
+  }
+
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-8 px-4 py-12">
+    <main className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-12 sm:px-6 lg:flex-row lg:gap-10 lg:px-8">
+      {/* ── 왼쪽: 메인 콘텐츠 ── */}
+      <div className="flex min-w-0 flex-1 flex-col gap-8 lg:max-w-4xl">
       {/* 문장 본문 — 큰 화면 감상 */}
-      <section className="flex flex-col items-center gap-6 text-center">
+      <section className="animate-fade-up flex flex-col items-center gap-6 text-center">
         <p className="user-text font-serif text-2xl leading-loose font-semibold text-ink sm:text-3xl">
           {sentence.body}
         </p>
@@ -90,7 +105,7 @@ export default async function SentenceDetailPage({
       {/* 감상 목록 */}
       <section className="flex flex-col gap-4">
         <h2 className="font-serif text-lg font-bold text-ink">
-          Reflections
+          감상
           {reflections && reflections.length > 0 ? (
             <span className="ml-2 text-sm font-normal text-stone">
               {reflections.length}
@@ -138,6 +153,30 @@ export default async function SentenceDetailPage({
       >
         ← 목록으로 돌아가기
       </Link>
+      </div>
+
+      {/* ── 오른쪽: 관련 문장 사이드바 (데스크탑) ── */}
+      {relatedSentences.length > 0 ? (
+        <aside className="hidden shrink-0 lg:sticky lg:top-20 lg:flex lg:w-72 lg:flex-col lg:gap-4 lg:self-start">
+          <h2 className="font-serif text-sm font-bold text-ink">
+            같은 감정의 문장
+          </h2>
+          {relatedSentences.map((r) => (
+            <Link
+              key={r.id}
+              href={`/sentences/${r.id}`}
+              className="card-lift flex flex-col gap-2 rounded-[var(--radius-card)] border border-hairline bg-surface px-4 py-3 transition-all hover:border-archive/40 hover:shadow-[var(--shadow-card-hover)]"
+            >
+              <p className="user-text line-clamp-2 text-sm leading-relaxed text-ink">
+                {r.body}
+              </p>
+              <span className="text-xs text-stone-faint">
+                {r.source || "출처 미상"}
+              </span>
+            </Link>
+          ))}
+        </aside>
+      ) : null}
     </main>
   );
 }

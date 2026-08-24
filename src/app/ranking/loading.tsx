@@ -3,7 +3,7 @@ import { Skeleton, SentenceCardSkeleton } from "@/components/Skeleton";
 /** 랭킹 페이지 스켈레톤: 타이틀 + 탭 + 카드 목록 */
 export default function RankingLoading() {
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-8">
+    <main className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-8 sm:px-6 lg:px-8">
       {/* 타이틀 */}
       <Skeleton className="h-6 w-16" />
 

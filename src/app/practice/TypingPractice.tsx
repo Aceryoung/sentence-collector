@@ -46,7 +46,7 @@ export function TypingPractice({ sentenceId, originalText }: Props) {
   if (done && accuracy !== null) {
     return (
       <div className="flex flex-col items-center gap-4">
-        <p className="text-lg font-bold text-ink">🎉 필사 완료!</p>
+        <p className="text-lg font-bold text-ink">필사 완료!</p>
         <div className="flex gap-6">
           <div className="flex flex-col items-center">
             <span className="text-xs text-stone">정확도</span>

@@ -37,7 +37,7 @@ export default async function ChallengesPage() {
   const progressPercent = Math.min(100, Math.round((totalPractice / goal) * 100));
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-6 px-4 py-8">
+    <main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex items-center gap-3">
         <BrandMascot className="h-10 w-[30px] text-archive" />
         <h1 className="font-serif text-xl font-bold text-ink">필사 챌린지</h1>
@@ -47,7 +47,7 @@ export default async function ChallengesPage() {
       {user ? (
         <section className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-hairline-strong bg-surface px-5 py-5 shadow-[var(--shadow-card)]">
           <div className="flex items-center justify-between">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-stone">
+            <h2 className="font-serif text-sm font-bold text-ink">
               나의 필사 현황
             </h2>
             <Link
@@ -102,20 +102,34 @@ export default async function ChallengesPage() {
             </Link>
           ) : (
             <p className="text-center text-sm text-archive">
-              오늘의 필사를 완료했어요 ✨
+              오늘의 필사를 완료했어요
             </p>
           )}
         </section>
       ) : (
-        <section className="flex flex-col items-center gap-3 rounded-[var(--radius-card)] border border-hairline bg-surface px-5 py-6 shadow-[var(--shadow-card)]">
-          <p className="text-sm text-stone">
-            로그인하면 필사 현황을 확인할 수 있어요
-          </p>
+        <section className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-hairline bg-surface px-5 py-5 shadow-[var(--shadow-card)]">
+          <h2 className="font-serif text-sm font-bold text-ink">
+            나의 필사 현황
+          </h2>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="flex flex-col items-center gap-1">
+              <span className="font-serif text-2xl font-bold text-stone-faint">—</span>
+              <span className="text-[10px] text-stone">연속 일수</span>
+            </div>
+            <div className="flex flex-col items-center gap-1">
+              <span className="font-serif text-2xl font-bold text-stone-faint">—</span>
+              <span className="text-[10px] text-stone">총 필사</span>
+            </div>
+            <div className="flex flex-col items-center gap-1">
+              <span className="font-serif text-2xl font-bold text-stone-faint">—</span>
+              <span className="text-[10px] text-stone">오늘</span>
+            </div>
+          </div>
           <Link
             href="/login"
-            className="rounded-[var(--radius-pill)] border-none bg-cta px-5 py-2.5 text-sm font-bold text-cta-contrast transition-colors hover:bg-cta-hover"
+            className="self-center rounded-[var(--radius-pill)] border-none bg-cta px-5 py-2.5 text-sm font-bold text-cta-contrast transition-colors hover:bg-cta-hover"
           >
-            로그인
+            로그인하고 시작하기
           </Link>
         </section>
       )}
@@ -123,23 +137,27 @@ export default async function ChallengesPage() {
       {/* 공식 챌린지 */}
       {active.length > 0 ? (
         <section className="flex flex-col gap-3">
-          <h2 className="text-xs font-bold uppercase tracking-widest text-stone">
+          <h2 className="font-serif text-sm font-bold text-ink">
             진행 중인 챌린지
           </h2>
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           {active.map((c) => (
             <ChallengeCard key={c.id} challenge={c} />
           ))}
+          </div>
         </section>
       ) : null}
 
       {past.length > 0 ? (
         <section className="flex flex-col gap-3">
-          <h2 className="text-xs font-bold uppercase tracking-widest text-stone">
+          <h2 className="font-serif text-sm font-bold text-ink">
             완료된 챌린지
           </h2>
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           {past.map((c) => (
             <ChallengeCard key={c.id} challenge={c} ended />
           ))}
+          </div>
         </section>
       ) : null}
     </main>
@@ -169,7 +187,7 @@ function ChallengeCard({
   return (
     <Link
       href={`/challenges/${challenge.id}`}
-      className={`flex flex-col gap-2 rounded-[var(--radius-card)] border bg-surface px-5 py-4 shadow-[var(--shadow-card)] transition-colors hover:border-archive/40 ${
+      className={`card-lift flex flex-col gap-2 rounded-[var(--radius-card)] border bg-surface px-5 py-4 shadow-[var(--shadow-card)] hover:border-archive/40 hover:shadow-[var(--shadow-card-hover)] ${
         ended ? "border-hairline opacity-70" : "border-hairline-strong"
       }`}
     >

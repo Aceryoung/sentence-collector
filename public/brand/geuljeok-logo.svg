@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 200" fill="none">
+  <!-- 말풍선 외곽 — 손그림 스타일 -->
+  <path d="M180 16c-85 0-156 30-156 75s71 75 156 75c18 0 35-2 51-5l38 28-8-32c30-16 49-39 49-66C310 46 265 16 180 16z"
+        stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"
+        fill="none"
+        style="paint-order:stroke"/>
+  <!-- 약간의 손그림 거침 표현 -->
+  <path d="M42 60c-5 8-8 17-8 27" stroke="currentColor" stroke-width="10" stroke-linecap="round" fill="none" opacity="0.7"/>
+  <path d="M300 55c5 9 7 18 7 28" stroke="currentColor" stroke-width="10" stroke-linecap="round" fill="none" opacity="0.7"/>
+  <!-- Geuljeok 텍스트 -->
+  <text x="178" y="88" text-anchor="middle"
+        font-family="'Nunito','Pretendard',system-ui,sans-serif"
+        font-size="52" font-weight="900" letter-spacing="-1"
+        fill="currentColor">Geuljeok</text>
+  <!-- 글적 텍스트 -->
+  <text x="178" y="130" text-anchor="middle"
+        font-family="'Pretendard','Noto Sans KR',system-ui,sans-serif"
+        font-size="32" font-weight="700"
+        fill="currentColor">글적</text>
+</svg>

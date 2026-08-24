@@ -48,7 +48,7 @@ export default async function ChallengeDetailPage({
     : 0;
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-6 px-4 py-8">
+    <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-col items-center gap-4 text-center">
         <BrandMascot className="h-16 w-[47px] text-archive" />
         <h1 className="font-serif text-2xl font-bold text-ink">
@@ -102,7 +102,7 @@ export default async function ChallengeDetailPage({
           </div>
           {progressPercent >= 100 ? (
             <p className="text-center text-sm text-archive">
-              🎉 챌린지를 완료했어요!
+              챌린지를 완료했어요!
             </p>
           ) : null}
         </section>

@@ -23,13 +23,26 @@ export async function TopBar() {
 
   return (
     <header className="sticky top-0 z-10 border-b border-hairline bg-paper/90 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4 sm:px-6">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* 로고 */}
         <Link
           href="/"
-          className="shrink-0 font-serif text-lg font-bold tracking-tight text-ink"
+          className="shrink-0"
+          aria-label="글적 홈"
         >
-          글적<span className="text-archive">.</span>
+          <span
+            className="inline-block h-9 w-[72px] bg-ink"
+            style={{
+              WebkitMaskImage: "url(/brand/geuljeok-logo.svg)",
+              WebkitMaskSize: "contain",
+              WebkitMaskRepeat: "no-repeat",
+              WebkitMaskPosition: "center",
+              maskImage: "url(/brand/geuljeok-logo.svg)",
+              maskSize: "contain",
+              maskRepeat: "no-repeat",
+              maskPosition: "center",
+            }}
+          />
         </Link>
 
         {/* 데스크탑 네비게이션 */}
@@ -37,6 +50,16 @@ export async function TopBar() {
           <NavLink href="/practice">필사</NavLink>
           <NavLink href="/ranking">랭킹</NavLink>
           <NavLink href="/challenges">챌린지</NavLink>
+          <Link
+            href="/search"
+            className="ml-1 rounded-full p-2 text-stone transition-colors duration-200 hover:bg-surface hover:text-ink"
+            aria-label="검색"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </Link>
         </nav>
 
         {/* 액션 영역 */}
@@ -54,7 +77,7 @@ export async function TopBar() {
 
               <Link
                 href="/write"
-                className="ml-1 inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] bg-cta px-3.5 py-1.5 text-xs font-bold text-cta-contrast transition-colors hover:bg-cta-hover"
+                className="ml-1 inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] bg-cta px-3.5 py-1.5 text-xs font-bold text-cta-contrast transition-all duration-200 hover:bg-cta-hover hover:shadow-md"
               >
                 <svg
                   width="14"
@@ -96,7 +119,7 @@ export async function TopBar() {
 
               <Link
                 href="/login"
-                className="rounded-[var(--radius-pill)] border border-hairline-strong px-3.5 py-1.5 text-xs font-bold text-ink transition-colors hover:border-archive hover:text-archive"
+                className="rounded-[var(--radius-pill)] border border-hairline-strong px-3.5 py-1.5 text-xs font-bold text-ink transition-all duration-200 hover:border-archive hover:text-archive hover:shadow-sm"
               >
                 로그인
               </Link>
@@ -121,7 +144,7 @@ function NavLink({
   return (
     <Link
       href={href}
-      className={`relative px-2.5 py-1.5 text-xs text-stone transition-colors hover:text-ink ${className}`}
+      className={`relative px-2.5 py-1.5 text-xs font-medium text-stone transition-colors duration-200 hover:text-ink ${className}`}
     >
       {children}
     </Link>

@@ -45,10 +45,10 @@ function TagChip({
   return (
     <Link
       href={href}
-      className={`shrink-0 rounded-[var(--radius-pill)] border px-3 py-1.5 text-sm transition-colors ${
+      className={`shrink-0 rounded-[var(--radius-pill)] border px-3 py-1.5 text-xs transition-all duration-200 ${
         active
-          ? "border-archive bg-archive text-archive-contrast"
-          : "border-hairline-strong bg-surface text-stone hover:border-archive/40 hover:text-ink"
+          ? "border-archive bg-archive font-bold text-archive-contrast shadow-sm"
+          : "border-hairline-strong bg-surface text-stone hover:border-archive/40 hover:text-ink active:scale-95"
       }`}
     >
       {label}

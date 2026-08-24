@@ -4,11 +4,11 @@ import { createClient } from "@/lib/supabase/server";
 import { EmptyState } from "@/components/EmptyState";
 import { MarkAllReadButton } from "./MarkAllReadButton";
 
-const TYPE_ICONS: Record<string, string> = {
-  like: "♥",
-  reflection: "💬",
-  challenge: "🏆",
-  system: "📢",
+const TYPE_LABELS: Record<string, string> = {
+  like: "좋아요",
+  reflection: "감상",
+  challenge: "챌린지",
+  system: "알림",
 };
 
 export default async function NotificationsPage() {
@@ -30,7 +30,7 @@ export default async function NotificationsPage() {
   const unreadCount = items.filter((n) => !n.read).length;
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-8">
+    <main className="mx-auto flex w-full max-w-5xl flex-col gap-4 px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between">
         <h1 className="font-serif text-xl font-bold text-ink">알림</h1>
         {unreadCount > 0 ? (
@@ -48,12 +48,12 @@ export default async function NotificationsPage() {
           {items.map((n) => (
             <li
               key={n.id}
-              className={`flex gap-3 border-b border-hairline px-2 py-4 ${
+              className={`animate-fade-up flex gap-3 border-b border-hairline px-2 py-4 transition-colors duration-200 hover:bg-surface/50 ${
                 n.read ? "opacity-60" : ""
               }`}
             >
-              <span className="shrink-0 text-lg" aria-hidden="true">
-                {TYPE_ICONS[n.type] ?? "📢"}
+              <span className="shrink-0 rounded-[var(--radius-pill)] bg-hairline px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-stone">
+                {TYPE_LABELS[n.type] ?? "알림"}
               </span>
               <div className="flex min-w-0 flex-1 flex-col gap-1">
                 {n.link ? (

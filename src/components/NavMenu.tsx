@@ -58,11 +58,11 @@ export function NavMenu() {
             챌린지
           </Link>
           <Link
-            href="/my/journey"
+            href="/notifications"
             className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
             onClick={() => setOpen(false)}
           >
-            나의 여정
+            알림
           </Link>
           <div className="flex min-h-11 items-center justify-between px-3 py-3">
             <span>테마</span>

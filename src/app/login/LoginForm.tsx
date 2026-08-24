@@ -186,7 +186,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
           <button
             type="submit"
             disabled={verifying}
-            className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-3 text-sm text-archive-contrast disabled:opacity-60"
+            className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-3 text-sm text-archive-contrast transition-all duration-200 hover:shadow-md disabled:opacity-60"
           >
             {verifying ? "확인하는 중…" : "코드로 로그인"}
           </button>
@@ -333,7 +333,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
         <button
           type="submit"
           disabled={status === "sending"}
-          className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-3 text-sm text-archive-contrast disabled:opacity-60"
+          className="rounded-[var(--radius-pill)] border-none bg-archive px-3 py-3 text-sm text-archive-contrast transition-all duration-200 hover:shadow-md disabled:opacity-60"
         >
           {status === "sending"
             ? isPasswordMode

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getPublicDailyPick } from "@/lib/sentences";
 import { getUserStreak } from "@/lib/streak";
@@ -18,14 +19,14 @@ export default async function PracticePage() {
     : { streak: 0, completedToday: false };
 
   return (
-    <main className="mx-auto flex min-h-[70vh] w-full max-w-xl flex-col items-center justify-center gap-10 px-4 py-16">
-      <span className="text-xs font-bold uppercase tracking-widest text-coral">
+    <main className="mx-auto flex min-h-[70vh] w-full max-w-3xl flex-col items-center justify-center gap-10 px-4 py-16 sm:px-6 lg:px-8">
+      <span className="animate-fade-up text-xs font-bold tracking-widest text-coral">
         오늘의 필사
       </span>
       {sentence ? (
         <div className="flex w-full flex-col items-center gap-8 text-center">
           {/* 문장 카드 — 종이 질감 강조 */}
-          <div className="w-full rounded-[var(--radius-card)] border border-hairline bg-surface px-8 py-10 shadow-[var(--shadow-card)]">
+          <div className="animate-fade-up w-full rounded-[var(--radius-card)] border border-hairline bg-surface px-8 py-10 shadow-[var(--shadow-card)]" style={{ animationDelay: '100ms' }}>
             <p className="user-text font-serif text-2xl leading-loose text-ink">
               {sentence.body}
             </p>
@@ -41,7 +42,7 @@ export default async function PracticePage() {
                 <div className="flex flex-col items-center gap-2">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold text-coral">
-                      🔥 {streak}일째 필사 중
+                      {streak}일째 필사 중
                     </span>
                   </div>
                   <div className="h-1.5 w-32 overflow-hidden rounded-full bg-hairline">
@@ -61,7 +62,7 @@ export default async function PracticePage() {
                 <div className="flex flex-col items-center gap-2">
                   <BrandMascot className="h-10 w-[29px] text-archive" />
                   <span className="text-sm text-archive">
-                    오늘의 필사를 완료했어요 ✨
+                    오늘의 필사를 완료했어요
                   </span>
                 </div>
               ) : (
@@ -80,9 +81,17 @@ export default async function PracticePage() {
               )}
             </div>
           ) : (
-            <p className="text-xs text-stone">
-              로그인하면 필사 기록을 스트릭으로 남길 수 있어요
-            </p>
+            <div className="flex flex-col items-center gap-3">
+              <p className="text-sm text-stone">
+                로그인하면 필사 기록을 스트릭으로 남길 수 있어요
+              </p>
+              <Link
+                href="/login"
+                className="rounded-[var(--radius-pill)] border border-hairline-strong px-4 py-2 text-xs font-bold text-ink transition-all duration-200 hover:border-archive hover:text-archive"
+              >
+                로그인하고 기록 남기기
+              </Link>
+            </div>
           )}
         </div>
       ) : (

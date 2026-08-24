@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git clone *)",
+      "Bash(npm run *)",
+      "Bash(npm install *)",
+      "Bash(npx next *)",
+      "Bash(kill 56448)",
+      "Bash(lsof -ti:3000)",
+      "Bash(xargs kill)",
+      "Bash(sed -i '' 's/max-w-xl flex-col gap-5 px-4 py-8/max-w-7xl flex-col gap-5 px-4 py-8 sm:px-6 lg:px-8/' src/app/loading.tsx)",
+      "Bash(sed -i '' 's/max-w-xl flex-col gap-4 px-4 py-8/max-w-7xl flex-col gap-4 px-4 py-8 sm:px-6 lg:px-8/' src/app/ranking/loading.tsx)",
+      "Bash(sed -i '' 's/max-w-xl flex-col gap-6 px-4 py-8/max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8/' src/app/challenges/loading.tsx)",
+      "Bash(sed -i '' 's/max-w-xl flex-col gap-4 px-4 py-8/max-w-7xl flex-col gap-4 px-4 py-8 sm:px-6 lg:px-8/' src/app/my/loading.tsx)",
+      "Bash(sed -i '' 's/max-w-xl flex-col gap-4 px-4 py-8/max-w-3xl flex-col gap-4 px-4 py-8 sm:px-6 lg:px-8/' src/app/notifications/loading.tsx)",
+      "Bash(find /tmp/taste-skill -type f | head -30)",
+      "Bash(mkdir -p .claude/skills/taste-skill .claude/skills/redesign-skill .claude/skills/soft-skill .claude/skills/minimalist-skill)",
+      "Bash(cp /tmp/taste-skill/skills/taste-skill/SKILL.md .claude/skills/taste-skill/SKILL.md)",
+      "Bash(cp /tmp/taste-skill/skills/redesign-skill/SKILL.md .claude/skills/redesign-skill/SKILL.md)",
+      "Bash(cp /tmp/taste-skill/skills/soft-skill/SKILL.md .claude/skills/soft-skill/SKILL.md)",
+      "Bash(cp /tmp/taste-skill/skills/minimalist-skill/SKILL.md .claude/skills/minimalist-skill/SKILL.md)",
+      "mcp__visualize__read_me",
+      "mcp__visualize__show_widget",
+      "Bash(git add *)",
+      "Bash(git commit -m 'feat: UI/UX 전면 개선 — 데스크탑 레이아웃 확장, 보관함+여정 통합, 검색 페이지 신설 *)"
+    ]
+  }
+}
