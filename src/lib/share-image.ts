@@ -195,3 +195,99 @@ export function renderShareCard(
 
   return true;
 }
+
+/* ── 배경화면 모드 ── */
+
+const WALLPAPER_WIDTH = 1080;
+const WALLPAPER_HEIGHT = 1920;
+const WP_PADDING_X = 120;
+const WP_BODY_FONT_SIZE = 48;
+const WP_BODY_LINE_HEIGHT = 74;
+const WP_SOURCE_FONT_SIZE = 26;
+const WP_SOURCE_GAP = 36;
+
+const WP_BODY_FONT = `600 ${WP_BODY_FONT_SIZE}px -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif`;
+const WP_SOURCE_FONT = `${WP_SOURCE_FONT_SIZE}px ui-monospace, "SF Mono", Menlo, "Courier New", monospace`;
+
+const WP_COLORS = {
+  bg: "#1a1816",
+  ink: "#faf8f4",
+  archive: "#c9a87c",
+  stoneFaint: "#8a8580",
+};
+
+export function renderWallpaper(
+  canvas: HTMLCanvasElement,
+  { body, source }: ShareImageData,
+  glyph?: CanvasImageSource,
+): boolean {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return false;
+
+  canvas.width = WALLPAPER_WIDTH;
+  canvas.height = WALLPAPER_HEIGHT;
+
+  // 배경 — 따뜻한 다크 톤
+  ctx.fillStyle = WP_COLORS.bg;
+  ctx.fillRect(0, 0, WALLPAPER_WIDTH, WALLPAPER_HEIGHT);
+
+  // 본문 줄바꿈
+  const maxTextWidth = WALLPAPER_WIDTH - WP_PADDING_X * 2;
+  ctx.font = WP_BODY_FONT;
+  const lines = wrapText(body, maxTextWidth, (s) => ctx.measureText(s).width);
+
+  // 콘텐츠 높이 계산 → 세로 중앙 배치
+  const bodyHeight = lines.length * WP_BODY_LINE_HEIGHT;
+  const sourceHeight = source
+    ? WP_SOURCE_GAP + WP_SOURCE_FONT_SIZE + 28
+    : 0;
+  const sigHeight = 56 + SIGNATURE_HEIGHT;
+  const totalContentHeight = bodyHeight + sourceHeight + sigHeight;
+  const startY = (WALLPAPER_HEIGHT - totalContentHeight) / 2;
+
+  // 본문
+  ctx.fillStyle = WP_COLORS.ink;
+  ctx.font = WP_BODY_FONT;
+  ctx.textBaseline = "top";
+  lines.forEach((line, i) => {
+    ctx.fillText(line, WP_PADDING_X, startY + i * WP_BODY_LINE_HEIGHT);
+  });
+
+  // 출처
+  if (source) {
+    const sourceY = startY + bodyHeight + WP_SOURCE_GAP;
+    ctx.font = WP_SOURCE_FONT;
+    ctx.fillStyle = WP_COLORS.archive;
+    ctx.fillText(`— ${source}`, WP_PADDING_X, sourceY);
+  }
+
+  // 서명 (하단 중앙)
+  const sigY = WALLPAPER_HEIGHT - 120;
+  ctx.font = SIGNATURE_FONT;
+  const wordmarkW = ctx.measureText(SIGNATURE_TEXT).width;
+  const glyphW = glyph ? SIGNATURE_GLYPH_WIDTH + SIGNATURE_TEXT_GAP : 0;
+  const sigTotalW = glyphW + wordmarkW;
+  const sigLeft = (WALLPAPER_WIDTH - sigTotalW) / 2;
+
+  if (glyph) {
+    const glyphH = (SIGNATURE_GLYPH_WIDTH * 1017) / 1412;
+    ctx.globalAlpha = 0.5;
+    ctx.drawImage(
+      glyph,
+      sigLeft,
+      sigY + (SIGNATURE_HEIGHT - glyphH) / 2,
+      SIGNATURE_GLYPH_WIDTH,
+      glyphH,
+    );
+    ctx.globalAlpha = 1;
+  }
+
+  ctx.fillStyle = WP_COLORS.stoneFaint;
+  ctx.fillText(
+    SIGNATURE_TEXT,
+    sigLeft + glyphW,
+    sigY + (SIGNATURE_HEIGHT - SIGNATURE_FONT_SIZE) / 2,
+  );
+
+  return true;
+}
