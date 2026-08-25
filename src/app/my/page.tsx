@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { SENTENCE_WITH_LIKE_COUNT_SELECT, toSentenceCardData } from "@/lib/sentences";
 import { getMonthlyRecap } from "@/lib/recap";
 import { getUserStreak } from "@/lib/streak";
+import { BrandMascot } from "@/components/BrandMascot";
 import { MyArchive } from "./MyArchive";
 import { MyThoughts } from "./MyThoughts";
 import { MyLibraryTabsClient } from "./MyLibraryTabsClient";
@@ -16,7 +16,7 @@ export default async function MyPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    return <MyPagePreview />;
   }
 
   const now = new Date();
@@ -172,6 +172,76 @@ export default async function MyPage() {
           계정 설정 →
         </Link>
       </div>
+    </main>
+  );
+}
+
+/* ── 비로그인 미리보기 ── */
+function MyPagePreview() {
+  const previewFeatures = [
+    {
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-archive">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        </svg>
+      ),
+      title: "문장 아카이브",
+      desc: "마음에 닿은 문장을 수집하고 나만의 라이브러리를 만들어요.",
+    },
+    {
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-coral">
+          <path d="M12 20h9" />
+          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+        </svg>
+      ),
+      title: "필사 스트릭",
+      desc: "매일 한 문장씩 따라 쓰며 꾸준함을 기록해요.",
+    },
+    {
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-ink">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+      ),
+      title: "나의 여정",
+      desc: "활동 히트맵과 월간 리캡으로 성장을 한눈에 확인해요.",
+    },
+  ];
+
+  return (
+    <main className="mx-auto flex w-full max-w-3xl flex-col items-center gap-8 px-4 py-16 sm:px-6 lg:px-8">
+      <BrandMascot className="h-20 w-[59px] text-archive" />
+
+      <div className="flex flex-col items-center gap-2 text-center">
+        <h1 className="font-serif text-2xl font-bold text-ink">내 보관함</h1>
+        <p className="text-sm leading-relaxed text-stone">
+          문장을 수집하고, 감상을 남기고, 필사하는 모든 기록이 여기에 모여요.
+        </p>
+      </div>
+
+      {/* 기능 미리보기 카드 */}
+      <div className="grid w-full gap-4 sm:grid-cols-3">
+        {previewFeatures.map((feature) => (
+          <div
+            key={feature.title}
+            className="flex flex-col items-center gap-3 rounded-[var(--radius-card)] border border-hairline bg-surface px-5 py-6 text-center shadow-[var(--shadow-card)]"
+          >
+            {feature.icon}
+            <span className="text-sm font-bold text-ink">{feature.title}</span>
+            <p className="text-xs leading-relaxed text-stone">{feature.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <Link
+        href="/login"
+        className="btn-press rounded-[var(--radius-pill)] bg-cta px-6 py-3 text-sm font-bold text-cta-contrast transition-all duration-200 hover:bg-cta-hover hover:shadow-md"
+      >
+        로그인하고 시작하기
+      </Link>
     </main>
   );
 }
