@@ -13,7 +13,7 @@ type Props = {
 
 export function SentenceCard({ id, body, source, commentary, emotionTag, likeCount }: Props) {
   return (
-    <article className="card-lift animate-fade-up group relative flex h-full flex-col gap-4 rounded-[var(--radius-card)] border border-hairline bg-surface px-6 py-5 shadow-[var(--shadow-card)] hover:border-archive/40 hover:shadow-[var(--shadow-card-hover)]">
+    <article className="card-lift scroll-reveal animate-fade-up group relative flex h-full flex-col gap-4 rounded-[var(--radius-card)] border border-hairline bg-surface px-6 py-5 shadow-[var(--shadow-card)] hover:border-archive/40 hover:shadow-[var(--shadow-card-hover)]">
       {/* 카드 전체 클릭 영역 — stretched link 패턴 */}
       <Link
         href={`/sentences/${id}`}

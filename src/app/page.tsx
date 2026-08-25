@@ -103,7 +103,7 @@ export default async function HomePage({
           {/* 오늘의 필사 CTA */}
           <Link
             href="/practice"
-            className="card-lift animate-fade-up group flex items-center justify-between rounded-[var(--radius-card)] bg-cta px-5 py-4 hover:bg-cta-hover hover:shadow-lg"
+            className="btn-press card-lift animate-fade-up group flex items-center justify-between rounded-[var(--radius-card)] bg-cta px-5 py-4 hover:bg-cta-hover hover:shadow-lg"
             style={{ animationDelay: '100ms' }}
           >
             <div className="flex flex-col gap-0.5">
