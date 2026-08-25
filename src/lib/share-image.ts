@@ -230,14 +230,15 @@ const WP_COLORS = {
 };
 
 /**
- * 한국어 배경화면용 줄바꿈.
+ * 한국어 배경화면용 줄바꿈 — 균등 분배.
  *
  * 1. 원본 줄바꿈(\n)을 최우선으로 유지한다.
- * 2. 한 줄이 maxWidth를 넘으면 자연스러운 끊김점에서 분리한다:
- *    - 구두점(. , ! ? …) 뒤
- *    - 접속 부사(그러니, 하지만, 그래서 등) 앞
- *    - 조사/어미 뒤 공백
- * 3. 끊김점이 없으면 글자 단위로 줄바꿈한다(기존 동작).
+ * 2. 한 줄이 maxWidth를 넘으면:
+ *    a) 필요한 최소 줄 수를 구한다.
+ *    b) 줄 수를 고정하고, 각 줄 길이가 최대한 균등해지는 끊김점을 찾는다.
+ *       → "인생은 짧다. 그러니 화낼시간도 없다" 같은 문장이
+ *         "인생은 짧다." / "그러니 화낼시간도 없다" 로 고르게 나뉜다.
+ *    c) 끊김점: 구두점 뒤, 공백 뒤, 없으면 글자 단위 폴백.
  */
 function wrapWallpaperText(
   text: string,
@@ -251,64 +252,75 @@ function wrapWallpaperText(
       result.push("");
       continue;
     }
-
-    // maxWidth에 이미 들어가면 그대로
     if (measureText(paragraph) <= maxWidth) {
       result.push(paragraph);
       continue;
     }
-
-    // 끊김 후보 위치를 찾는다
-    const breakPoints = findBreakPoints(paragraph);
-
-    if (breakPoints.length > 0) {
-      // 끊김점 기반 줄바꿈 — 각 줄이 maxWidth를 넘지 않는 선에서 가능한 많이 담는다
-      let lineStart = 0;
-      let lastGoodBreak = -1;
-
-      for (const bp of breakPoints) {
-        const candidate = paragraph.slice(lineStart, bp).trimEnd();
-        if (measureText(candidate) <= maxWidth) {
-          lastGoodBreak = bp;
-        } else {
-          // 이 끊김점에서 넘침 — 이전 끊김점에서 줄을 끊는다
-          if (lastGoodBreak > lineStart) {
-            result.push(paragraph.slice(lineStart, lastGoodBreak).trimEnd());
-            lineStart = lastGoodBreak;
-            // 줄 시작 공백 제거
-            while (lineStart < paragraph.length && paragraph[lineStart] === " ") lineStart++;
-            lastGoodBreak = -1;
-          } else {
-            // 끊김점이 없는 긴 구간 — 글자 단위 폴백
-            const fallback = wrapParagraph(
-              paragraph.slice(lineStart, bp),
-              maxWidth,
-              measureText,
-            );
-            result.push(...fallback.slice(0, -1));
-            const lastLine = fallback[fallback.length - 1];
-            lineStart = bp - lastLine.length;
-            lastGoodBreak = -1;
-          }
-        }
-      }
-
-      // 남은 부분
-      const remaining = paragraph.slice(lineStart).trimEnd();
-      if (remaining.length > 0) {
-        if (measureText(remaining) <= maxWidth) {
-          result.push(remaining);
-        } else {
-          result.push(...wrapParagraph(remaining, maxWidth, measureText));
-        }
-      }
-    } else {
-      // 끊김점이 아예 없으면 글자 단위
-      result.push(...wrapParagraph(paragraph, maxWidth, measureText));
-    }
+    result.push(...balancedWrap(paragraph, maxWidth, measureText));
   }
 
   return result;
+}
+
+/**
+ * 균등 줄바꿈 — 줄 간 너비 차이를 최소화한다.
+ */
+function balancedWrap(
+  text: string,
+  maxWidth: number,
+  measureText: (s: string) => number,
+): string[] {
+  const breaks = findBreakPoints(text);
+  if (breaks.length === 0) {
+    return wrapParagraph(text, maxWidth, measureText);
+  }
+
+  // 필요한 최소 줄 수
+  const totalWidth = measureText(text);
+  const minLines = Math.ceil(totalWidth / maxWidth);
+  const targetWidth = totalWidth / minLines;
+
+  const lines: string[] = [];
+  let lineStart = 0;
+
+  for (let lineIdx = 0; lineIdx < minLines - 1; lineIdx++) {
+    let bestBreak = -1;
+    let bestDiff = Infinity;
+
+    for (const bp of breaks) {
+      if (bp <= lineStart) continue;
+      const candidate = text.slice(lineStart, bp).trimEnd();
+      const w = measureText(candidate);
+      if (w > maxWidth) break; // 넘으면 더 볼 필요 없음
+      const diff = Math.abs(w - targetWidth);
+      if (diff < bestDiff) {
+        bestDiff = diff;
+        bestBreak = bp;
+      }
+    }
+
+    if (bestBreak <= lineStart) {
+      // 끊김점으로 안 되면 글자 단위 폴백
+      lines.push(...wrapParagraph(text.slice(lineStart), maxWidth, measureText));
+      return lines;
+    }
+
+    lines.push(text.slice(lineStart, bestBreak).trimEnd());
+    lineStart = bestBreak;
+    while (lineStart < text.length && text[lineStart] === " ") lineStart++;
+  }
+
+  // 마지막 줄
+  const remaining = text.slice(lineStart).trimEnd();
+  if (remaining.length > 0) {
+    if (measureText(remaining) <= maxWidth) {
+      lines.push(remaining);
+    } else {
+      lines.push(...wrapParagraph(remaining, maxWidth, measureText));
+    }
+  }
+
+  return lines;
 }
 
 /**
@@ -316,22 +328,21 @@ function wrapWallpaperText(
  * 반환값은 "이 위치부터 다음 줄" 이라는 뜻이다.
  */
 function findBreakPoints(text: string): number[] {
-  const points: number[] = [];
-  // 구두점 뒤 (다음 글자가 있을 때)
+  const points = new Set<number>();
+  // 구두점 뒤 (우선순위 높음)
   const punctuation = /[.!?…,，。]\s*/g;
   let m;
   while ((m = punctuation.exec(text)) !== null) {
     const after = m.index + m[0].length;
-    if (after < text.length) points.push(after);
+    if (after < text.length) points.add(after);
   }
   // 공백 뒤
   for (let i = 0; i < text.length; i++) {
     if (text[i] === " " && i + 1 < text.length) {
-      if (!points.includes(i + 1)) points.push(i + 1);
+      points.add(i + 1);
     }
   }
-  points.sort((a, b) => a - b);
-  return points;
+  return [...points].sort((a, b) => a - b);
 }
 
 export function renderWallpaper(
@@ -366,21 +377,24 @@ export function renderWallpaper(
   const totalContentHeight = bodyHeight + sourceHeight + sigHeight;
   const startY = Math.max(200, (WALLPAPER_HEIGHT - totalContentHeight) / 2);
 
-  // 본문
+  // 본문 — 가운데 정렬
   ctx.fillStyle = WP_COLORS.ink;
   ctx.font = bodyFont;
   ctx.textBaseline = "top";
+  ctx.textAlign = "center";
+  const centerX = WALLPAPER_WIDTH / 2;
   lines.forEach((line, i) => {
-    ctx.fillText(line, WP_PADDING_X, startY + i * tier.lineHeight);
+    ctx.fillText(line, centerX, startY + i * tier.lineHeight);
   });
 
-  // 출처
+  // 출처 — 가운데 정렬
   if (source) {
     const sourceY = startY + bodyHeight + WP_SOURCE_GAP;
     ctx.font = `${WP_SOURCE_FONT_SIZE}px ui-monospace, "SF Mono", Menlo, "Courier New", monospace`;
     ctx.fillStyle = WP_COLORS.archive;
-    ctx.fillText(`— ${source}`, WP_PADDING_X, sourceY);
+    ctx.fillText(`— ${source}`, centerX, sourceY);
   }
+  ctx.textAlign = "start";
 
   // 서명 (하단 중앙)
   const sigY = WALLPAPER_HEIGHT - 120;
