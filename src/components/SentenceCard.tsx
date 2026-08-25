@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { ShareImageButton } from "@/components/ShareImageButton";
 import { LikeButton } from "@/components/LikeButton";
