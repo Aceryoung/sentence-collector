@@ -87,7 +87,7 @@ export function MoodPicker() {
             key={tag}
             type="button"
             onClick={() => handleSelect(tag)}
-            className={`rounded-[var(--radius-pill)] border px-2.5 py-1 text-xs transition-all duration-200 ${
+            className={`inline-flex min-h-[44px] items-center rounded-[var(--radius-pill)] border px-2.5 text-xs transition-all duration-200 ${
               selected === tag
                 ? "border-archive bg-archive text-archive-contrast"
                 : "border-hairline-strong bg-paper text-stone hover:border-archive/40 hover:text-ink active:scale-95"

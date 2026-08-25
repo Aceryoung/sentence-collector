@@ -4,7 +4,7 @@ export function NotificationBadge({ count }: { count: number }) {
   return (
     <Link
       href="/notifications"
-      className="relative inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-input)] text-stone transition-colors hover:bg-surface hover:text-ink"
+      className="relative inline-flex h-11 w-11 items-center justify-center rounded-[var(--radius-input)] text-stone transition-colors hover:bg-surface hover:text-ink"
       aria-label={count > 0 ? `알림 ${count}개` : "알림"}
     >
       <svg

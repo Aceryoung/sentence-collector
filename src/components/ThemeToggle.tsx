@@ -41,7 +41,7 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label={isDark ? "라이트 모드로 전환" : "다크 모드로 전환"}
       title={isDark ? "라이트 모드로 전환" : "다크 모드로 전환"}
-      className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-input)] text-stone transition-colors hover:bg-surface hover:text-ink"
+      className="inline-flex h-11 w-11 items-center justify-center rounded-[var(--radius-input)] text-stone transition-colors hover:bg-surface hover:text-ink"
     >
       {isDark ? (
         <svg

@@ -144,7 +144,7 @@ function NavLink({
   return (
     <Link
       href={href}
-      className={`relative px-2.5 py-1.5 text-xs font-medium text-stone transition-colors duration-200 hover:text-ink ${className}`}
+      className={`relative inline-flex min-h-[44px] items-center px-2.5 text-xs font-medium text-stone transition-colors duration-200 hover:text-ink ${className}`}
     >
       {children}
     </Link>

@@ -45,7 +45,7 @@ function TagChip({
   return (
     <Link
       href={href}
-      className={`shrink-0 rounded-[var(--radius-pill)] border px-3 py-1.5 text-xs transition-all duration-200 ${
+      className={`inline-flex min-h-[44px] shrink-0 items-center rounded-[var(--radius-pill)] border px-3 text-xs transition-all duration-200 ${
         active
           ? "border-archive bg-archive font-bold text-archive-contrast shadow-sm"
           : "border-hairline-strong bg-surface text-stone hover:border-archive/40 hover:text-ink active:scale-95"
