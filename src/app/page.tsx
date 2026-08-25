@@ -49,7 +49,7 @@ export default async function HomePage({
       <div className="flex flex-col gap-8 lg:flex-row lg:gap-10">
 
         {/* ── 왼쪽 사이드바 (데스크탑) / 상단 (모바일) ── */}
-        <aside className="flex shrink-0 flex-col gap-5 lg:sticky lg:top-20 lg:w-80 lg:self-start">
+        <aside aria-label="추천 및 바로가기" className="flex shrink-0 flex-col gap-5 lg:sticky lg:top-20 lg:w-80 lg:self-start">
 
           {/* 마스코트 인사 */}
           <div className="animate-fade-up flex items-center gap-4">
@@ -128,7 +128,7 @@ export default async function HomePage({
         {/* ── 오른쪽 메인 피드 ── */}
         <div className="min-w-0 flex-1">
           {sentences.length > 0 || tag ? (
-            <section className="flex flex-col gap-4">
+            <section aria-label="문장 피드" className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <h1 className="font-serif text-lg font-bold text-ink">
                   발견하기

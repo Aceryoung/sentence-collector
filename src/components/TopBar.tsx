@@ -22,7 +22,7 @@ export async function TopBar() {
   }
 
   return (
-    <header className="sticky top-0 z-10 border-b border-hairline bg-paper/90 backdrop-blur">
+    <header aria-label="글적 상단 내비게이션" className="sticky top-0 z-10 border-b border-hairline bg-paper/90 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* 로고 */}
         <Link
