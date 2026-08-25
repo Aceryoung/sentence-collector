@@ -223,10 +223,10 @@ function makeWpBodyFont(fontSize: number): string {
 }
 
 const WP_COLORS = {
-  bg: "#1a1816",
-  ink: "#faf8f4",
-  archive: "#c9a87c",
-  stoneFaint: "#8a8580",
+  bg: "#faf8f4",
+  ink: "#1a1816",
+  archive: "#8b6542",
+  stoneFaint: "#b5b0a7",
 };
 
 /**
