@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { SentenceCard } from "@/components/SentenceCard";
 import { EmptyState } from "@/components/EmptyState";
 import { BrandMascot } from "@/components/BrandMascot";
 import { TagFilter } from "@/components/TagFilter";
+import { InfiniteScrollFeed } from "@/components/InfiniteScrollFeed";
 import {
   SENTENCE_WITH_LIKE_COUNT_SELECT,
   getPersonalDailyPick,
@@ -14,10 +14,9 @@ import { getUserStreak } from "@/lib/streak";
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams: Promise<{ tag?: string; page?: string }>;
+  searchParams: Promise<{ tag?: string }>;
 }) {
-  const { tag, page } = await searchParams;
-  const currentPage = Math.max(1, parseInt(page ?? "1", 10) || 1);
+  const { tag } = await searchParams;
   const PAGE_SIZE = 20;
   const supabase = await createClient();
   const {
@@ -29,10 +28,9 @@ export default async function HomePage({
     .select(SENTENCE_WITH_LIKE_COUNT_SELECT)
     .is("deleted_at", null);
   if (tag) feedQuery = feedQuery.eq("emotion_tag", tag);
-  const offset = (currentPage - 1) * PAGE_SIZE;
   feedQuery = feedQuery
     .order("created_at", { ascending: false })
-    .range(offset, offset + PAGE_SIZE);
+    .range(0, PAGE_SIZE);
 
   const [{ data }, dailyPick, userStreak] = await Promise.all([
     feedQuery,
@@ -144,43 +142,12 @@ export default async function HomePage({
               </div>
               <TagFilter activeTag={tag ?? null} />
               {sentences.length > 0 ? (
-                <>
-                  <div className="stagger-grid grid grid-cols-1 gap-4 md:grid-cols-2">
-                    {sentences.map((sentence) => (
-                      <SentenceCard
-                        key={sentence.id}
-                        id={sentence.id}
-                        body={sentence.body}
-                        source={sentence.source}
-                        commentary={sentence.commentary}
-                        emotionTag={sentence.emotionTag}
-                        likeCount={sentence.likeCount}
-                      />
-                    ))}
-                  </div>
-
-                  {/* 페이지네이션 */}
-                  {(currentPage > 1 || sentences.length >= PAGE_SIZE) ? (
-                    <div className="flex items-center justify-center gap-3 pt-4">
-                      {currentPage > 1 ? (
-                        <Link
-                          href={`/?${new URLSearchParams({ ...(tag ? { tag } : {}), page: String(currentPage - 1) }).toString()}`}
-                          className="rounded-[var(--radius-pill)] border border-hairline-strong px-4 py-2 text-xs font-medium text-stone transition-all hover:border-archive hover:text-ink active:scale-95"
-                        >
-                          ← 이전
-                        </Link>
-                      ) : null}
-                      {sentences.length >= PAGE_SIZE ? (
-                        <Link
-                          href={`/?${new URLSearchParams({ ...(tag ? { tag } : {}), page: String(currentPage + 1) }).toString()}`}
-                          className="rounded-[var(--radius-pill)] border border-hairline-strong px-4 py-2 text-xs font-medium text-stone transition-all hover:border-archive hover:text-ink active:scale-95"
-                        >
-                          더 보기 →
-                        </Link>
-                      ) : null}
-                    </div>
-                  ) : null}
-                </>
+                <InfiniteScrollFeed
+                  initialSentences={sentences}
+                  tag={tag}
+                  excludeId={dailyPick?.id}
+                  initialHasMore={sentences.length >= PAGE_SIZE}
+                />
               ) : (
                 <p className="py-6 text-center text-sm text-stone">
                   &lsquo;{tag}&rsquo; 태그의 문장이 아직 없어요.
