@@ -15,37 +15,37 @@
 
 | 토큰 | 라이트 | 다크 | 용도 |
 |------|--------|------|------|
-| `--paper` | `#fbf9f5` | `#141313` | 페이지 배경. 미세한 grain 노이즈 오버레이 적용. |
-| `--surface` | `#f5f3ef` | `#1c1b1c` | 카드, 입력 필드, 올린 표면. |
+| `--paper` | `#fbf9f5` | `#000000` | 페이지 배경. 라이트: grain 오버레이 적용, 다크: 순수 블랙(iPhone 스타일). |
+| `--surface` | `#f5f3ef` | `#1c1c1e` | 카드, 입력 필드, 올린 표면. 다크 모드에서 배경과 명확한 계층 분리. |
 
 ### 텍스트(Text)
 
 | 토큰 | 라이트 | 다크 | 용도 |
 |------|--------|------|------|
-| `--ink-black` | `#1a2a3a` | `#e3e2de` | 본문 텍스트. Deep Navy에 가까운 잉크색. |
-| `--stone` | `#6b7a8a` | `#8a8b89` | 보조 텍스트, 라벨. |
-| `--stone-faint` | `#9ba5b0` | `#5a5a59` | 비활성 텍스트, 플레이스홀더. |
+| `--ink-black` | `#1a2a3a` | `#f2f2f7` | 본문 텍스트. 라이트: Deep Navy 잉크, 다크: iOS 시스템 화이트. |
+| `--stone` | `#6b7a8a` | `#a1a1a6` | 보조 텍스트, 라벨. |
+| `--stone-faint` | `#9ba5b0` | `#636366` | 비활성 텍스트, 플레이스홀더. |
 
 ### 강조(Accents)
 
 | 토큰 | 라이트 | 다크 | 용도 |
 |------|--------|------|------|
-| `--archive` | `#4a6580` | `#7a9ab5` | 링크, 브랜드 컬러, 아이콘. |
-| `--archive-contrast` | `#fbf9f5` | `#141313` | archive 배경 위 텍스트. |
+| `--archive` | `#4a6580` | `#7aafcf` | 링크, 브랜드 컬러, 아이콘. |
+| `--archive-contrast` | `#fbf9f5` | `#000000` | archive 배경 위 텍스트. |
 | `--cta` | `#1e3a5f` | `#7ab0d9` | CTA 버튼 배경. Deep Ink Blue. |
 | `--cta-hover` | `#15304f` | `#8fc0e5` | CTA 호버 상태. |
-| `--cta-contrast` | `#f5f3ef` | `#141313` | CTA 위 텍스트. |
-| `--coral` | `#c4654a` | `#e8836a` | 포인트 강조, 알림, 성취 뱃지. |
-| `--coral-soft` | `rgba(196,101,74,0.12)` | `rgba(232,131,106,0.15)` | 코랄 배경 하이라이트. |
+| `--cta-contrast` | `#f5f3ef` | `#000000` | CTA 위 텍스트. |
+| `--coral` | `#c4654a` | `#ef8e76` | 포인트 강조, 알림, 성취 뱃지. |
+| `--coral-soft` | `rgba(196,101,74,0.12)` | `rgba(239,142,118,0.18)` | 코랄 배경 하이라이트. |
 
 ### 보더 & 그림자(Borders & Shadows)
 
 | 토큰 | 라이트 | 다크 | 용도 |
 |------|--------|------|------|
-| `--hairline` | `#dbdad6` | `#3a3939` | 기본 보더, 구분선. |
-| `--hairline-strong` | `#c8c7c3` | `#4a4949` | 강조 보더, 인터랙티브 요소 보더. |
-| `--shadow-card` | `0 1px 3px …` | `0 1px 3px …` | 카드 기본 그림자. |
-| `--shadow-card-hover` | `0 2px 6px …` | `0 2px 6px …` | 카드 호버 그림자. |
+| `--hairline` | `#dbdad6` | `#38383a` | 기본 보더, 구분선. (iOS 표준) |
+| `--hairline-strong` | `#c8c7c3` | `#48484a` | 강조 보더, 인터랙티브 요소 보더. |
+| `--shadow-card` | `0 1px 3px …` | `0 1px 4px …` | 카드 기본 그림자. 다크 모드에서 더 강하게. |
+| `--shadow-card-hover` | `0 2px 6px …` | `0 2px 8px …` | 카드 호버 그림자. |
 
 ## 라디우스(Radius)
 
@@ -191,8 +191,8 @@ CTA 버튼에 `btn-press` 클래스 적용 → active 시 `scale(0.97)`.
 ## 종이 질감 (Grain)
 
 `--grain` 토큰으로 `body`에 미세한 fractalNoise SVG 오버레이 적용:
-- 라이트: `opacity: 0.03`
-- 다크: `opacity: 0.025`
+- 라이트: `opacity: 0.03`의 fractalNoise SVG
+- 다크: `none` (순수 블랙 배경 유지, iPhone 다크모드 참고)
 
 ```css
 body {
