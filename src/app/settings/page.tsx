@@ -4,6 +4,24 @@ import { createClient } from "@/lib/supabase/server";
 import { PasswordForm } from "./PasswordForm";
 import { SkipPasswordButton } from "./SkipPasswordButton";
 import { NicknameForm } from "./NicknameForm";
+import { PreferencesForm } from "./PreferencesForm";
+
+async function PreferencesSection({ userId }: { userId: string }) {
+  const supabase = await createClient();
+  const { data: settings } = await supabase
+    .from("user_settings")
+    .select("reminder_enabled, reminder_hour, weekly_report_enabled")
+    .eq("user_id", userId)
+    .single();
+
+  return (
+    <PreferencesForm
+      initialReminder={settings?.reminder_enabled ?? false}
+      initialHour={settings?.reminder_hour ?? 9}
+      initialWeeklyReport={settings?.weekly_report_enabled ?? false}
+    />
+  );
+}
 
 export default async function SettingsPage({
   searchParams,
@@ -53,6 +71,13 @@ export default async function SettingsPage({
       )}
 
       <PasswordForm variant={isSetup ? "setup" : "settings"} />
+
+      {!isSetup ? (
+        <>
+          <div className="h-px bg-hairline" />
+          <PreferencesSection userId={user.id} />
+        </>
+      ) : null}
 
       {isSetup ? (
         <SkipPasswordButton />

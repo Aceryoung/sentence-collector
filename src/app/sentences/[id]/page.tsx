@@ -6,6 +6,8 @@ import { LikeButton } from "@/components/LikeButton";
 import { ShareImageButton } from "@/components/ShareImageButton";
 import { ReflectionForm } from "./ReflectionForm";
 import { ThoughtSection } from "./ThoughtSection";
+import { ReflectionLikeButton } from "@/components/ReflectionLikeButton";
+import { AddToCollectionButton } from "@/components/AddToCollectionButton";
 
 export default async function SentenceDetailPage({
   params,
@@ -41,10 +43,23 @@ export default async function SentenceDetailPage({
 
   const { data: reflections } = await supabase
     .from("reflections")
-    .select("id, body, created_at")
+    .select("id, body, created_at, reflection_likes(count)")
     .eq("sentence_id", id)
     .order("created_at", { ascending: false })
     .limit(50);
+
+  // 로그인 사용자의 감상 좋아요 상태
+  let likedReflectionIds = new Set<string>();
+  if (user && reflections && reflections.length > 0) {
+    const { data: myLikes } = await supabase
+      .from("reflection_likes")
+      .select("reflection_id")
+      .eq("user_id", user.id)
+      .in("reflection_id", reflections.map((r) => r.id));
+    if (myLikes) {
+      likedReflectionIds = new Set(myLikes.map((l) => l.reflection_id));
+    }
+  }
 
   // 같은 태그의 관련 문장 (최대 4개)
   let relatedSentences: { id: string; body: string; source: string | null }[] = [];
@@ -89,6 +104,7 @@ export default async function SentenceDetailPage({
         <div className="flex items-center gap-3">
           <LikeButton sentenceId={sentence.id} initialCount={sentence.likeCount} />
           <ShareImageButton body={sentence.body} source={sentence.source} />
+          {user ? <AddToCollectionButton sentenceId={sentence.id} /> : null}
         </div>
       </section>
 
@@ -123,9 +139,21 @@ export default async function SentenceDetailPage({
                 <p className="user-text leading-relaxed text-ink">
                   {r.body}
                 </p>
-                <time className="mt-2 block text-xs text-stone-faint">
-                  {new Date(r.created_at).toLocaleDateString("ko-KR")}
-                </time>
+                <div className="mt-2 flex items-center justify-between">
+                  <time className="text-xs text-stone-faint">
+                    {new Date(r.created_at).toLocaleDateString("ko-KR")}
+                  </time>
+                  {user ? (
+                    <ReflectionLikeButton
+                      reflectionId={r.id}
+                      liked={likedReflectionIds.has(r.id)}
+                      count={
+                        (r as unknown as { reflection_likes: { count: number }[] })
+                          .reflection_likes?.[0]?.count ?? 0
+                      }
+                    />
+                  ) : null}
+                </div>
               </li>
             ))}
           </ul>

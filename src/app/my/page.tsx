@@ -82,6 +82,13 @@ export default async function MyPage() {
     activityMap[d] = (activityMap[d] ?? 0) + 1;
   }
 
+  // 내 컬렉션
+  const { data: myCollections } = await supabase
+    .from("collections")
+    .select("id, title, is_public, collection_items(count)")
+    .eq("user_id", user.id)
+    .order("updated_at", { ascending: false });
+
   // 총 좋아요 (내 문장에 달린)
   const { data: likeData } = await supabase
     .from("sentences")
@@ -162,6 +169,48 @@ export default async function MyPage() {
         recap={recap}
         journeyData={journeyData}
       />
+
+      {/* 내 컬렉션 */}
+      <section className="flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <h2 className="font-serif text-lg font-bold text-ink">내 컬렉션</h2>
+          <Link
+            href="/collections/new"
+            className="rounded-[var(--radius-pill)] bg-cta px-3 py-1.5 text-xs font-bold text-cta-contrast transition-colors hover:bg-cta-hover"
+          >
+            + 새 컬렉션
+          </Link>
+        </div>
+        {myCollections && myCollections.length > 0 ? (
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {myCollections.map((c) => (
+              <li key={c.id}>
+                <Link
+                  href={`/collections/${c.id}`}
+                  className="card-lift flex items-center justify-between rounded-[var(--radius-card)] border border-hairline bg-surface px-4 py-3 transition-all hover:shadow-[var(--shadow-card-hover)]"
+                >
+                  <div className="flex items-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-archive" aria-hidden="true">
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                    </svg>
+                    <span className="text-sm font-medium text-ink">{c.title}</span>
+                    {c.is_public ? (
+                      <span className="rounded bg-archive/10 px-1.5 py-0.5 text-[10px] text-archive">공개</span>
+                    ) : null}
+                  </div>
+                  <span className="text-xs tabular-nums text-stone-faint">
+                    {(c.collection_items as { count: number }[])?.[0]?.count ?? 0}개
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="py-4 text-center text-sm text-stone">
+            문장을 주제별로 모아보세요.
+          </p>
+        )}
+      </section>
 
       {/* 하단 링크 */}
       <div className="mt-4 flex flex-col gap-3">
