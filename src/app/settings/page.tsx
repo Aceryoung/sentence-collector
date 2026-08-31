@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PasswordForm } from "./PasswordForm";
 import { SkipPasswordButton } from "./SkipPasswordButton";
+import { NicknameForm } from "./NicknameForm";
 
 export default async function SettingsPage({
   searchParams,
@@ -35,12 +36,20 @@ export default async function SettingsPage({
           다른 기기에서도 메일 없이 바로 들어올 수 있어요.
         </p>
       ) : (
-        <div className="flex flex-col gap-1">
-          <span className="text-xs uppercase tracking-wide text-stone">
-            이메일
-          </span>
-          <p className="text-sm break-words text-ink">{user.email}</p>
-        </div>
+        <>
+          <div className="flex flex-col gap-1">
+            <span className="text-xs uppercase tracking-wide text-stone">
+              이메일
+            </span>
+            <p className="text-sm break-words text-ink">{user.email}</p>
+          </div>
+
+          <NicknameForm
+            currentNickname={(user.user_metadata?.nickname as string) ?? null}
+          />
+
+          <div className="h-px bg-hairline" />
+        </>
       )}
 
       <PasswordForm variant={isSetup ? "setup" : "settings"} />

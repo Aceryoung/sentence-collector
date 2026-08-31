@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { NavMenu } from "@/components/NavMenu";
 import { NotificationBadge } from "@/components/NotificationBadge";
+import { UserMenu } from "@/components/UserMenu";
 
 export async function TopBar() {
   const supabase = await createClient();
@@ -66,13 +67,6 @@ export async function TopBar() {
         <div className="flex items-center gap-1">
           {user ? (
             <>
-              {/* 데스크탑 전용 액션 */}
-              <NavLink href="/my" className="hidden sm:inline-flex">
-                보관함
-              </NavLink>
-
-              <span className="mx-1 hidden h-4 w-px bg-hairline sm:inline-block" aria-hidden="true" />
-
               <NotificationBadge count={unreadCount} />
 
               <Link
@@ -101,6 +95,12 @@ export async function TopBar() {
               <span className="hidden sm:inline-flex">
                 <ThemeToggle />
               </span>
+
+              {/* 데스크탑 사용자 메뉴 (닉네임 + 로그아웃) */}
+              <UserMenu
+                nickname={(user.user_metadata?.nickname as string) ?? null}
+                email={user.email ?? ""}
+              />
 
               {/* 모바일 햄버거 */}
               <NavMenu />
