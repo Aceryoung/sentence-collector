@@ -48,7 +48,7 @@ export async function createSentence(
   });
 
   if (error) {
-    console.error("[createSentence] insert failed:", error);
+    console.error("[createSentence] insert failed:", error.message);
     return { error: "등록에 실패했어요, 잠시 후 다시 시도해주세요." };
   }
 

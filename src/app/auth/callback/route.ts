@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(`${baseUrl}${destination}`);
     }
 
-    console.error("[auth/callback] exchangeCodeForSession failed:", error);
+    console.error("[auth/callback] exchangeCodeForSession failed:", error.message);
   }
 
   // 코드가 없거나 교환에 실패 — 링크가 만료됐거나 이미 사용된 경우

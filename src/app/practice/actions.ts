@@ -37,7 +37,7 @@ export async function logPractice(
 
   // 23505 = unique(user_id, date) 위반 → 오늘 이미 기록됨, 정상 처리
   if (error && error.code !== "23505") {
-    console.error("[logPractice] insert failed:", error);
+    console.error("[logPractice] insert failed:", error.message);
     return { error: "기록에 실패했어요, 잠시 후 다시 시도해주세요." };
   }
 

@@ -25,6 +25,10 @@ export async function addThought(
     return { error: "생각을 적어주세요." };
   }
 
+  if (body.length > 500) {
+    return { error: "생각은 500자까지 쓸 수 있어요." };
+  }
+
   const { error } = await supabase
     .from("thoughts")
     .insert({ sentence_id: sentenceId, author_id: user.id, body });
@@ -56,6 +60,10 @@ export async function updateThought(
 
   if (!body) {
     return { error: "생각을 적어주세요." };
+  }
+
+  if (body.length > 500) {
+    return { error: "생각은 500자까지 쓸 수 있어요." };
   }
 
   const { error } = await supabase

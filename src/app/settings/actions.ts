@@ -32,7 +32,7 @@ export async function updateNickname(
   });
 
   if (error) {
-    console.error("[updateNickname] failed:", error);
+    console.error("[updateNickname] failed:", error.message);
     return { error: "닉네임 저장에 실패했어요. 잠시 후 다시 시도해주세요.", success: false };
   }
 

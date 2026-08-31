@@ -13,6 +13,13 @@ export async function joinChallenge(formData: FormData) {
 
   const challengeId = formData.get("challengeId") as string;
 
+  // UUID 형식 검증
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!challengeId || !uuidRegex.test(challengeId)) {
+    redirect("/challenges");
+  }
+
   await supabase
     .from("challenge_participants")
     .upsert(
