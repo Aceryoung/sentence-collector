@@ -10,6 +10,9 @@ import {
   toSentenceCardData,
 } from "@/lib/sentences";
 import { getUserStreak } from "@/lib/streak";
+import { getLeaderboard } from "@/lib/leaderboard";
+import { PracticeLeaderboard } from "@/components/PracticeLeaderboard";
+import { getPersonalizedRecommendations } from "@/lib/personalization";
 
 export default async function HomePage({
   searchParams,
@@ -32,10 +35,14 @@ export default async function HomePage({
     .order("created_at", { ascending: false })
     .range(0, PAGE_SIZE);
 
-  const [{ data }, dailyPick, userStreak] = await Promise.all([
+  const [{ data }, dailyPick, userStreak, leaderboard, recommendations] = await Promise.all([
     feedQuery,
     user ? getPersonalDailyPick(supabase, user.id) : Promise.resolve(null),
     user ? getUserStreak(supabase, user.id) : Promise.resolve(null),
+    getLeaderboard(supabase, user?.id ?? null),
+    user
+      ? getPersonalizedRecommendations(supabase, user.id)
+      : Promise.resolve(null),
   ]);
 
   const sentences = (data ?? [])
@@ -121,10 +128,38 @@ export default async function HomePage({
               <span className="text-cta-contrast/60 transition-transform duration-200 group-hover:translate-x-0.5">→</span>
             </div>
           </Link>
+
+          {/* 필사 챌린지 순위 */}
+          <PracticeLeaderboard entries={leaderboard} />
         </aside>
 
         {/* ── 오른쪽 메인 피드 ── */}
         <div className="min-w-0 flex-1">
+          {/* 맞춤 추천 (로그인 시) */}
+          {recommendations && recommendations.sentences.length > 0 && !tag ? (
+            <section className="mb-6 flex flex-col gap-3">
+              <span className="text-xs font-bold tracking-widest text-coral">
+                {recommendations.reason}
+              </span>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {recommendations.sentences.map((s) => (
+                  <Link
+                    key={s.id}
+                    href={`/sentences/${s.id}`}
+                    className="card-lift flex flex-col gap-2 rounded-[var(--radius-card)] border border-hairline bg-surface px-4 py-4 shadow-[var(--shadow-card)] hover:border-archive/40 hover:shadow-[var(--shadow-card-hover)]"
+                  >
+                    <p className="user-text line-clamp-3 font-serif text-sm leading-relaxed text-ink">
+                      {s.body}
+                    </p>
+                    <span className="text-[10px] text-stone">
+                      {s.source || "출처 미상"}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
           {sentences.length > 0 || tag ? (
             <section aria-label="문장 피드" className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
