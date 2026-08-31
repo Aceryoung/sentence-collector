@@ -40,46 +40,48 @@
     ui-monospace, "SF Mono", "Menlo", "Courier New", monospace;
 }
 
+/* Nocturnal Inkwell v3 — iPhone 다크모드 참고.
+   배경 계층을 확실히 분리하고, 텍스트 대비를 높인다. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #141313;
-    --surface: #1c1b1c;
-    --ink-black: #e3e2de;
-    --stone: #8a8b89;
-    --stone-faint: #5a5a59;
-    --archive: #7a9ab5;
-    --archive-contrast: #141313;
-    --hairline: #3a3939;
-    --hairline-strong: #4a4949;
+    --paper: #000000;
+    --surface: #1c1c1e;
+    --ink-black: #f2f2f7;
+    --stone: #a1a1a6;
+    --stone-faint: #636366;
+    --archive: #7aafcf;
+    --archive-contrast: #000000;
+    --hairline: #38383a;
+    --hairline-strong: #48484a;
     --cta: #7ab0d9;
     --cta-hover: #8fc0e5;
-    --cta-contrast: #141313;
-    --coral: #e8836a;
-    --coral-soft: rgba(232, 131, 106, 0.15);
-    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
-    --shadow-card-hover: 0 2px 6px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2);
-    --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    --cta-contrast: #000000;
+    --coral: #ef8e76;
+    --coral-soft: rgba(239, 142, 118, 0.18);
+    --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.3);
+    --shadow-card-hover: 0 2px 8px rgba(0, 0, 0, 0.5), 0 8px 28px rgba(0, 0, 0, 0.35);
+    --grain: none;
   }
 }
 
 :root[data-theme="dark"] {
-  --paper: #141313;
-  --surface: #1c1b1c;
-  --ink-black: #e3e2de;
-  --stone: #8a8b89;
-  --stone-faint: #5a5a59;
-  --archive: #7a9ab5;
-  --archive-contrast: #141313;
-  --hairline: #3a3939;
-  --hairline-strong: #4a4949;
+  --paper: #000000;
+  --surface: #1c1c1e;
+  --ink-black: #f2f2f7;
+  --stone: #a1a1a6;
+  --stone-faint: #636366;
+  --archive: #7aafcf;
+  --archive-contrast: #000000;
+  --hairline: #38383a;
+  --hairline-strong: #48484a;
   --cta: #7ab0d9;
   --cta-hover: #8fc0e5;
-  --cta-contrast: #141313;
-  --coral: #e8836a;
-  --coral-soft: rgba(232, 131, 106, 0.15);
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
-  --shadow-card-hover: 0 2px 6px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2);
-  --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  --cta-contrast: #000000;
+  --coral: #ef8e76;
+  --coral-soft: rgba(239, 142, 118, 0.18);
+  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 2px 8px rgba(0, 0, 0, 0.5), 0 8px 28px rgba(0, 0, 0, 0.35);
+  --grain: none;
 }
 
 :root[data-theme="light"] {
