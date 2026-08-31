@@ -6,6 +6,8 @@ import { BrandMascot } from "@/components/BrandMascot";
 import { PracticeCompleteButton } from "./PracticeCompleteButton";
 import { TypingPractice } from "./TypingPractice";
 import { EmptyState } from "@/components/EmptyState";
+import { MilestoneCelebration } from "@/components/MilestoneCelebration";
+import { getExactMilestone, getNextMilestone, getCurrentBadge } from "@/lib/milestones";
 
 export default async function PracticePage() {
   const supabase = await createClient();
@@ -59,11 +61,33 @@ export default async function PracticePage() {
                 </div>
               ) : null}
               {completedToday ? (
-                <div className="flex flex-col items-center gap-2">
-                  <BrandMascot className="h-10 w-[29px] text-archive" />
-                  <span className="text-sm text-archive">
-                    오늘의 필사를 완료했어요
-                  </span>
+                <div className="flex flex-col items-center gap-4">
+                  {getExactMilestone(streak) ? (
+                    <MilestoneCelebration
+                      milestone={getExactMilestone(streak)!}
+                      nextInfo={getNextMilestone(streak)}
+                    />
+                  ) : (
+                    <>
+                      <BrandMascot className="h-10 w-[29px] text-archive" />
+                      <span className="text-sm text-archive">
+                        오늘의 필사를 완료했어요
+                      </span>
+                      {getCurrentBadge(streak) ? (
+                        <span className="text-xs text-stone-faint">
+                          현재 뱃지: {getCurrentBadge(streak)!.emoji} {getCurrentBadge(streak)!.title}
+                        </span>
+                      ) : null}
+                      {getNextMilestone(streak) ? (
+                        <p className="text-xs text-stone-faint">
+                          다음 목표까지{" "}
+                          <span className="tabular-nums font-bold text-archive">
+                            {getNextMilestone(streak)!.remaining}일
+                          </span>
+                        </p>
+                      ) : null}
+                    </>
+                  )}
                 </div>
               ) : (
                 <div className="flex w-full flex-col gap-6">
