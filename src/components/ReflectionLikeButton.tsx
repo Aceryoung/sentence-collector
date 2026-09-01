@@ -5,11 +5,12 @@ import { toggleReflectionLike } from "@/app/sentences/[id]/reflection-like-actio
 
 type Props = {
   reflectionId: string;
+  sentenceId: string;
   liked: boolean;
   count: number;
 };
 
-export function ReflectionLikeButton({ reflectionId, liked, count }: Props) {
+export function ReflectionLikeButton({ reflectionId, sentenceId, liked, count }: Props) {
   const [isPending, startTransition] = useTransition();
   const [optimistic, setOptimistic] = useOptimistic(
     { liked, count },
@@ -22,7 +23,7 @@ export function ReflectionLikeButton({ reflectionId, liked, count }: Props) {
   function handleClick() {
     startTransition(async () => {
       setOptimistic(!optimistic.liked);
-      await toggleReflectionLike(reflectionId, optimistic.liked ? "unlike" : "like");
+      await toggleReflectionLike(reflectionId, sentenceId, optimistic.liked ? "unlike" : "like");
     });
   }
 

@@ -56,9 +56,22 @@ export async function addToCollection(
   } = await supabase.auth.getUser();
   if (!user) return;
 
-  await supabase
+  // 소유권 검증
+  const { data: collection } = await supabase
+    .from("collections")
+    .select("id")
+    .eq("id", collectionId)
+    .eq("user_id", user.id)
+    .maybeSingle();
+  if (!collection) return;
+
+  const { error } = await supabase
     .from("collection_items")
     .insert({ collection_id: collectionId, sentence_id: sentenceId });
+
+  if (error && error.code !== "23505") {
+    console.error("[addToCollection] failed:", error.message);
+  }
 
   revalidatePath(`/collections/${collectionId}`);
 }
@@ -73,11 +86,24 @@ export async function removeFromCollection(
   } = await supabase.auth.getUser();
   if (!user) return;
 
-  await supabase
+  // 소유권 검증
+  const { data: collection } = await supabase
+    .from("collections")
+    .select("id")
+    .eq("id", collectionId)
+    .eq("user_id", user.id)
+    .maybeSingle();
+  if (!collection) return;
+
+  const { error } = await supabase
     .from("collection_items")
     .delete()
     .eq("collection_id", collectionId)
     .eq("sentence_id", sentenceId);
+
+  if (error) {
+    console.error("[removeFromCollection] failed:", error.message);
+  }
 
   revalidatePath(`/collections/${collectionId}`);
 }

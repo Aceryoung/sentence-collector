@@ -20,7 +20,12 @@ export default async function PublicProfilePage({
   params: Promise<{ nickname: string }>;
 }) {
   const { nickname } = await params;
-  const decodedNickname = decodeURIComponent(nickname);
+  let decodedNickname: string;
+  try {
+    decodedNickname = decodeURIComponent(nickname);
+  } catch {
+    notFound();
+  }
   const supabase = await createClient();
 
   const { data, error } = await supabase.rpc("get_public_profile", {
@@ -38,21 +43,17 @@ export default async function PublicProfilePage({
   // 본인 프로필이면 팔로우 버튼 숨김
   const isSelf = user?.id === profile.user_id;
 
-  // 이미 팔로우 중인지
-  let isFollowing = false;
-  if (user && !isSelf) {
-    const { data: follow } = await supabase
-      .from("follows")
-      .select("id")
-      .eq("follower_id", user.id)
-      .eq("following_id", profile.user_id)
-      .maybeSingle();
-    isFollowing = !!follow;
-  }
-
-  // 팔로워/팔로잉 수
-  const [{ count: followerCount }, { count: followingCount }] =
+  // 팔로우 상태, 카운트, 최근 문장을 병렬 조회
+  const [followResult, { count: followerCount }, { count: followingCount }, { data: recentSentences }] =
     await Promise.all([
+      user && !isSelf
+        ? supabase
+            .from("follows")
+            .select("id")
+            .eq("follower_id", user.id)
+            .eq("following_id", profile.user_id)
+            .maybeSingle()
+        : Promise.resolve({ data: null }),
       supabase
         .from("follows")
         .select("*", { count: "exact", head: true })
@@ -61,16 +62,15 @@ export default async function PublicProfilePage({
         .from("follows")
         .select("*", { count: "exact", head: true })
         .eq("follower_id", profile.user_id),
+      supabase
+        .from("sentences")
+        .select(SENTENCE_WITH_LIKE_COUNT_SELECT)
+        .eq("author_id", profile.user_id)
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false })
+        .limit(6),
     ]);
-
-  // 최근 공개 문장
-  const { data: recentSentences } = await supabase
-    .from("sentences")
-    .select(SENTENCE_WITH_LIKE_COUNT_SELECT)
-    .eq("author_id", profile.user_id)
-    .is("deleted_at", null)
-    .order("created_at", { ascending: false })
-    .limit(6);
+  const isFollowing = !!followResult.data;
 
   const sentences = (recentSentences ?? []).map(toSentenceCardData);
 

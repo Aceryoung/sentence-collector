@@ -146,6 +146,7 @@ export default async function SentenceDetailPage({
                   {user ? (
                     <ReflectionLikeButton
                       reflectionId={r.id}
+                      sentenceId={id}
                       liked={likedReflectionIds.has(r.id)}
                       count={
                         (r as unknown as { reflection_likes: { count: number }[] })
