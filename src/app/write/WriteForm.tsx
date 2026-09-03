@@ -20,6 +20,7 @@ export function WriteForm() {
 
   return (
     <form action={formAction} className="flex flex-col gap-8">
+      {state.error && <p role="alert" className="text-sm text-coral">{state.error}</p>}
       {/* THE SENTENCE */}
       <fieldset className="flex flex-col gap-2">
         <label
@@ -97,92 +98,3 @@ export function WriteForm() {
               className="w-36 border-b border-hairline-strong bg-transparent px-0 py-1.5 text-sm text-ink outline-none transition-colors focus-visible:border-cta"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  e.preventDefault();
-                  const val = e.currentTarget.value.trim();
-                  if (val) {
-                    setSelectedTag(val);
-                    e.currentTarget.value = "";
-                  }
-                }
-              }}
-            />
-            <span className="text-xs text-stone-faint">Enter로 추가</span>
-          </div>
-        )}
-        {/* 커스텀 태그가 선택된 경우 표시 */}
-        {selectedTag && !EMOTION_TAGS.includes(selectedTag as typeof EMOTION_TAGS[number]) ? (
-          <div className="flex items-center gap-2">
-            <span className="rounded-[var(--radius-pill)] border border-archive bg-archive px-3 py-1.5 text-sm text-archive-contrast">
-              {selectedTag}
-            </span>
-            <button
-              type="button"
-              onClick={() => setSelectedTag("")}
-              className="text-xs text-stone hover:text-ink"
-            >
-              삭제
-            </button>
-          </div>
-        ) : null}
-      </fieldset>
-
-      {/* YOUR REFLECTION */}
-      <fieldset className="flex flex-col gap-2">
-        <label
-          htmlFor="commentary"
-          className="text-xs font-semibold tracking-wide text-stone"
-        >
-          나의 감상 (선택)
-        </label>
-        <textarea
-          id="commentary"
-          name="commentary"
-          rows={3}
-          maxLength={COMMENTARY_MAX_LENGTH}
-          onChange={(event) => setCommentaryLength(event.target.value.length)}
-          className="resize-none border-b-2 border-hairline-strong bg-transparent px-0 py-3 text-ink italic leading-relaxed outline-none transition-colors placeholder:text-stone-faint/60 focus-visible:border-cta"
-          placeholder="이 문장이 오늘 당신에게 특별한 이유는?"
-        />
-        <p
-          className={`self-end text-xs ${
-            commentaryShort
-              ? "text-coral"
-              : commentaryNearLimit
-                ? "text-coral"
-                : "text-stone-faint"
-          }`}
-        >
-          {commentaryLength}/{COMMENTARY_MAX_LENGTH}
-          {commentaryShort ? ` (${COMMENTARY_MIN_LENGTH}자 이상)` : ""}
-        </p>
-      </fieldset>
-
-      {state.error ? (
-        <p className="text-xs text-coral">{state.error}</p>
-      ) : null}
-
-      {/* 액션 버튼 */}
-      <div className="flex items-center justify-end gap-4 border-t border-hairline pt-6">
-        <a
-          href="/"
-          className="text-xs font-semibold tracking-wide text-stone transition-colors hover:text-ink"
-        >
-          취소
-        </a>
-        <button
-          type="submit"
-          disabled={isPending}
-          className="inline-flex items-center gap-2 rounded-[var(--radius-pill)] border-none bg-cta px-6 py-2.5 text-sm font-bold text-cta-contrast transition-all duration-200 hover:bg-cta-hover hover:shadow-md disabled:opacity-60"
-        >
-          {isPending ? "등록하는 중…" : "보관함에 저장"}
-          {!isPending ? (
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          ) : null}
-        </button>
-      </div>
-    </form>
-  );
-}
