@@ -30,29 +30,34 @@ export async function createSentence(
   const commentaryError = validateCommentary(commentary);
   if (commentaryError) return { error: commentaryError };
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/login");
+    if (!user) {
+      redirect("/login");
+    }
+
+    const { error } = await supabase.from("sentences").insert({
+      author_id: user.id,
+      body: body.trim(),
+      source: source.trim() || null,
+      commentary: commentary.trim() || null,
+      emotion_tag: emotionTag,
+    });
+
+    if (error) {
+      console.error("[createSentence] insert failed:", error);
+      return { error: "등록에 실패했어요, 잠시 후 다시 시도해주세요." };
+    }
+
+    revalidatePath("/");
+    revalidatePath("/my");
+    redirect("/my");
+  } catch (error) {
+    if (error instanceof Error && error.message === "NEXT_REDIRECT") throw error;
+    return { error: "일시적인 오류가 발생했어요, 잠시 후 다시 시도해주세요." };
   }
-
-  const { error } = await supabase.from("sentences").insert({
-    author_id: user.id,
-    body: body.trim(),
-    source: source.trim() || null,
-    commentary: commentary.trim() || null,
-    emotion_tag: emotionTag,
-  });
-
-  if (error) {
-    console.error("[createSentence] insert failed:", error.message);
-    return { error: "등록에 실패했어요, 잠시 후 다시 시도해주세요." };
-  }
-
-  revalidatePath("/");
-  revalidatePath("/my");
-  redirect("/my");
 }

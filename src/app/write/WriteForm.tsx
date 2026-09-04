@@ -20,6 +20,7 @@ export function WriteForm() {
 
   return (
     <form action={formAction} className="flex flex-col gap-8">
+      {state.error && <p role="alert" className="text-sm text-coral">{state.error}</p>}
       {/* THE SENTENCE */}
       <fieldset className="flex flex-col gap-2">
         <label
