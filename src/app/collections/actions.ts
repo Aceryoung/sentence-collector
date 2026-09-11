@@ -108,6 +108,24 @@ export async function removeFromCollection(
   revalidatePath(`/collections/${collectionId}`);
 }
 
+export async function getMyCollections(): Promise<
+  { id: string; title: string }[]
+> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return [];
+
+  const { data } = await supabase
+    .from("collections")
+    .select("id, title")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
+  return data ?? [];
+}
+
 export async function deleteCollection(collectionId: string) {
   const supabase = await createClient();
   const {

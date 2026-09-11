@@ -4,7 +4,14 @@ import { createClient } from "@/lib/supabase/server";
 import { SENTENCE_WITH_LIKE_COUNT_SELECT, toSentenceCardData } from "@/lib/sentences";
 import { SentenceCard } from "@/components/SentenceCard";
 
-export default async function FeedPage() {
+const PAGE_SIZE = 20;
+
+export default async function FeedPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ cursor?: string }>;
+}) {
+  const { cursor } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -23,17 +30,36 @@ export default async function FeedPage() {
   const followingIds = (followingRows ?? []).map((r) => r.following_id);
 
   let sentences: ReturnType<typeof toSentenceCardData>[] = [];
+  let hasMore = false;
+  let nextCursor: string | null = null;
 
   if (followingIds.length > 0) {
-    const { data } = await supabase
+    let query = supabase
       .from("sentences")
       .select(SENTENCE_WITH_LIKE_COUNT_SELECT)
       .in("author_id", followingIds)
       .is("deleted_at", null)
       .order("created_at", { ascending: false })
-      .limit(20);
+      .limit(PAGE_SIZE + 1);
 
-    sentences = (data ?? []).map(toSentenceCardData);
+    if (cursor) {
+      query = query.lt("created_at", cursor);
+    }
+
+    const { data } = await query;
+    const rows = data ?? [];
+
+    if (rows.length > PAGE_SIZE) {
+      hasMore = true;
+      rows.pop();
+    }
+
+    // created_at을 커서용으로 보존 후 카드 데이터로 변환
+    if (hasMore && rows.length > 0) {
+      nextCursor = rows[rows.length - 1].created_at as string;
+    }
+
+    sentences = rows.map(toSentenceCardData);
   }
 
   return (
@@ -52,18 +78,43 @@ export default async function FeedPage() {
             문장 둘러보기
           </Link>
         </div>
-      ) : sentences.length === 0 ? (
+      ) : sentences.length === 0 && !cursor ? (
         <p className="py-16 text-center text-sm text-stone">
           팔로잉한 사람의 새 문장이 아직 없어요.
         </p>
+      ) : sentences.length === 0 && cursor ? (
+        <div className="flex flex-col items-center gap-4 py-16 text-center">
+          <p className="text-sm text-stone">더 이상 문장이 없어요.</p>
+          <Link
+            href="/feed"
+            className="text-xs text-archive underline underline-offset-4 hover:text-ink"
+          >
+            처음으로 돌아가기
+          </Link>
+        </div>
       ) : (
-        <ul className="flex flex-col gap-4">
-          {sentences.map((s) => (
-            <li key={s.id}>
-              <SentenceCard {...s} />
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul className="flex flex-col gap-4">
+            {sentences.map((s) => (
+              <li key={s.id}>
+                <SentenceCard {...s} />
+              </li>
+            ))}
+          </ul>
+
+          {nextCursor ? (
+            <Link
+              href={`/feed?cursor=${encodeURIComponent(nextCursor)}`}
+              className="self-center rounded-[var(--radius-pill)] border border-hairline-strong px-5 py-2.5 text-sm font-medium text-stone transition-colors hover:border-archive hover:text-ink"
+            >
+              이전 문장 더 보기
+            </Link>
+          ) : sentences.length > 0 ? (
+            <p className="self-center text-xs text-stone-faint">
+              모든 문장을 확인했어요
+            </p>
+          ) : null}
+        </>
       )}
 
       <Link

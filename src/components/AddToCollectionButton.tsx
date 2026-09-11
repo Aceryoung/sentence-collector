@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { addToCollection } from "@/app/collections/actions";
-import { createClient } from "@/lib/supabase/client";
+import { addToCollection, getMyCollections } from "@/app/collections/actions";
 
 type Collection = { id: string; title: string };
 
 export function AddToCollectionButton({ sentenceId }: { sentenceId: string }) {
   const [open, setOpen] = useState(false);
   const [collections, setCollections] = useState<Collection[]>([]);
+  const [loading, setLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [added, setAdded] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
@@ -16,14 +16,10 @@ export function AddToCollectionButton({ sentenceId }: { sentenceId: string }) {
   useEffect(() => {
     if (!open) return;
 
-    const supabase = createClient();
-    supabase
-      .from("collections")
-      .select("id, title")
-      .order("created_at", { ascending: false })
-      .then(({ data }) => {
-        if (data) setCollections(data);
-      });
+    setLoading(true);
+    getMyCollections()
+      .then(setCollections)
+      .finally(() => setLoading(false));
 
     function handleClick(e: PointerEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -71,7 +67,9 @@ export function AddToCollectionButton({ sentenceId }: { sentenceId: string }) {
 
       {open ? (
         <div className="absolute top-full right-0 z-20 mt-2 flex w-52 flex-col overflow-hidden rounded-[var(--radius-card)] border border-hairline-strong bg-surface py-1 text-xs shadow-[var(--shadow-card)]">
-          {collections.length > 0 ? (
+          {loading ? (
+            <p className="px-3 py-3 text-stone-faint">불러오는 중...</p>
+          ) : collections.length > 0 ? (
             collections.map((c) => (
               <button
                 key={c.id}
