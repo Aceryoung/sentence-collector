@@ -49,6 +49,7 @@ export async function TopBar() {
         {/* 데스크탑 네비게이션 */}
         <nav className="hidden items-center gap-1 sm:flex">
           <NavLink href="/practice">필사</NavLink>
+          {user ? <NavLink href="/feed">피드</NavLink> : null}
           <NavLink href="/ranking">랭킹</NavLink>
           <NavLink href="/challenges">챌린지</NavLink>
           <Link

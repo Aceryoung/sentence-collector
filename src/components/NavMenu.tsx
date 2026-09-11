@@ -44,6 +44,13 @@ export function NavMenu() {
       {open ? (
         <div className="absolute top-full right-0 z-20 mt-2 flex w-40 flex-col overflow-hidden rounded-[var(--radius-card)] border border-hairline-strong bg-surface py-1 text-xs text-stone shadow-[var(--shadow-card)]">
           <Link
+            href="/feed"
+            className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
+            onClick={() => setOpen(false)}
+          >
+            피드
+          </Link>
+          <Link
             href="/ranking"
             className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
             onClick={() => setOpen(false)}
@@ -56,6 +63,13 @@ export function NavMenu() {
             onClick={() => setOpen(false)}
           >
             챌린지
+          </Link>
+          <Link
+            href="/weekly-report"
+            className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
+            onClick={() => setOpen(false)}
+          >
+            주간 리포트
           </Link>
           <Link
             href="/notifications"
