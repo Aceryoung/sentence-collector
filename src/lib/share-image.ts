@@ -39,6 +39,12 @@ const COLORS = {
   stoneFaint: "#b5b0a7",
 };
 
+/**
+ * 어절(띄어쓰기) 단위 줄바꿈.
+ *
+ * 공백으로 나눈 어절을 한 줄에 모으다가 maxWidth를 초과하면 줄을 바꾼다.
+ * 어절 하나가 maxWidth보다 길면 글자 단위로 쪼갠다(폴백).
+ */
 function wrapParagraph(
   paragraph: string,
   maxWidth: number,
@@ -46,9 +52,48 @@ function wrapParagraph(
 ): string[] {
   if (paragraph.length === 0) return [""];
 
+  const words = paragraph.split(" ");
   const lines: string[] = [];
   let current = "";
-  for (const char of paragraph) {
+
+  for (const word of words) {
+    if (current.length === 0) {
+      // 첫 어절 — 그대로 시작
+      if (measureText(word) > maxWidth) {
+        // 어절 하나가 줄 너비를 초과: 글자 단위 폴백
+        lines.push(...wrapByChar(word, maxWidth, measureText));
+        current = "";
+      } else {
+        current = word;
+      }
+    } else {
+      const candidate = current + " " + word;
+      if (measureText(candidate) > maxWidth) {
+        lines.push(current);
+        if (measureText(word) > maxWidth) {
+          lines.push(...wrapByChar(word, maxWidth, measureText));
+          current = "";
+        } else {
+          current = word;
+        }
+      } else {
+        current = candidate;
+      }
+    }
+  }
+  if (current.length > 0) lines.push(current);
+  return lines;
+}
+
+/** 글자 단위 줄바꿈 — 공백 없이 maxWidth를 초과하는 어절 전용 폴백 */
+function wrapByChar(
+  text: string,
+  maxWidth: number,
+  measureText: (segment: string) => number,
+): string[] {
+  const lines: string[] = [];
+  let current = "";
+  for (const char of text) {
     const candidate = current + char;
     if (current.length > 0 && measureText(candidate) > maxWidth) {
       lines.push(current);

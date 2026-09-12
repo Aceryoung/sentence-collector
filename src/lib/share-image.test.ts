@@ -15,7 +15,22 @@ describe("wrapText", () => {
     expect(wrapText("짧은 문장", 200, measureText)).toEqual(["짧은 문장"]);
   });
 
-  it("wraps long text into multiple lines that each fit maxWidth", () => {
+  it("wraps at word boundaries (spaces)", () => {
+    // 6 words: "인생은 짧고 예술은 길다 그러니 즐기자"
+    // Each word ~3 chars = 30px, space = 10px
+    // maxWidth = 100 → fits ~10 chars → about 2 words + space per line
+    const text = "인생은 짧고 예술은 길다 그러니 즐기자";
+    const lines = wrapText(text, 100, measureText);
+
+    expect(lines.length).toBeGreaterThan(1);
+    // Verify no line breaks mid-word: rejoin should match original
+    expect(lines.join(" ")).toBe(text);
+    for (const line of lines) {
+      expect(measureText(line)).toBeLessThanOrEqual(100);
+    }
+  });
+
+  it("falls back to character wrap for a single long word without spaces", () => {
     const longText = "가".repeat(50);
     const maxWidth = 100; // 10글자만큼의 폭
     const lines = wrapText(longText, maxWidth, measureText);
