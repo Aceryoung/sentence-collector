@@ -24,15 +24,20 @@ export default async function PublicProfilePage({
   try {
     decodedNickname = decodeURIComponent(nickname);
   } catch {
-    notFound();
+    return notFound();
   }
   const supabase = await createClient();
 
-  const { data, error } = await supabase.rpc("get_public_profile", {
-    target_nickname: decodedNickname,
-  });
-
-  if (error || !data) notFound();
+  let data: unknown;
+  try {
+    const result = await supabase.rpc("get_public_profile", {
+      target_nickname: decodedNickname,
+    });
+    if (result.error || !result.data) notFound();
+    data = result.data;
+  } catch {
+    notFound();
+  }
 
   const profile = data as unknown as PublicProfileData;
 
