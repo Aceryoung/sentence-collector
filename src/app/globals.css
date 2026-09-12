@@ -140,11 +140,12 @@ h1, h2, h3 {
   line-height: 1.35;
 }
 
-/* 사용자 작성 텍스트 — 줄바꿈 보존 + 단어 단위 줄바꿈 + 긴 URL 방어 */
+/* 사용자 작성 텍스트 — 줄바꿈 보존 + 단어 단위 줄바꿈 + 균등 분배 + 긴 URL 방어 */
 .user-text {
   word-break: keep-all;
   white-space: pre-wrap;
   overflow-wrap: break-word;
+  text-wrap: balance;
 }
 
 /* 잉크가 채워지는 진행률 인디케이터 */
