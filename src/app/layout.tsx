@@ -44,22 +44,31 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "글적",
-    url: SITE_URL,
-    description: DESCRIPTION,
-    inLanguage: "ko",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "글적",
+      url: SITE_URL,
+      description: DESCRIPTION,
+      inLanguage: "ko",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
       },
-      "query-input": "required name=search_term_string",
     },
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "글적",
+      url: SITE_URL,
+      description: "마음에 닿은 문장을 모으고, 필사하며, 감상을 나누는 문장 아카이브 서비스",
+    },
+  ];
 
   return (
     <html lang="ko" className={`h-full antialiased ${literata.variable}`}>
