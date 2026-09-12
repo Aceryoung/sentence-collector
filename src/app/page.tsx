@@ -12,6 +12,7 @@ import {
 import { getUserStreak } from "@/lib/streak";
 import { getLeaderboard } from "@/lib/leaderboard";
 import { PracticeLeaderboard } from "@/components/PracticeLeaderboard";
+import { DomainChallenge } from "@/components/DomainChallenge";
 import { getPersonalizedRecommendations } from "@/lib/personalization";
 
 export default async function HomePage({
@@ -35,7 +36,7 @@ export default async function HomePage({
     .order("created_at", { ascending: false })
     .range(0, PAGE_SIZE);
 
-  const [{ data }, dailyPick, userStreak, leaderboard, recommendations] = await Promise.all([
+  const [{ data }, dailyPick, userStreak, leaderboard, recommendations, { count: totalSentences }] = await Promise.all([
     feedQuery,
     user ? getPersonalDailyPick(supabase, user.id) : Promise.resolve(null),
     user ? getUserStreak(supabase, user.id) : Promise.resolve(null),
@@ -43,6 +44,10 @@ export default async function HomePage({
     user
       ? getPersonalizedRecommendations(supabase, user.id)
       : Promise.resolve(null),
+    supabase
+      .from("sentences")
+      .select("*", { count: "exact", head: true })
+      .is("deleted_at", null),
   ]);
 
   const sentences = (data ?? [])
@@ -148,6 +153,9 @@ export default async function HomePage({
 
           {/* 필사 챌린지 순위 */}
           <PracticeLeaderboard entries={leaderboard} />
+
+          {/* 도메인 챌린지 */}
+          <DomainChallenge currentCount={totalSentences ?? 0} />
         </aside>
 
         {/* ── 오른쪽 메인 피드 ── */}
