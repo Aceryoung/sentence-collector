@@ -101,6 +101,7 @@ export async function TopBar() {
               <UserMenu
                 nickname={(user.user_metadata?.nickname as string) ?? null}
                 email={user.email ?? ""}
+                isAdmin={user.email === process.env.ADMIN_EMAIL}
               />
 
               {/* 모바일 햄버거 */}

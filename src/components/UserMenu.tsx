@@ -7,9 +7,10 @@ import { signOut } from "@/lib/auth-actions";
 type Props = {
   nickname: string | null;
   email: string;
+  isAdmin?: boolean;
 };
 
-export function UserMenu({ nickname, email }: Props) {
+export function UserMenu({ nickname, email, isAdmin }: Props) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -78,6 +79,15 @@ export function UserMenu({ nickname, email }: Props) {
           >
             계정 설정
           </Link>
+          {isAdmin ? (
+            <Link
+              href="/admin"
+              className="min-h-11 px-3 py-3 text-stone hover:bg-paper hover:text-ink"
+              onClick={() => setOpen(false)}
+            >
+              🔧 관리자
+            </Link>
+          ) : null}
           <div className="border-t border-hairline">
             <form action={signOut}>
               <button
