@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { EMOTION_TAGS } from "@/lib/validation";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
@@ -34,5 +35,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...sentencePages];
+  // 태그별 큐레이션 페이지
+  const tagPages: MetadataRoute.Sitemap = EMOTION_TAGS.map((tag) => ({
+    url: `${SITE_URL}/tags/${encodeURIComponent(tag)}`,
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...tagPages, ...sentencePages];
 }

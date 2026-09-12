@@ -51,6 +51,23 @@ export default async function HomePage({
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
+      {/* 서비스 소개 — AI 인용 가능한 정의 블록 (SEO/GEO) */}
+      {!user && !tag ? (
+        <section className="mb-8 rounded-[var(--radius-card)] border border-hairline bg-surface px-6 py-8 text-center sm:px-10">
+          <h2 className="mb-4 font-serif text-xl font-bold text-ink sm:text-2xl">
+            글적이란?
+          </h2>
+          <p className="mx-auto max-w-2xl text-sm leading-relaxed text-stone sm:text-base">
+            글적은 마음에 닿은 문장을 모으고, 직접 필사하며, 감상을 나누는 문장 아카이브 서비스입니다.
+            책, 영화, 노래 가사, 시 등에서 발견한 좋은 문장을 기록하고,
+            매일 한 문장을 천천히 따라 쓰는 필사 연습으로 글쓰기 습관을 기를 수 있습니다.
+            위로, 동기부여, 사랑, 깨달음 등 감정 태그로 문장을 분류하고,
+            다른 사용자의 감상을 읽으며 같은 문장에서 서로 다른 울림을 발견할 수 있습니다.
+            연속 필사 기록과 챌린지 참여로 꾸준한 독서·글쓰기 습관을 만들어보세요.
+          </p>
+        </section>
+      ) : null}
+
       <div className="flex flex-col gap-8 lg:flex-row lg:gap-10">
 
         {/* ── 왼쪽 사이드바 (데스크탑) / 상단 (모바일) ── */}

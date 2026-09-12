@@ -108,13 +108,38 @@ export default async function SentenceDetailPage({
     relatedSentences = related ?? [];
   }
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Quotation",
-    text: sentence.body,
-    ...(sentence.source ? { creator: { "@type": "Person", name: sentence.source } } : {}),
-    isPartOf: { "@type": "WebSite", name: "글적", url: SITE_URL },
-  };
+  const breadcrumbItems = [
+    { "@type": "ListItem" as const, position: 1, name: "홈", item: SITE_URL },
+    ...(sentence.emotionTag
+      ? [{
+          "@type": "ListItem" as const,
+          position: 2,
+          name: `${sentence.emotionTag} 문장`,
+          item: `${SITE_URL}/tags/${encodeURIComponent(sentence.emotionTag)}`,
+        }]
+      : []),
+    {
+      "@type": "ListItem" as const,
+      position: sentence.emotionTag ? 3 : 2,
+      name: sentence.body.length > 30 ? sentence.body.slice(0, 30) + "…" : sentence.body,
+      item: `${SITE_URL}/sentences/${id}`,
+    },
+  ];
+
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Quotation",
+      text: sentence.body,
+      ...(sentence.source ? { creator: { "@type": "Person", name: sentence.source } } : {}),
+      isPartOf: { "@type": "WebSite", name: "글적", url: SITE_URL },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: breadcrumbItems,
+    },
+  ];
 
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-12 sm:px-6 lg:flex-row lg:gap-10 lg:px-8">
