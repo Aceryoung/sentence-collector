@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
@@ -8,6 +9,39 @@ import { ReflectionForm } from "./ReflectionForm";
 import { ThoughtSection } from "./ThoughtSection";
 import { ReflectionLikeButton } from "@/components/ReflectionLikeButton";
 import { AddToCollectionButton } from "@/components/AddToCollectionButton";
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sentence-collector-zeta.vercel.app";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("sentences")
+    .select("body, source")
+    .eq("id", id)
+    .is("deleted_at", null)
+    .single();
+
+  if (!data) return { title: "문장을 찾을 수 없습니다" };
+
+  const preview = data.body.length > 80 ? data.body.slice(0, 80) + "…" : data.body;
+  const title = data.source ? `${preview} — ${data.source}` : preview;
+
+  return {
+    title,
+    description: data.body,
+    openGraph: {
+      title,
+      description: data.body,
+      type: "article",
+    },
+  };
+}
 
 export default async function SentenceDetailPage({
   params,
@@ -74,8 +108,20 @@ export default async function SentenceDetailPage({
     relatedSentences = related ?? [];
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Quotation",
+    text: sentence.body,
+    ...(sentence.source ? { creator: { "@type": "Person", name: sentence.source } } : {}),
+    isPartOf: { "@type": "WebSite", name: "글적", url: SITE_URL },
+  };
+
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-12 sm:px-6 lg:flex-row lg:gap-10 lg:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ── 왼쪽: 메인 콘텐츠 ── */}
       <div className="flex min-w-0 flex-1 flex-col gap-8 lg:max-w-4xl">
       {/* 문장 본문 — 큰 화면 감상 */}
