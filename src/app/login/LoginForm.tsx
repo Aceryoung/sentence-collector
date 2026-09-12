@@ -47,11 +47,9 @@ export function LoginForm({ initialError }: { initialError?: string }) {
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
-        queryParams: {
-          // 항상 계정 선택 화면을 보여준다 — 여러 구글 계정을 쓰는 사람이
-          // 원하는 계정을 골라 로그인할 수 있게 한다.
-          prompt: "select_account",
-        },
+        // prompt를 지정하지 않으면 Google이 자동 판단한다:
+        // - 계정이 하나면 바로 로그인 (이탈률 감소)
+        // - 여러 개면 계정 선택 화면 표시
       },
     });
 

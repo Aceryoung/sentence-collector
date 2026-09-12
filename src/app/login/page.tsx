@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 import { LoginForm } from "./LoginForm";
 import { BrandMascot } from "@/components/BrandMascot";
 
@@ -7,6 +9,11 @@ export default async function LoginPage({
   searchParams: Promise<{ error?: string }>;
 }) {
   const { error } = await searchParams;
+
+  // 이미 로그인된 사용자는 홈으로 보낸다 — 불필요한 재인증 방지
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) redirect("/");
 
   // 세로 중앙 정렬을 쓰면 모바일에서 화면 위쪽 절반이 비고 폼이 아래로 몰린다.
   // 키보드가 올라오면 그 폼마저 가려지므로 위에서부터 배치한다.
