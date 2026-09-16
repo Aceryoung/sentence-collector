@@ -15,7 +15,7 @@ type Props = {
 
 export function SentenceCard({ id, body, source, commentary, emotionTag, likeCount }: Props) {
   return (
-    <article className="card-lift scroll-reveal animate-fade-up group relative flex h-full flex-col gap-4 rounded-[var(--radius-card)] border border-hairline bg-surface px-6 py-5 shadow-[var(--shadow-card)] hover:border-archive/40 hover:shadow-[var(--shadow-card-hover)]">
+    <article className="card-lift scroll-reveal animate-fade-up group relative flex h-full flex-col gap-5 rounded-[var(--radius-card)] border border-hairline bg-surface px-7 py-6 shadow-[var(--shadow-card)] hover:border-archive/40 hover:shadow-[var(--shadow-card-hover)]">
       {/* 카드 전체 클릭 영역 — stretched link 패턴 */}
       <Link
         href={`/sentences/${id}`}
@@ -24,12 +24,12 @@ export function SentenceCard({ id, body, source, commentary, emotionTag, likeCou
       />
 
       <div className="pointer-events-none relative z-[1] flex flex-col gap-4">
-        <p className="user-text line-clamp-3 text-lg font-semibold leading-relaxed text-ink">
+        <p className="user-text line-clamp-3 text-lg font-semibold leading-loose text-ink">
           {body}
         </p>
         {commentary ? (
-          <p className="user-text line-clamp-2 text-sm italic leading-relaxed text-stone">
-            {commentary}
+          <p className="user-text line-clamp-2 text-sm italic leading-relaxed text-ink/70">
+            &ldquo;{commentary}&rdquo;
           </p>
         ) : (
           <p className="text-xs text-stone-faint">감상을 남겨보세요 →</p>

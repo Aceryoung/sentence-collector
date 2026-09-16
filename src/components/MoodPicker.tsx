@@ -14,6 +14,14 @@ const MOOD_CHIPS = [
   "그리움",
   "용기",
   "성찰",
+  "적막",
+  "상실",
+  "균열",
+  "연대",
+  "경계",
+  "온기",
+  "부유",
+  "여운",
 ] as const;
 
 export function MoodPicker() {

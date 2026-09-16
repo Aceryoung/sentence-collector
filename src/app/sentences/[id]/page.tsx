@@ -167,8 +167,8 @@ export default async function SentenceDetailPage({
         </div>
 
         {sentence.commentary ? (
-          <p className="max-w-md italic leading-relaxed text-stone">
-            {sentence.commentary}
+          <p className="max-w-md italic leading-relaxed text-ink/70">
+            &ldquo;{sentence.commentary}&rdquo;
           </p>
         ) : null}
 
@@ -207,8 +207,8 @@ export default async function SentenceDetailPage({
                 key={r.id}
                 className="rounded-[var(--radius-card)] border border-hairline bg-surface px-5 py-4"
               >
-                <p className="user-text leading-relaxed text-ink">
-                  {r.body}
+                <p className="user-text italic leading-relaxed text-ink/80">
+                  &ldquo;{r.body}&rdquo;
                 </p>
                 <div className="mt-2 flex items-center justify-between">
                   <time className="text-xs text-stone-faint">
