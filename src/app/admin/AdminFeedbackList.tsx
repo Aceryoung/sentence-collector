@@ -13,9 +13,9 @@ type FeedbackItem = {
 };
 
 const CATEGORY_LABEL: Record<string, string> = {
-  bug: "🐛 버그",
-  suggestion: "💡 제안",
-  general: "💬 기타",
+  bug: "버그",
+  suggestion: "제안",
+  general: "기타",
 };
 
 export function AdminFeedbackList({ items }: { items: FeedbackItem[] }) {

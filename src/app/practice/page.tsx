@@ -75,7 +75,7 @@ export default async function PracticePage() {
                       </span>
                       {getCurrentBadge(streak) ? (
                         <span className="text-xs text-stone-faint">
-                          현재 뱃지: {getCurrentBadge(streak)!.emoji} {getCurrentBadge(streak)!.title}
+                          현재 뱃지: {getCurrentBadge(streak)!.title}
                         </span>
                       ) : null}
                       {getNextMilestone(streak) ? (

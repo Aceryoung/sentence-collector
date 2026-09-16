@@ -3,9 +3,9 @@
 const GOAL = 500;
 
 const MILESTONES = [
-  { count: 100, label: "100", emoji: "🌱" },
-  { count: 250, label: "250", emoji: "🌿" },
-  { count: 500, label: "500", emoji: "🌳" },
+  { count: 100, label: "100" },
+  { count: 250, label: "250" },
+  { count: 500, label: "500" },
 ];
 
 type Props = {
@@ -20,7 +20,7 @@ export function DomainChallenge({ currentCount }: Props) {
     <section className="animate-fade-up flex flex-col gap-3 rounded-[var(--radius-card)] border border-hairline bg-surface px-5 py-5 shadow-[var(--shadow-card)]">
       <div className="flex items-center justify-between">
         <span className="text-xs font-bold tracking-widest text-archive">
-          🏠 도메인 챌린지
+          도메인 챌린지
         </span>
         <span className="text-xs tabular-nums text-stone">
           {currentCount.toLocaleString()} / {GOAL.toLocaleString()}
@@ -29,7 +29,7 @@ export function DomainChallenge({ currentCount }: Props) {
 
       <p className="text-xs leading-relaxed text-stone">
         {reached
-          ? "🎉 목표 달성! 정식 도메인을 준비합니다."
+          ? "목표 달성! 정식 도메인을 준비합니다."
           : "문장이 500개 모이면 글적의 정식 도메인이 열립니다."}
       </p>
 
@@ -75,7 +75,7 @@ export function DomainChallenge({ currentCount }: Props) {
               }`}
               style={{ left: `${pos}%` }}
             >
-              {m.emoji} {m.label}
+              {m.label}
             </span>
           );
         })}

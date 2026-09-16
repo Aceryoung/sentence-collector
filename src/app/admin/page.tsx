@@ -77,14 +77,14 @@ export default async function AdminPage({
     .limit(100);
 
   const stats = [
-    { label: "문장", value: sentenceCount ?? 0, emoji: "📝" },
-    { label: "사용자", value: userCount ?? 0, emoji: "👤" },
-    { label: "좋아요", value: likeCount ?? 0, emoji: "❤️" },
-    { label: "필사", value: practiceCount ?? 0, emoji: "✍️" },
-    { label: "감상", value: reflectionCount ?? 0, emoji: "💬" },
-    { label: "팔로우", value: followCount ?? 0, emoji: "🤝" },
-    { label: "컬렉션", value: collectionCount ?? 0, emoji: "📚" },
-    { label: "챌린지", value: challengeCount ?? 0, emoji: "🏆" },
+    { label: "문장", value: sentenceCount ?? 0 },
+    { label: "사용자", value: userCount ?? 0 },
+    { label: "좋아요", value: likeCount ?? 0 },
+    { label: "필사", value: practiceCount ?? 0 },
+    { label: "감상", value: reflectionCount ?? 0 },
+    { label: "팔로우", value: followCount ?? 0 },
+    { label: "컬렉션", value: collectionCount ?? 0 },
+    { label: "챌린지", value: challengeCount ?? 0 },
   ];
 
   const isDeleted = deleted === "true";
@@ -131,7 +131,6 @@ export default async function AdminPage({
               key={s.label}
               className="flex flex-col items-center gap-1 rounded-[var(--radius-card)] border border-hairline bg-surface px-4 py-5 shadow-[var(--shadow-card)]"
             >
-              <span className="text-2xl">{s.emoji}</span>
               <span className="text-2xl font-bold tabular-nums text-ink">
                 {s.value.toLocaleString("ko-KR")}
               </span>

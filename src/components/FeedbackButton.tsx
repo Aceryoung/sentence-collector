@@ -4,9 +4,9 @@ import { useState, useTransition } from "react";
 import { submitFeedback } from "@/app/feedback/actions";
 
 const CATEGORIES = [
-  { value: "bug", label: "버그 신고", emoji: "🐛" },
-  { value: "suggestion", label: "제안", emoji: "💡" },
-  { value: "general", label: "기타", emoji: "💬" },
+  { value: "bug", label: "버그 신고" },
+  { value: "suggestion", label: "제안" },
+  { value: "general", label: "기타" },
 ] as const;
 
 export function FeedbackButton() {
@@ -83,7 +83,6 @@ export function FeedbackButton() {
                       : "border-hairline-strong text-stone hover:border-archive/40"
                   }`}
                 >
-                  <span>{c.emoji}</span>
                   {c.label}
                 </button>
               ))}

@@ -144,7 +144,6 @@ export default async function DailyWordPage() {
         </>
       ) : (
         <div className="flex flex-col items-center gap-4 py-20 text-center">
-          <span className="text-4xl">📝</span>
           <h1 className="font-serif text-xl font-bold text-ink">
             오늘의 단어가 아직 없어요
           </h1>

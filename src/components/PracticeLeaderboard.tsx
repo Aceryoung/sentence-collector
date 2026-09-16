@@ -5,8 +5,6 @@ type Props = {
   entries: LeaderboardEntry[];
 };
 
-const RANK_MEDALS = ["🥇", "🥈", "🥉"];
-
 export function PracticeLeaderboard({ entries }: Props) {
   if (entries.length === 0) return null;
 
@@ -36,7 +34,9 @@ export function PracticeLeaderboard({ entries }: Props) {
           >
             {/* 순위 */}
             <span className="w-6 shrink-0 text-center text-sm">
-              {entry.rank <= 3 ? RANK_MEDALS[entry.rank - 1] : (
+              {entry.rank <= 3 ? (
+                <span className="font-bold text-archive">{entry.rank}</span>
+              ) : (
                 <span className="tabular-nums text-stone-faint">{entry.rank}</span>
               )}
             </span>

@@ -23,9 +23,6 @@ export function MilestoneCelebration({ milestone, nextInfo }: Props) {
         visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
       }`}
     >
-      <span className="text-5xl" role="img" aria-label={milestone.title}>
-        {milestone.emoji}
-      </span>
       <div className="flex flex-col items-center gap-1">
         <span className="text-xs font-bold tracking-widest text-coral">
           마일스톤 달성!
@@ -39,7 +36,7 @@ export function MilestoneCelebration({ milestone, nextInfo }: Props) {
       </div>
       {nextInfo ? (
         <p className="text-xs text-stone-faint">
-          다음 목표: {nextInfo.milestone.emoji} {nextInfo.milestone.title}까지{" "}
+          다음 목표: {nextInfo.milestone.title}까지{" "}
           <span className="tabular-nums font-bold text-archive">
             {nextInfo.remaining}일
           </span>

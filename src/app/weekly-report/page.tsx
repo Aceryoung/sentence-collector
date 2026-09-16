@@ -68,17 +68,17 @@ export default async function WeeklyReportPage() {
       <div className="rounded-[var(--radius-card)] border border-hairline bg-surface px-5 py-4 shadow-[var(--shadow-card)]">
         {report.practice_days >= 5 ? (
           <p className="text-sm leading-relaxed text-ink">
-            🎉 이번 주 {report.practice_days}일이나 필사했어요! 꾸준한 습관이
+            이번 주 {report.practice_days}일이나 필사했어요! 꾸준한 습관이
             만들어지고 있네요.
           </p>
         ) : report.practice_days >= 3 ? (
           <p className="text-sm leading-relaxed text-ink">
-            ✍️ {report.practice_days}일 필사했어요. 조금만 더 하면 일주일의
+            {report.practice_days}일 필사했어요. 조금만 더 하면 일주일의
             절반을 넘길 수 있어요.
           </p>
         ) : report.practice_days >= 1 ? (
           <p className="text-sm leading-relaxed text-ink">
-            📖 이번 주 {report.practice_days}일 필사했어요. 하루에 한 문장,
+            이번 주 {report.practice_days}일 필사했어요. 하루에 한 문장,
             습관을 만들어봐요.
           </p>
         ) : (
