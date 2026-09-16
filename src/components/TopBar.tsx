@@ -50,6 +50,8 @@ export async function TopBar() {
         <nav className="hidden items-center gap-1 sm:flex">
           <NavLink href="/practice">필사</NavLink>
           {user ? <NavLink href="/feed">피드</NavLink> : null}
+          <NavLink href="/daily-word">오늘의 단어</NavLink>
+          <NavLink href="/works">작품별</NavLink>
           <NavLink href="/ranking">랭킹</NavLink>
           <NavLink href="/challenges">챌린지</NavLink>
           <Link

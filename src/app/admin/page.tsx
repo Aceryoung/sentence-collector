@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getAdminUser } from "@/lib/admin";
 import { AdminSentenceList } from "./AdminSentenceList";
+import { AdminDailyWords } from "./AdminDailyWords";
 
 export default async function AdminPage({
   searchParams,
@@ -60,6 +61,13 @@ export default async function AdminPage({
   const { data: sentences, count: totalSentences } = await sentenceQuery;
   const totalPages = Math.ceil((totalSentences ?? 0) / PAGE_SIZE);
 
+  // ── 오늘의 단어 ──
+  const { data: dailyWords } = await supabase
+    .from("daily_words")
+    .select("id, word, description, scheduled_date")
+    .order("scheduled_date", { ascending: false })
+    .limit(50);
+
   const stats = [
     { label: "문장", value: sentenceCount ?? 0, emoji: "📝" },
     { label: "사용자", value: userCount ?? 0, emoji: "👤" },
@@ -90,6 +98,7 @@ export default async function AdminPage({
         {[
           { key: "dashboard", label: "대시보드" },
           { key: "sentences", label: "문장 관리" },
+          { key: "daily-words", label: "오늘의 단어" },
         ].map((t) => (
           <Link
             key={t.key}
@@ -121,6 +130,12 @@ export default async function AdminPage({
             </div>
           ))}
         </section>
+      ) : tab === "daily-words" ? (
+        /* ── 오늘의 단어 관리 ── */
+        <AdminDailyWords
+          words={dailyWords ?? []}
+          lastScheduledDate={dailyWords?.[0]?.scheduled_date ?? null}
+        />
       ) : (
         /* ── 문장 관리 ── */
         <section className="flex flex-col gap-4">

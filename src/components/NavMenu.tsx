@@ -58,6 +58,20 @@ export function NavMenu() {
             랭킹
           </Link>
           <Link
+            href="/daily-word"
+            className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
+            onClick={() => setOpen(false)}
+          >
+            오늘의 단어
+          </Link>
+          <Link
+            href="/works"
+            className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
+            onClick={() => setOpen(false)}
+          >
+            작품별 보기
+          </Link>
+          <Link
             href="/challenges"
             className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
             onClick={() => setOpen(false)}

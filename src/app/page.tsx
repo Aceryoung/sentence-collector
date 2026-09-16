@@ -36,11 +36,12 @@ export default async function HomePage({
     .order("created_at", { ascending: false })
     .range(0, PAGE_SIZE);
 
-  const [{ data }, dailyPick, userStreak, leaderboard, recommendations, { count: totalSentences }] = await Promise.all([
+  const today = new Date().toISOString().split("T")[0];
+  const [{ data }, dailyPick, userStreak, leaderboard, recommendations, { count: totalSentences }, { data: todayWord }] = await Promise.all([
     feedQuery,
     user ? getPersonalDailyPick(supabase, user.id) : Promise.resolve(null),
     user ? getUserStreak(supabase, user.id) : Promise.resolve(null),
-    getLeaderboard(supabase, user?.id ?? null),
+    getLeaderboard(supabase, user?.id ?? null, 3),
     user
       ? getPersonalizedRecommendations(supabase, user.id)
       : Promise.resolve(null),
@@ -48,6 +49,11 @@ export default async function HomePage({
       .from("sentences")
       .select("*", { count: "exact", head: true })
       .is("deleted_at", null),
+    supabase
+      .from("daily_words")
+      .select("word, description")
+      .eq("scheduled_date", today)
+      .single(),
   ]);
 
   const sentences = (data ?? [])
@@ -150,6 +156,24 @@ export default async function HomePage({
               <span className="text-cta-contrast/60 transition-transform duration-200 group-hover:translate-x-0.5">→</span>
             </div>
           </Link>
+
+          {/* 오늘의 단어 */}
+          {todayWord ? (
+            <Link
+              href="/daily-word"
+              className="card-lift animate-fade-up group flex items-center justify-between rounded-[var(--radius-card)] border border-hairline bg-surface px-5 py-4 transition-all hover:border-archive/40 hover:shadow-[var(--shadow-card-hover)]"
+              style={{ animationDelay: "120ms" }}
+            >
+              <div className="flex flex-col gap-0.5">
+                <span className="text-xs font-bold text-coral">오늘의 단어</span>
+                <span className="font-serif text-lg font-bold text-ink">{todayWord.word}</span>
+                {todayWord.description ? (
+                  <span className="text-xs text-stone line-clamp-1">{todayWord.description}</span>
+                ) : null}
+              </div>
+              <span className="text-stone/60 transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+            </Link>
+          ) : null}
 
           {/* 필사 챌린지 순위 */}
           <PracticeLeaderboard entries={leaderboard} />
