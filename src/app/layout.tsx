@@ -4,6 +4,7 @@ import { TopBar } from "@/components/TopBar";
 import { SiteFooter } from "@/components/SiteFooter";
 import { BottomNav } from "@/components/BottomNav";
 import { ToastProvider } from "@/components/Toast";
+import { FeedbackButton } from "@/components/FeedbackButton";
 import "./globals.css";
 
 const literata = Literata({
@@ -86,6 +87,7 @@ export default function RootLayout({
           </div>
           <SiteFooter />
           <BottomNav />
+          <FeedbackButton />
         </ToastProvider>
       </body>
     </html>

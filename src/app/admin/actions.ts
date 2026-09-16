@@ -110,6 +110,23 @@ export async function bulkAddDailyWords(words: string[]) {
   return { success: true, count: rows.length };
 }
 
+/** 관리자 전용: 피드백 해결 처리 */
+export async function resolveFeedback(feedbackId: string) {
+  const admin = await getAdminUser();
+  if (!admin) return { error: "권한이 없습니다." };
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("feedback")
+    .update({ resolved: true })
+    .eq("id", feedbackId);
+
+  if (error) return { error: error.message };
+
+  revalidatePath("/admin");
+  return { success: true };
+}
+
 /** 관리자 전용: 오늘의 단어 삭제 */
 export async function deleteDailyWord(id: string) {
   const admin = await getAdminUser();

@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getAdminUser } from "@/lib/admin";
 import { AdminSentenceList } from "./AdminSentenceList";
 import { AdminDailyWords } from "./AdminDailyWords";
+import { AdminFeedbackList } from "./AdminFeedbackList";
 
 export default async function AdminPage({
   searchParams,
@@ -68,6 +69,13 @@ export default async function AdminPage({
     .order("scheduled_date", { ascending: false })
     .limit(50);
 
+  // ── 피드백 ──
+  const { data: feedbackItems } = await supabase
+    .from("feedback")
+    .select("id, category, body, page_url, created_at, resolved")
+    .order("created_at", { ascending: false })
+    .limit(100);
+
   const stats = [
     { label: "문장", value: sentenceCount ?? 0, emoji: "📝" },
     { label: "사용자", value: userCount ?? 0, emoji: "👤" },
@@ -99,6 +107,7 @@ export default async function AdminPage({
           { key: "dashboard", label: "대시보드" },
           { key: "sentences", label: "문장 관리" },
           { key: "daily-words", label: "오늘의 단어" },
+          { key: "feedback", label: "피드백" },
         ].map((t) => (
           <Link
             key={t.key}
@@ -130,6 +139,9 @@ export default async function AdminPage({
             </div>
           ))}
         </section>
+      ) : tab === "feedback" ? (
+        /* ── 피드백 ── */
+        <AdminFeedbackList items={feedbackItems ?? []} />
       ) : tab === "daily-words" ? (
         /* ── 오늘의 단어 관리 ── */
         <AdminDailyWords

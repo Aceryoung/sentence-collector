@@ -9,6 +9,7 @@ import { ReflectionForm } from "./ReflectionForm";
 import { ThoughtSection } from "./ThoughtSection";
 import { ReflectionLikeButton } from "@/components/ReflectionLikeButton";
 import { AddToCollectionButton } from "@/components/AddToCollectionButton";
+import { TagVoteSection } from "@/components/TagVoteSection";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://geuljeok.vercel.app";
@@ -108,6 +109,34 @@ export default async function SentenceDetailPage({
     relatedSentences = related ?? [];
   }
 
+  // 시선의 충돌: 사용자별 태그 분포
+  const { data: userTags } = await supabase
+    .from("sentence_user_tags")
+    .select("emotion_tag")
+    .eq("sentence_id", id);
+
+  const tagCountMap = new Map<string, number>();
+  if (sentence.emotionTag) {
+    tagCountMap.set(sentence.emotionTag, 1);
+  }
+  for (const row of userTags ?? []) {
+    tagCountMap.set(row.emotion_tag, (tagCountMap.get(row.emotion_tag) ?? 0) + 1);
+  }
+  const tagCounts = Array.from(tagCountMap.entries())
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => b.count - a.count);
+
+  let myTag: string | null = null;
+  if (user) {
+    const { data: myTagRow } = await supabase
+      .from("sentence_user_tags")
+      .select("emotion_tag")
+      .eq("sentence_id", id)
+      .eq("user_id", user.id)
+      .single();
+    myTag = myTagRow?.emotion_tag ?? null;
+  }
+
   const breadcrumbItems = [
     { "@type": "ListItem" as const, position: 1, name: "홈", item: SITE_URL },
     ...(sentence.emotionTag
@@ -186,6 +215,17 @@ export default async function SentenceDetailPage({
           <ThoughtSection sentenceId={id} thoughts={thoughts ?? []} />
         </>
       ) : null}
+
+      <hr className="border-hairline" />
+
+      {/* 시선의 충돌 */}
+      <TagVoteSection
+        sentenceId={id}
+        authorTag={sentence.emotionTag ?? null}
+        tagCounts={tagCounts}
+        myTag={myTag}
+        isLoggedIn={!!user}
+      />
 
       <hr className="border-hairline" />
 
