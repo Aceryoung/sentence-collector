@@ -9,7 +9,7 @@ import { SentenceCard } from "@/components/SentenceCard";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
-  "https://sentence-collector-zeta.vercel.app";
+  "https://geuljeok.vercel.app";
 
 export async function generateMetadata({
   params,

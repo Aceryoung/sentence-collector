@@ -13,7 +13,7 @@ const literata = Literata({
 });
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sentence-collector-zeta.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://geuljeok.vercel.app";
 
 const DESCRIPTION = "문장을 모으고, 다시 꺼내보고, 나누는 곳";
 

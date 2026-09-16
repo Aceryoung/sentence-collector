@@ -11,7 +11,7 @@ import { ReflectionLikeButton } from "@/components/ReflectionLikeButton";
 import { AddToCollectionButton } from "@/components/AddToCollectionButton";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sentence-collector-zeta.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://geuljeok.vercel.app";
 
 export async function generateMetadata({
   params,

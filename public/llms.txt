@@ -5,11 +5,11 @@
 글적은 책, 영화, 노래 가사 등에서 발견한 좋은 문장을 기록하고, 매일 한 문장을 천천히 따라 쓰는 필사 연습과 감상 공유를 할 수 있는 한국어 문장 수집 플랫폼입니다.
 
 ## 주요 기능
-- [문장 피드](https://sentence-collector-zeta.vercel.app/): 사용자들이 등록한 문장 탐색
-- [필사 연습](https://sentence-collector-zeta.vercel.app/practice): 매일 한 문장을 따라 쓰는 필사
-- [챌린지](https://sentence-collector-zeta.vercel.app/challenges): 기간별 필사 챌린지 참여
-- [랭킹](https://sentence-collector-zeta.vercel.app/ranking): 필사 연속 기록 순위
-- [검색](https://sentence-collector-zeta.vercel.app/search): 문장, 출처, 태그별 검색
+- [문장 피드](https://geuljeok.vercel.app/): 사용자들이 등록한 문장 탐색
+- [필사 연습](https://geuljeok.vercel.app/practice): 매일 한 문장을 따라 쓰는 필사
+- [챌린지](https://geuljeok.vercel.app/challenges): 기간별 필사 챌린지 참여
+- [랭킹](https://geuljeok.vercel.app/ranking): 필사 연속 기록 순위
+- [검색](https://geuljeok.vercel.app/search): 문장, 출처, 태그별 검색
 
 ## 핵심 콘텐츠
 - 사용자가 등록한 문장과 출처 정보

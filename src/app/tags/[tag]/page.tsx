@@ -11,7 +11,7 @@ import { SentenceCard } from "@/components/SentenceCard";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
-  "https://sentence-collector-zeta.vercel.app";
+  "https://geuljeok.vercel.app";
 
 /** 태그별 큐레이션 설명 (AI 인용 가능한 정보 블록) */
 const TAG_DESCRIPTIONS: Record<string, string> = {

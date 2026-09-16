@@ -4,7 +4,7 @@ import { EMOTION_TAGS } from "@/lib/validation";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
-  "https://sentence-collector-zeta.vercel.app";
+  "https://geuljeok.vercel.app";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createClient();
