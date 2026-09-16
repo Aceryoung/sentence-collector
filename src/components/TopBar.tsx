@@ -112,6 +112,12 @@ export async function TopBar() {
           ) : (
             <>
               {/* 비로그인 — 모바일에서도 핵심 링크 표시 */}
+              <NavLink href="/daily-word" className="sm:hidden">
+                오늘의 단어
+              </NavLink>
+              <NavLink href="/works" className="sm:hidden">
+                작품별
+              </NavLink>
               <NavLink href="/ranking" className="sm:hidden">
                 랭킹
               </NavLink>
