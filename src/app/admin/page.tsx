@@ -5,6 +5,7 @@ import { getAdminUser } from "@/lib/admin";
 import { AdminSentenceList } from "./AdminSentenceList";
 import { AdminDailyWords } from "./AdminDailyWords";
 import { AdminFeedbackList } from "./AdminFeedbackList";
+import { AdminSns } from "./AdminSns";
 
 export default async function AdminPage({
   searchParams,
@@ -69,6 +70,28 @@ export default async function AdminPage({
     .order("scheduled_date", { ascending: false })
     .limit(50);
 
+  // ── SNS 인기 문장 (최근 7일) ──
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const { data: snsSentences } = await supabase
+    .from("sentences")
+    .select("id, body, source, created_at, likes(count)")
+    .is("deleted_at", null)
+    .gte("created_at", sevenDaysAgo)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  const snsRanked = (snsSentences ?? [])
+    .map((s) => ({
+      id: s.id as string,
+      body: s.body as string,
+      source: s.source as string | null,
+      likeCount: (s.likes as { count: number }[])?.[0]?.count ?? 0,
+      createdAt: s.created_at as string,
+    }))
+    .filter((s) => s.likeCount > 0)
+    .sort((a, b) => b.likeCount - a.likeCount)
+    .slice(0, 5);
+
   // ── 피드백 ──
   const { data: feedbackItems } = await supabase
     .from("feedback")
@@ -107,6 +130,7 @@ export default async function AdminPage({
           { key: "dashboard", label: "대시보드" },
           { key: "sentences", label: "문장 관리" },
           { key: "daily-words", label: "오늘의 단어" },
+          { key: "sns", label: "SNS" },
           { key: "feedback", label: "피드백" },
         ].map((t) => (
           <Link
@@ -141,6 +165,9 @@ export default async function AdminPage({
       ) : tab === "feedback" ? (
         /* ── 피드백 ── */
         <AdminFeedbackList items={feedbackItems ?? []} />
+      ) : tab === "sns" ? (
+        /* ── SNS 콘텐츠 ── */
+        <AdminSns sentences={snsRanked} />
       ) : tab === "daily-words" ? (
         /* ── 오늘의 단어 관리 ── */
         <AdminDailyWords
