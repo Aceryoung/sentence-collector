@@ -14,12 +14,13 @@ export default async function SearchPage({
   let sentences: ReturnType<typeof toSentenceCardData>[] = [];
 
   if (query.length > 0) {
+    const sanitized = query.replace(/[,%()]/g, "");
     const supabase = await createClient();
     const { data } = await supabase
       .from("sentences")
       .select(SENTENCE_WITH_LIKE_COUNT_SELECT)
       .is("deleted_at", null)
-      .or(`body.ilike.%${query}%,source.ilike.%${query}%,commentary.ilike.%${query}%`)
+      .or(`body.ilike.%${sanitized}%,source.ilike.%${sanitized}%,commentary.ilike.%${sanitized}%`)
       .order("created_at", { ascending: false })
       .limit(30);
 
