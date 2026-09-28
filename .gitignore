@@ -45,4 +45,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .claude/launch.json
+.claude-flow/
+.swarm/
 .gstack/
+agentdb.rvf*
+ruvector.db
+static_analysis_semgrep_*/
