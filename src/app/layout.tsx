@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Literata } from "next/font/google";
 import { TopBar } from "@/components/TopBar";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -17,6 +17,10 @@ const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://geuljeok.vercel.app";
 
 const DESCRIPTION = "문장을 모으고, 다시 꺼내보고, 나누는 곳";
+
+export const viewport: Viewport = {
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   // opengraph-image 를 절대 URL 로 뽑으려면 기준 주소가 있어야 한다.

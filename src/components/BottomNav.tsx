@@ -41,7 +41,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-20 border-t border-hairline bg-paper/95 backdrop-blur sm:hidden"
+      className="fixed bottom-0 left-0 right-0 z-20 border-t border-hairline bg-paper/95 pb-[env(safe-area-inset-bottom)] backdrop-blur sm:hidden"
       aria-label="주요 탐색"
     >
       <ul className="mx-auto flex max-w-xl items-stretch justify-around">

@@ -74,13 +74,33 @@ export async function updateNickname(
     return { error: "로그인이 필요합니다.", success: false };
   }
 
-  const { error } = await supabase.auth.updateUser({
-    data: { nickname: nickname || null },
-  });
+  if (nickname) {
+    const { data: existing } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("nickname", nickname)
+      .neq("id", user.id)
+      .maybeSingle();
 
-  if (error) {
-    console.error("[updateNickname] failed:", error.message);
+    if (existing) {
+      return { error: "이미 사용 중인 닉네임이에요.", success: false };
+    }
+  }
+
+  const value = nickname || null;
+
+  const [authResult, profileResult] = await Promise.all([
+    supabase.auth.updateUser({ data: { nickname: value } }),
+    supabase.from("profiles").update({ nickname: value }).eq("id", user.id),
+  ]);
+
+  if (authResult.error) {
+    console.error("[updateNickname] auth failed:", authResult.error.message);
     return { error: "닉네임 저장에 실패했어요. 잠시 후 다시 시도해주세요.", success: false };
+  }
+
+  if (profileResult.error) {
+    console.error("[updateNickname] profile sync failed:", profileResult.error.message);
   }
 
   revalidatePath("/", "layout");
