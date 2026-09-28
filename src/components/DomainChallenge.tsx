@@ -20,7 +20,7 @@ export function DomainChallenge({ currentCount }: Props) {
     <section className="animate-fade-up flex flex-col gap-3 rounded-[var(--radius-card)] border border-hairline bg-surface px-5 py-5 shadow-[var(--shadow-card)]">
       <div className="flex items-center justify-between">
         <span className="text-xs font-bold tracking-widest text-archive">
-          도메인 챌린지
+          글적의 집 주소
         </span>
         <span className="text-xs tabular-nums text-stone">
           {currentCount.toLocaleString()} / {GOAL.toLocaleString()}
@@ -29,8 +29,8 @@ export function DomainChallenge({ currentCount }: Props) {
 
       <p className="text-xs leading-relaxed text-stone">
         {reached
-          ? "목표 달성! 정식 도메인을 준비합니다."
-          : "문장이 500개 모이면 글적의 정식 도메인이 열립니다."}
+          ? "목표 달성! 글적만의 집 주소를 준비합니다."
+          : "문장이 500개 모이면 글적만의 집 주소가 열립니다."}
       </p>
 
       {/* 프로그레스 바 */}
