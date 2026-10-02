@@ -44,11 +44,25 @@ export function NavMenu() {
       {open ? (
         <div className="absolute top-full right-0 z-20 mt-2 flex w-40 flex-col overflow-hidden rounded-[var(--radius-card)] border border-hairline-strong bg-surface py-1 text-xs text-stone shadow-[var(--shadow-card)]">
           <Link
+            href="/search"
+            className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
+            onClick={() => setOpen(false)}
+          >
+            검색
+          </Link>
+          <Link
             href="/feed"
             className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
             onClick={() => setOpen(false)}
           >
             피드
+          </Link>
+          <Link
+            href="/practice"
+            className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
+            onClick={() => setOpen(false)}
+          >
+            필사
           </Link>
           <Link
             href="/ranking"
@@ -91,6 +105,13 @@ export function NavMenu() {
             onClick={() => setOpen(false)}
           >
             알림
+          </Link>
+          <Link
+            href="/settings"
+            className="min-h-11 px-3 py-3 hover:bg-paper hover:text-ink"
+            onClick={() => setOpen(false)}
+          >
+            계정 설정
           </Link>
           <div className="flex min-h-11 items-center justify-between px-3 py-3">
             <span>테마</span>
