@@ -94,6 +94,8 @@ function PreviewCard({ sentence }: { sentence: FeaturedSentence }) {
       sentence.source ? `— ${sentence.source}` : "",
       "",
       "#글적 #문장수집 #명문장 #책스타그램 #독서기록",
+      "",
+      "@geuljeok_official",
       "글적에서 더 보기 → geuljeok.vercel.app",
     ]
       .filter(Boolean)
