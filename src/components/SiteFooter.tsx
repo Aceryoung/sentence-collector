@@ -17,6 +17,9 @@ export function SiteFooter() {
           <Link href="/privacy" className="font-semibold text-stone hover:text-ink">
             개인정보 처리방침
           </Link>
+          <Link href="/copyright" className="hover:text-ink">
+            저작권 안내
+          </Link>
         </div>
         <div className="flex flex-col gap-0.5 sm:flex-row sm:flex-wrap sm:gap-x-3 sm:gap-y-0.5">
           <span>{LEGAL.operatorName}</span>
