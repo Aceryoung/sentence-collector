@@ -1,12 +1,14 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { createSentence, type CreateSentenceState } from "./actions";
+import { useActionState, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { createSentence, acceptSuggestedTags, type CreateSentenceState } from "./actions";
 import { SENTENCE_BODY_MAX_LENGTH, SOURCE_MAX_LENGTH, COMMENTARY_MIN_LENGTH, COMMENTARY_MAX_LENGTH, EMOTION_TAGS } from "@/lib/validation";
 
 const initialState: CreateSentenceState = { error: null };
 
 export function WriteForm() {
+  const router = useRouter();
   const [state, formAction, isPending] = useActionState(
     createSentence,
     initialState,
@@ -17,6 +19,58 @@ export function WriteForm() {
   const commentaryShort = commentaryLength > 0 && commentaryLength < COMMENTARY_MIN_LENGTH;
   const commentaryNearLimit = commentaryLength > COMMENTARY_MAX_LENGTH - 20;
   const [selectedTag, setSelectedTag] = useState("");
+  const [acceptingTag, setAcceptingTag] = useState(false);
+
+  useEffect(() => {
+    if (state.success && state.success.suggestedTags.length === 0) {
+      router.push("/my");
+    }
+  }, [state.success, router]);
+
+  async function handleAcceptTag(tag: string) {
+    if (!state.success) return;
+    setAcceptingTag(true);
+    await acceptSuggestedTags(state.success.sentenceId, [tag]);
+    router.push("/my");
+  }
+
+  function handleSkip() {
+    router.push("/my");
+  }
+
+  if (state.success && state.success.suggestedTags.length > 0) {
+    return (
+      <div className="flex flex-col items-center gap-6 py-12 text-center">
+        <div className="flex flex-col gap-2">
+          <p className="font-serif text-lg font-bold text-ink">저장 완료</p>
+          <p className="text-sm text-stone">
+            AI가 추천하는 감정 태그예요. 하나를 선택하면 이 문장에 추가됩니다.
+          </p>
+        </div>
+        <div className="flex flex-wrap justify-center gap-2">
+          {state.success.suggestedTags.map((tag) => (
+            <button
+              key={tag}
+              type="button"
+              disabled={acceptingTag}
+              onClick={() => handleAcceptTag(tag)}
+              className="rounded-[var(--radius-pill)] border border-archive/40 bg-surface px-4 py-2 text-sm text-ink transition-all hover:border-archive hover:bg-archive/10 hover:shadow-sm active:scale-95 disabled:opacity-60"
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={handleSkip}
+          disabled={acceptingTag}
+          className="text-xs text-stone underline underline-offset-4 hover:text-ink disabled:opacity-60"
+        >
+          건너뛰기
+        </button>
+      </div>
+    );
+  }
 
   return (
     <form action={formAction} className="flex flex-col gap-8">
