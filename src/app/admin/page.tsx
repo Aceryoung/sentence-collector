@@ -6,6 +6,7 @@ import { AdminSentenceList } from "./AdminSentenceList";
 import { AdminDailyWords } from "./AdminDailyWords";
 import { AdminFeedbackList } from "./AdminFeedbackList";
 import { AdminSns } from "./AdminSns";
+import { AdminKpi } from "./AdminKpi";
 
 export default async function AdminPage({
   searchParams,
@@ -38,6 +39,90 @@ export default async function AdminPage({
     supabase.from("collections").select("*", { count: "exact", head: true }),
     supabase.from("challenges").select("*", { count: "exact", head: true }),
   ]);
+
+  // ── KPI ──
+  const now = new Date();
+  const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+  const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString();
+  const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59).toISOString();
+  const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
+
+  const [
+    { data: newSentencesThisMonth },
+    { data: newSentencesLastMonth },
+    { data: wauSentences },
+    { data: wauPractice },
+    { data: wauReflections },
+    { data: prevWauSentences },
+    { data: prevWauPractice },
+    { data: prevWauReflections },
+    { count: monthlyNewUsers },
+    { count: lastMonthNewUsers },
+  ] = await Promise.all([
+    supabase.from("sentences").select("author_id").is("deleted_at", null).gte("created_at", thisMonthStart),
+    supabase.from("sentences").select("author_id").is("deleted_at", null).gte("created_at", lastMonthStart).lte("created_at", lastMonthEnd),
+    supabase.from("sentences").select("author_id").is("deleted_at", null).gte("created_at", oneWeekAgo),
+    supabase.from("practice_logs").select("user_id").gte("date", oneWeekAgo.slice(0, 10)),
+    supabase.from("reflections").select("author_id").gte("created_at", oneWeekAgo),
+    supabase.from("sentences").select("author_id").is("deleted_at", null).gte("created_at", twoWeeksAgo).lt("created_at", oneWeekAgo),
+    supabase.from("practice_logs").select("user_id").gte("date", twoWeeksAgo.slice(0, 10)).lt("date", oneWeekAgo.slice(0, 10)),
+    supabase.from("reflections").select("author_id").gte("created_at", twoWeeksAgo).lt("created_at", oneWeekAgo),
+    supabase.from("user_settings").select("*", { count: "exact", head: true }).gte("created_at", thisMonthStart),
+    supabase.from("user_settings").select("*", { count: "exact", head: true }).gte("created_at", lastMonthStart).lte("created_at", lastMonthEnd),
+  ]);
+
+  const wauSet = new Set<string>();
+  for (const r of wauSentences ?? []) wauSet.add(r.author_id as string);
+  for (const r of wauPractice ?? []) wauSet.add(r.user_id as string);
+  for (const r of wauReflections ?? []) wauSet.add(r.author_id as string);
+  const wau = wauSet.size;
+
+  const prevWauSet = new Set<string>();
+  for (const r of prevWauSentences ?? []) prevWauSet.add(r.author_id as string);
+  for (const r of prevWauPractice ?? []) prevWauSet.add(r.user_id as string);
+  for (const r of prevWauReflections ?? []) prevWauSet.add(r.author_id as string);
+  const prevWau = prevWauSet.size;
+
+  const wauChange = prevWau > 0 ? Math.round(((wau - prevWau) / prevWau) * 100) : null;
+
+  const monthlySentences = new Set((newSentencesThisMonth ?? []).map((r) => r.author_id as string)).size;
+  const lastMonthlySentences = new Set((newSentencesLastMonth ?? []).map((r) => r.author_id as string)).size;
+
+  const monthlyUsersVal = monthlyNewUsers ?? 0;
+  const lastMonthUsersVal = lastMonthNewUsers ?? 0;
+  const monthlyUsersChange = lastMonthUsersVal > 0 ? Math.round(((monthlyUsersVal - lastMonthUsersVal) / lastMonthUsersVal) * 100) : null;
+
+  const sentenceCountThisMonth = (newSentencesThisMonth ?? []).length;
+  const sentenceCountLastMonth = (newSentencesLastMonth ?? []).length;
+  const sentenceChange = sentenceCountLastMonth > 0 ? Math.round(((sentenceCountThisMonth - sentenceCountLastMonth) / sentenceCountLastMonth) * 100) : null;
+
+  const kpiItems = [
+    {
+      label: "월간 신규 가입",
+      value: monthlyUsersVal,
+      change: monthlyUsersChange,
+      note: `지난달 ${lastMonthUsersVal}명`,
+    },
+    {
+      label: "주간 활성 사용자 (WAU)",
+      value: wau,
+      change: wauChange,
+      note: `지난주 ${prevWau}명`,
+    },
+    {
+      label: "총 문장 수",
+      value: sentenceCount ?? 0,
+      target: 500,
+      note: `이번달 +${sentenceCountThisMonth}`,
+    },
+    {
+      label: "이번달 활동 작성자",
+      value: monthlySentences,
+      change: lastMonthlySentences > 0 ? Math.round(((monthlySentences - lastMonthlySentences) / lastMonthlySentences) * 100) : null,
+      note: `지난달 ${lastMonthlySentences}명`,
+    },
+  ];
 
   // ── 문장 관리 ──
   const pageNum = Math.max(1, parseInt(page, 10) || 1);
@@ -149,19 +234,28 @@ export default async function AdminPage({
 
       {tab === "dashboard" ? (
         /* ── 대시보드 ── */
-        <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {stats.map((s) => (
-            <div
-              key={s.label}
-              className="flex flex-col items-center gap-1 rounded-[var(--radius-card)] border border-hairline bg-surface px-4 py-5 shadow-[var(--shadow-card)]"
-            >
-              <span className="text-2xl font-bold tabular-nums text-ink">
-                {s.value.toLocaleString("ko-KR")}
-              </span>
-              <span className="text-xs text-stone">{s.label}</span>
+        <div className="flex flex-col gap-8">
+          <AdminKpi items={kpiItems} />
+
+          <section className="flex flex-col gap-3">
+            <h2 className="text-sm font-bold tracking-widest text-stone">
+              전체 현황
+            </h2>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {stats.map((s) => (
+                <div
+                  key={s.label}
+                  className="flex flex-col items-center gap-1 rounded-[var(--radius-card)] border border-hairline bg-surface px-4 py-5 shadow-[var(--shadow-card)]"
+                >
+                  <span className="text-2xl font-bold tabular-nums text-ink">
+                    {s.value.toLocaleString("ko-KR")}
+                  </span>
+                  <span className="text-xs text-stone">{s.label}</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </section>
+          </section>
+        </div>
       ) : tab === "feedback" ? (
         /* ── 피드백 ── */
         <AdminFeedbackList items={feedbackItems ?? []} />
