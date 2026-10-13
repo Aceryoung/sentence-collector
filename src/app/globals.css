@@ -6,9 +6,9 @@
 :root {
   --paper: #fbf9f5;
   --surface: #f5f3ef;
-  --ink-black: #1a2a3a;
-  --stone: #6b7a8a;
-  --stone-faint: #9ba5b0;
+  --ink-black: #111a2e;
+  --stone: #4f5e6f;
+  --stone-faint: #7b8794;
   --archive: #4a6580;
   --archive-contrast: #fbf9f5;
   --hairline: #dbdad6;
@@ -46,9 +46,9 @@
   :root {
     --paper: #000000;
     --surface: #1c1c1e;
-    --ink-black: #f2f2f7;
-    --stone: #a1a1a6;
-    --stone-faint: #636366;
+    --ink-black: #f5f5fa;
+    --stone: #c0c0c5;
+    --stone-faint: #8e8e93;
     --archive: #7aafcf;
     --archive-contrast: #000000;
     --hairline: #38383a;
@@ -67,9 +67,9 @@
 :root[data-theme="dark"] {
   --paper: #000000;
   --surface: #1c1c1e;
-  --ink-black: #f2f2f7;
-  --stone: #a1a1a6;
-  --stone-faint: #636366;
+  --ink-black: #f5f5fa;
+  --stone: #c0c0c5;
+  --stone-faint: #8e8e93;
   --archive: #7aafcf;
   --archive-contrast: #000000;
   --hairline: #38383a;
@@ -87,9 +87,9 @@
 :root[data-theme="light"] {
   --paper: #fbf9f5;
   --surface: #f5f3ef;
-  --ink-black: #1a2a3a;
-  --stone: #6b7a8a;
-  --stone-faint: #9ba5b0;
+  --ink-black: #111a2e;
+  --stone: #4f5e6f;
+  --stone-faint: #7b8794;
   --archive: #4a6580;
   --archive-contrast: #fbf9f5;
   --hairline: #dbdad6;
