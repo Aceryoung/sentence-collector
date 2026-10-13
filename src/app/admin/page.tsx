@@ -155,6 +155,9 @@ export default async function AdminPage({
     .order("scheduled_date", { ascending: false })
     .limit(50);
 
+  const todayStr = now.toISOString().split("T")[0];
+  const todayDailyWord = (dailyWords ?? []).find((w) => w.scheduled_date === todayStr) ?? null;
+
   // ── SNS 인기 문장 (최근 7일) ──
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const { data: snsSentences } = await supabase
@@ -261,7 +264,7 @@ export default async function AdminPage({
         <AdminFeedbackList items={feedbackItems ?? []} />
       ) : tab === "sns" ? (
         /* ── SNS 콘텐츠 ── */
-        <AdminSns sentences={snsRanked} />
+        <AdminSns sentences={snsRanked} dailyWord={todayDailyWord} />
       ) : tab === "daily-words" ? (
         /* ── 오늘의 단어 관리 ── */
         <AdminDailyWords
