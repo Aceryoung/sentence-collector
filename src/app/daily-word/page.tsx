@@ -73,7 +73,7 @@ export default async function DailyWordPage() {
               강력한 방아쇠 역할을 합니다.
             </p>
             {dailyWord.description ? (
-              <p className="max-w-md text-sm leading-relaxed text-stone">
+              <p className="max-w-md rounded-[var(--radius-card)] border border-hairline bg-surface/50 px-4 py-2.5 text-sm italic leading-relaxed text-stone">
                 {dailyWord.description}
               </p>
             ) : null}

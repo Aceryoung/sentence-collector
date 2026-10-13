@@ -85,11 +85,12 @@ export function AdminDailyWords({
         <h3 className="text-sm font-bold text-ink">단어 대량 등록</h3>
         <p className="text-xs text-stone">
           한 줄에 하나씩 입력하면 마지막 등록일({lastScheduledDate ?? today}) 다음 날부터 자동 배정됩니다.
+          뜻을 함께 입력하려면 <code className="rounded bg-paper px-1 py-0.5 text-coral">단어:뜻</code> 형식으로 적어주세요.
         </p>
         <textarea
           value={bulkText}
           onChange={(e) => setBulkText(e.target.value)}
-          placeholder={"고독\n설렘\n여백\n온기\n그리움"}
+          placeholder={"고독:홀로 있는 쓸쓸한 느낌\n설렘\n여백:비어 있는 공간이나 시간\n온기\n그리움"}
           rows={6}
           className="w-full resize-none rounded-[var(--radius-card)] border border-hairline bg-paper px-4 py-3 text-sm leading-relaxed text-ink placeholder:text-stone-faint focus:border-archive focus:outline-none"
         />
@@ -133,7 +134,7 @@ export function AdminDailyWords({
         <input
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="설명 (선택)"
+          placeholder="단어 뜻 (선택, 예: 홀로 있는 쓸쓸한 느낌)"
           maxLength={200}
           className="rounded-[var(--radius-input)] border border-hairline-strong bg-paper px-3 py-2 text-sm text-ink outline-none focus-visible:border-archive"
         />

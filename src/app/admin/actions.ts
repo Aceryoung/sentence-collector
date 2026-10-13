@@ -89,11 +89,15 @@ export async function bulkAddDailyWords(words: string[]) {
       : today,
   );
 
-  const rows = words.map((word, i) => {
+  const rows = words.map((line, i) => {
     const date = new Date(startDate);
     date.setDate(date.getDate() + i + 1);
+    const colonIdx = line.indexOf(":");
+    const word = colonIdx > 0 ? line.slice(0, colonIdx).trim() : line.trim();
+    const description = colonIdx > 0 ? line.slice(colonIdx + 1).trim() || null : null;
     return {
-      word: word.trim(),
+      word,
+      description,
       scheduled_date: date.toISOString().split("T")[0],
     };
   });
