@@ -69,12 +69,8 @@ export default async function HomePage({
             글적이란?
           </h2>
           <p className="mx-auto max-w-2xl text-sm leading-relaxed text-stone sm:text-base">
-            글적은 마음에 닿은 문장을 모으고, 직접 필사하며, 감상을 나누는 문장 아카이브 서비스입니다.
-            책, 영화, 노래 가사, 시 등에서 발견한 좋은 문장을 기록하고,
-            매일 한 문장을 천천히 따라 쓰는 필사 연습으로 글쓰기 습관을 기를 수 있습니다.
-            위로, 동기부여, 사랑, 깨달음 등 감정 태그로 문장을 분류하고,
-            다른 사용자의 감상을 읽으며 같은 문장에서 서로 다른 울림을 발견할 수 있습니다.
-            연속 필사 기록과 챌린지 참여로 꾸준한 독서·글쓰기 습관을 만들어보세요.
+            마음에 닿은 문장을 모으고, 천천히 따라 쓰며, 감상을 나누는 곳.
+            매일 한 문장 필사로 읽기와 쓰기 습관을 함께 만들어보세요.
           </p>
         </section>
       ) : null}
@@ -88,9 +84,9 @@ export default async function HomePage({
           <div className="animate-fade-up flex items-center gap-4">
             <BrandMascot className="h-14 w-[41px] shrink-0 text-archive" />
             <p className="font-serif text-sm leading-relaxed text-ink">
-              마음에 닿은 문장을 모으고,
+              문장을 모으고, 다시 꺼내보고,
               <br />
-              나만의 아카이브를 만들어보세요.
+              나누는 곳.
             </p>
           </div>
 
@@ -128,7 +124,7 @@ export default async function HomePage({
             >
               <span className="text-xs font-bold text-archive">나만의 아카이브</span>
               <p className="text-sm leading-relaxed text-stone">
-                로그인하고 마음에 드는 문장을 저장하고, 감상을 남겨보세요.
+                로그인하고 문장을 모아보세요.
               </p>
             </Link>
           ) : null}

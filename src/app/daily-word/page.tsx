@@ -68,9 +68,8 @@ export default async function DailyWordPage() {
               {dailyWord.word}
             </h1>
             <p className="max-w-md text-xs leading-relaxed text-stone/70">
-              단어들은 문장 안에 갇혀 있을 때보다, 이렇게 고립되어 툭 던져졌을 때
-              오히려 읽는 이의 내면에 숨겨진 수많은 기억과 감정들을 끌어올리는
-              강력한 방아쇠 역할을 합니다.
+              문장 속에서 스쳐 지나갔던 단어.
+              혼자 꺼내놓으면 떠오르는 기억이 있습니다.
             </p>
             {dailyWord.description ? (
               <p className="max-w-md rounded-[var(--radius-card)] border border-hairline bg-surface/50 px-4 py-2.5 text-sm italic leading-relaxed text-stone">
@@ -103,7 +102,7 @@ export default async function DailyWordPage() {
                 <Link href="/login" className="text-archive underline underline-offset-4">
                   로그인
                 </Link>
-                하고 오늘의 단어에 대한 생각을 남겨보세요.
+                하고 생각을 적어보세요.
               </p>
             </div>
           )}

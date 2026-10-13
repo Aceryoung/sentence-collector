@@ -35,7 +35,7 @@ export default async function WritePage() {
           href="/login"
           className="btn-press rounded-[var(--radius-pill)] bg-cta px-6 py-3 text-sm font-bold text-cta-contrast transition-all duration-200 hover:bg-cta-hover hover:shadow-md"
         >
-          로그인하고 등록하기
+          로그인하고 적어보기
         </Link>
       </main>
     );

@@ -31,12 +31,12 @@ const SOURCE_FONT = `${SOURCE_FONT_SIZE}px ui-monospace, "SF Mono", Menlo, "Cour
 const SIGNATURE_FONT = `${SIGNATURE_FONT_SIZE}px ui-monospace, "SF Mono", Menlo, "Courier New", monospace`;
 
 const COLORS = {
-  paper: "#faf8f4",
-  surface: "#ffffff",
-  ink: "#1a1816",
-  archive: "#8b6542",
-  hairline: "#d8d2c6",
-  stoneFaint: "#b5b0a7",
+  paper: "#fbf9f5",
+  surface: "#f5f3ef",
+  ink: "#111a2e",
+  archive: "#4a6580",
+  hairline: "#dbdad6",
+  stoneFaint: "#7b8794",
 };
 
 /**
@@ -268,10 +268,10 @@ function makeWpBodyFont(fontSize: number): string {
 }
 
 const WP_COLORS = {
-  bg: "#faf8f4",
-  ink: "#1a1816",
-  archive: "#8b6542",
-  stoneFaint: "#b5b0a7",
+  bg: "#fbf9f5",
+  ink: "#111a2e",
+  archive: "#4a6580",
+  stoneFaint: "#7b8794",
 };
 
 /**

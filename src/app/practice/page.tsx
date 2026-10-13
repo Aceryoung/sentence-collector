@@ -113,7 +113,7 @@ export default async function PracticePage() {
                 href="/login"
                 className="rounded-[var(--radius-pill)] border border-hairline-strong px-4 py-2 text-xs font-bold text-ink transition-all duration-200 hover:border-archive hover:text-archive"
               >
-                로그인하고 기록 남기기
+                로그인하고 시작하기
               </Link>
             </div>
           )}

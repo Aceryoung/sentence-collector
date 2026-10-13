@@ -302,7 +302,7 @@ function MyPagePreview() {
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="font-serif text-2xl font-bold text-ink">내 보관함</h1>
         <p className="text-sm leading-relaxed text-stone">
-          문장을 수집하고, 감상을 남기고, 필사하는 모든 기록이 여기에 모여요.
+          수집한 문장과 감상, 필사 기록을 모아두는 곳.
         </p>
       </div>
 

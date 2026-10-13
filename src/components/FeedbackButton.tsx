@@ -105,7 +105,7 @@ export function FeedbackButton() {
               <p className="mb-3 text-xs text-coral">{result.error}</p>
             ) : null}
             {result?.success ? (
-              <p className="mb-3 text-xs text-green-600">감사합니다! 피드백이 전달되었습니다.</p>
+              <p className="mb-3 text-xs text-green-600">피드백이 전달되었어요. 감사해요!</p>
             ) : null}
 
             <button
