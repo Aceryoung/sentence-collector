@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { EmptyState } from "@/components/EmptyState";
 import { BrandMascot } from "@/components/BrandMascot";
 import { TagFilter } from "@/components/TagFilter";
-import { InfiniteScrollFeed } from "@/components/InfiniteScrollFeed";
+import { PaginatedFeed } from "@/components/PaginatedFeed";
 import {
   SENTENCE_WITH_LIKE_COUNT_SELECT,
   getPersonalDailyPick,
@@ -15,13 +15,16 @@ import { PracticeLeaderboard } from "@/components/PracticeLeaderboard";
 import { DomainChallenge } from "@/components/DomainChallenge";
 import { getPersonalizedRecommendations } from "@/lib/personalization";
 
+const PAGE_SIZE = 20;
+
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams: Promise<{ tag?: string }>;
+  searchParams: Promise<{ tag?: string; page?: string }>;
 }) {
-  const { tag } = await searchParams;
-  const PAGE_SIZE = 20;
+  const { tag, page: pageParam } = await searchParams;
+  const currentPage = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
+  const offset = (currentPage - 1) * PAGE_SIZE;
   const supabase = await createClient();
   const {
     data: { user },
@@ -34,11 +37,18 @@ export default async function HomePage({
   if (tag) feedQuery = feedQuery.eq("emotion_tag", tag);
   feedQuery = feedQuery
     .order("created_at", { ascending: false })
-    .range(0, PAGE_SIZE);
+    .range(offset, offset + PAGE_SIZE - 1);
+
+  let countQuery = supabase
+    .from("sentences")
+    .select("*", { count: "exact", head: true })
+    .is("deleted_at", null);
+  if (tag) countQuery = countQuery.eq("emotion_tag", tag);
 
   const today = new Date().toISOString().split("T")[0];
-  const [{ data }, dailyPick, userStreak, leaderboard, recommendations, { count: totalSentences }, { data: todayWord }] = await Promise.all([
+  const [{ data }, { count: filteredCount }, dailyPick, userStreak, leaderboard, recommendations, { count: totalSentences }, { data: todayWord }] = await Promise.all([
     feedQuery,
+    countQuery,
     user ? getPersonalDailyPick(supabase, user.id) : Promise.resolve(null),
     user ? getUserStreak(supabase, user.id) : Promise.resolve(null),
     getLeaderboard(supabase, user?.id ?? null, 3),
@@ -59,6 +69,8 @@ export default async function HomePage({
   const sentences = (data ?? [])
     .map(toSentenceCardData)
     .filter((sentence) => sentence.id !== dailyPick?.id);
+
+  const totalPages = Math.max(1, Math.ceil((filteredCount ?? 0) / PAGE_SIZE));
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
@@ -222,11 +234,11 @@ export default async function HomePage({
               </div>
               <TagFilter activeTag={tag ?? null} />
               {sentences.length > 0 ? (
-                <InfiniteScrollFeed
-                  initialSentences={sentences}
+                <PaginatedFeed
+                  sentences={sentences}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
                   tag={tag}
-                  excludeId={dailyPick?.id}
-                  initialHasMore={sentences.length >= PAGE_SIZE}
                 />
               ) : (
                 <p className="py-6 text-center text-sm text-stone">
