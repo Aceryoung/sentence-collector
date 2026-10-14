@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { renderShareCard, renderWallpaper } from "@/lib/share-image";
+import { renderShareCard, renderWallpaper, CARD_STYLES, type CardStyle } from "@/lib/share-image";
 import { useToast } from "@/components/Toast";
 
 type FeaturedSentence = {
@@ -44,6 +44,7 @@ function PreviewCard({ sentence }: { sentence: FeaturedSentence }) {
   const { toast } = useToast();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [cardStyle, setCardStyle] = useState<CardStyle>("classic");
 
   async function handleDownload(mode: "card" | "wallpaper") {
     const canvas = document.createElement("canvas");
@@ -52,7 +53,7 @@ function PreviewCard({ sentence }: { sentence: FeaturedSentence }) {
     const rendered =
       mode === "wallpaper"
         ? renderWallpaper(canvas, data, glyph)
-        : renderShareCard(canvas, data, glyph);
+        : renderShareCard(canvas, data, glyph, cardStyle);
 
     if (!rendered) {
       toast("이미지 생성에 실패했어요.", "error");
@@ -88,6 +89,7 @@ function PreviewCard({ sentence }: { sentence: FeaturedSentence }) {
       canvas,
       { body: sentence.body, source: sentence.source },
       glyph,
+      cardStyle,
     );
     if (rendered) {
       setPreviewUrl(canvas.toDataURL("image/png"));
@@ -129,7 +131,23 @@ function PreviewCard({ sentence }: { sentence: FeaturedSentence }) {
         </span>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex gap-1">
+          {CARD_STYLES.map((s) => (
+            <button
+              key={s.key}
+              type="button"
+              onClick={() => { setCardStyle(s.key); setPreviewUrl(null); }}
+              className={`rounded-[var(--radius-pill)] px-2 py-1 text-[11px] font-medium transition-colors ${
+                cardStyle === s.key
+                  ? "bg-archive text-archive-contrast"
+                  : "text-stone hover:text-ink"
+              }`}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
         <button
           type="button"
           onClick={() => handleDownload("card")}
@@ -178,6 +196,7 @@ function PreviewCard({ sentence }: { sentence: FeaturedSentence }) {
 function DailyWordCard({ dailyWord }: { dailyWord: DailyWordData }) {
   const { toast } = useToast();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [cardStyle, setCardStyle] = useState<CardStyle>("classic");
 
   async function handleDownload() {
     const canvas = document.createElement("canvas");
@@ -186,7 +205,7 @@ function DailyWordCard({ dailyWord }: { dailyWord: DailyWordData }) {
       body: dailyWord.word,
       source: dailyWord.description,
     };
-    const rendered = renderShareCard(canvas, data, glyph);
+    const rendered = renderShareCard(canvas, data, glyph, cardStyle);
     if (!rendered) {
       toast("이미지 생성에 실패했어요.", "error");
       return;
@@ -196,7 +215,7 @@ function DailyWordCard({ dailyWord }: { dailyWord: DailyWordData }) {
         toast("이미지 생성에 실패했어요.", "error");
         return;
       }
-      downloadBlob(blob, `daily-word-${dailyWord.scheduled_date}.png`);
+      downloadBlob(blob, `daily-word-${dailyWord.scheduled_date}-${cardStyle}.png`);
       toast("오늘의 단어 이미지가 저장되었어요.");
     }, "image/png");
   }
@@ -211,7 +230,7 @@ function DailyWordCard({ dailyWord }: { dailyWord: DailyWordData }) {
     const rendered = renderShareCard(canvas, {
       body: dailyWord.word,
       source: dailyWord.description,
-    }, glyph);
+    }, glyph, cardStyle);
     if (rendered) {
       setPreviewUrl(canvas.toDataURL("image/png"));
     }
@@ -257,7 +276,23 @@ function DailyWordCard({ dailyWord }: { dailyWord: DailyWordData }) {
         <p className="text-sm italic text-stone">{dailyWord.description}</p>
       ) : null}
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex gap-1">
+          {CARD_STYLES.map((s) => (
+            <button
+              key={s.key}
+              type="button"
+              onClick={() => { setCardStyle(s.key); setPreviewUrl(null); }}
+              className={`rounded-[var(--radius-pill)] px-2 py-1 text-[11px] font-medium transition-colors ${
+                cardStyle === s.key
+                  ? "bg-archive text-archive-contrast"
+                  : "text-stone hover:text-ink"
+              }`}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
         <button
           type="button"
           onClick={handleDownload}

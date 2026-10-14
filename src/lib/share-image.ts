@@ -3,6 +3,14 @@ export type ShareImageData = {
   source: string | null;
 };
 
+export type CardStyle = "classic" | "dark" | "lined";
+
+export const CARD_STYLES: { key: CardStyle; label: string }[] = [
+  { key: "classic", label: "클래식" },
+  { key: "dark", label: "다크" },
+  { key: "lined", label: "라인" },
+];
+
 export const CANVAS_WIDTH = 1080;
 const PADDING_X = 96;
 const PADDING_Y = 120;
@@ -26,18 +34,49 @@ const SIGNATURE_BLOCK_HEIGHT = SIGNATURE_GAP + SIGNATURE_HEIGHT;
 // 서명 아래는 본문 여백만큼 띄울 필요가 없다. 그대로 두면 카드 하단이 텅 빈다.
 const SIGNATURE_BOTTOM_PADDING = 64;
 
-const BODY_FONT = `600 ${BODY_FONT_SIZE}px -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif`;
-const SOURCE_FONT = `${SOURCE_FONT_SIZE}px ui-monospace, "SF Mono", Menlo, "Courier New", monospace`;
-const SIGNATURE_FONT = `${SIGNATURE_FONT_SIZE}px ui-monospace, "SF Mono", Menlo, "Courier New", monospace`;
+const BODY_FONT = `600 ${BODY_FONT_SIZE}px "MaruBuri", "Noto Serif KR", serif`;
+const SOURCE_FONT = `${SOURCE_FONT_SIZE}px "Pretendard", -apple-system, "Apple SD Gothic Neo", sans-serif`;
+const SIGNATURE_FONT = `${SIGNATURE_FONT_SIZE}px "Pretendard", -apple-system, "Apple SD Gothic Neo", sans-serif`;
 
-const COLORS = {
-  paper: "#fbf9f5",
-  surface: "#f5f3ef",
-  ink: "#111a2e",
-  archive: "#4a6580",
-  hairline: "#dbdad6",
-  stoneFaint: "#7b8794",
+type CardColors = {
+  paper: string;
+  surface: string;
+  ink: string;
+  archive: string;
+  hairline: string;
+  stoneFaint: string;
+  accent?: string;
 };
+
+const STYLE_COLORS: Record<CardStyle, CardColors> = {
+  classic: {
+    paper: "#fbf9f5",
+    surface: "#f5f3ef",
+    ink: "#111a2e",
+    archive: "#4a6580",
+    hairline: "#dbdad6",
+    stoneFaint: "#7b8794",
+  },
+  dark: {
+    paper: "#111a2e",
+    surface: "#1a2540",
+    ink: "#f5f3ef",
+    archive: "#8badc4",
+    hairline: "#2a3a5a",
+    stoneFaint: "#7b8ea0",
+  },
+  lined: {
+    paper: "#ffffff",
+    surface: "#ffffff",
+    ink: "#111a2e",
+    archive: "#4a6580",
+    hairline: "#e8e6e2",
+    stoneFaint: "#7b8794",
+    accent: "#4a6580",
+  },
+};
+
+const COLORS = STYLE_COLORS.classic;
 
 /**
  * 어절(띄어쓰기) 단위 줄바꿈.
@@ -164,15 +203,13 @@ export function computeSignatureLayout(
 export function renderShareCard(
   canvas: HTMLCanvasElement,
   { body, source }: ShareImageData,
-  /**
-   * 로고 글리프. Canvas는 SVG를 직접 못 그려 호출부가 미리 불러 넘긴다.
-   * 없으면 워드마크만 그린다 — 서명이 통째로 빠지는 것보다 낫다.
-   */
   glyph?: CanvasImageSource,
+  style: CardStyle = "classic",
 ): boolean {
   const ctx = canvas.getContext("2d");
   if (!ctx) return false;
 
+  const colors = STYLE_COLORS[style];
   const maxTextWidth = CANVAS_WIDTH - PADDING_X * 2;
   ctx.font = BODY_FONT;
   const lines = wrapText(body, maxTextWidth, (segment) =>
@@ -183,13 +220,18 @@ export function renderShareCard(
   canvas.width = CANVAS_WIDTH;
   canvas.height = height;
 
-  ctx.fillStyle = COLORS.paper;
+  ctx.fillStyle = colors.paper;
   ctx.fillRect(0, 0, CANVAS_WIDTH, height);
 
-  ctx.fillStyle = COLORS.surface;
-  ctx.fillRect(24, 24, CANVAS_WIDTH - 48, height - 48);
+  if (style === "lined") {
+    ctx.fillStyle = colors.accent ?? colors.archive;
+    ctx.fillRect(48, 48, 4, height - 96);
+  } else {
+    ctx.fillStyle = colors.surface;
+    ctx.fillRect(24, 24, CANVAS_WIDTH - 48, height - 48);
+  }
 
-  ctx.fillStyle = COLORS.ink;
+  ctx.fillStyle = colors.ink;
   ctx.font = BODY_FONT;
   ctx.textBaseline = "top";
   lines.forEach((line, index) => {
@@ -203,11 +245,11 @@ export function renderShareCard(
     const tagWidth = textWidth + SOURCE_TAG_PADDING_X * 2;
     const tagHeight = SOURCE_FONT_SIZE + SOURCE_TAG_PADDING_Y * 2;
 
-    ctx.strokeStyle = COLORS.hairline;
+    ctx.strokeStyle = colors.hairline;
     ctx.lineWidth = 2;
     ctx.strokeRect(PADDING_X, tagY, tagWidth, tagHeight);
 
-    ctx.fillStyle = COLORS.archive;
+    ctx.fillStyle = colors.archive;
     ctx.fillText(source, PADDING_X + SOURCE_TAG_PADDING_X, tagY + SOURCE_TAG_PADDING_Y);
   }
 
@@ -219,8 +261,7 @@ export function renderShareCard(
 
   if (glyph) {
     const glyphHeight = (SIGNATURE_GLYPH_WIDTH * 1017) / 1412;
-    // 글리프는 검정으로 들어온다. 서명이 본문보다 세게 보이면 안 되므로 눌러 그린다.
-    ctx.globalAlpha = 0.62;
+    ctx.globalAlpha = style === "dark" ? 0.8 : 0.62;
     ctx.drawImage(
       glyph,
       signatureLeft,
@@ -231,7 +272,7 @@ export function renderShareCard(
     ctx.globalAlpha = 1;
   }
 
-  ctx.fillStyle = COLORS.stoneFaint;
+  ctx.fillStyle = colors.stoneFaint;
   ctx.fillText(
     SIGNATURE_TEXT,
     signatureLeft + glyphWidth,
@@ -264,7 +305,7 @@ function pickWpFontTier(charCount: number): WpFontTier {
 }
 
 function makeWpBodyFont(fontSize: number): string {
-  return `600 ${fontSize}px -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif`;
+  return `600 ${fontSize}px "MaruBuri", "Noto Serif KR", serif`;
 }
 
 const WP_COLORS = {
@@ -435,7 +476,7 @@ export function renderWallpaper(
   // 출처 — 가운데 정렬
   if (source) {
     const sourceY = startY + bodyHeight + WP_SOURCE_GAP;
-    ctx.font = `${WP_SOURCE_FONT_SIZE}px ui-monospace, "SF Mono", Menlo, "Courier New", monospace`;
+    ctx.font = `${WP_SOURCE_FONT_SIZE}px "Pretendard", -apple-system, "Apple SD Gothic Neo", sans-serif`;
     ctx.fillStyle = WP_COLORS.archive;
     ctx.fillText(`— ${source}`, centerX, sourceY);
   }

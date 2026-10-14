@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect, useSyncExternalStore } from "react";
-import { renderShareCard, renderWallpaper } from "@/lib/share-image";
+import { renderShareCard, renderWallpaper, CARD_STYLES, type CardStyle } from "@/lib/share-image";
 import { useToast } from "@/components/Toast";
 
 type Props = {
@@ -31,6 +31,7 @@ type ImageAction = "share" | "download";
 export function ShareImageButton({ body, source }: Props) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
+  const [cardStyle, setCardStyle] = useState<CardStyle>("classic");
   const menuRef = useRef<HTMLDivElement>(null);
 
   const canShareFiles = useSyncExternalStore(
@@ -73,7 +74,7 @@ export function ShareImageButton({ body, source }: Props) {
     const rendered =
       mode === "wallpaper"
         ? renderWallpaper(canvas, { body, source }, glyph)
-        : renderShareCard(canvas, { body, source }, glyph);
+        : renderShareCard(canvas, { body, source }, glyph, cardStyle);
 
     if (!rendered) {
       toast("이 브라우저에서는 이미지 저장을 지원하지 않아요.", "error");
@@ -131,6 +132,23 @@ export function ShareImageButton({ body, source }: Props) {
 
       {open ? (
         <div className="absolute right-0 bottom-full z-20 mb-1 flex min-w-44 flex-col overflow-hidden rounded-[var(--radius-card)] border border-hairline bg-surface shadow-[var(--shadow-card)]">
+          {/* 카드 스타일 선택 */}
+          <div className="flex items-center gap-1 border-b border-hairline px-4 py-2.5">
+            {CARD_STYLES.map((s) => (
+              <button
+                key={s.key}
+                type="button"
+                onClick={() => setCardStyle(s.key)}
+                className={`rounded-[var(--radius-pill)] px-2.5 py-1 text-[11px] font-medium transition-colors ${
+                  cardStyle === s.key
+                    ? "bg-archive text-archive-contrast"
+                    : "text-stone hover:text-ink"
+                }`}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
           {/* 카드 이미지 */}
           <button
             type="button"

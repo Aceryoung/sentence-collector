@@ -13,6 +13,11 @@ const literata = Literata({
   display: "swap",
 });
 
+const FONT_PRETENDARD =
+  "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css";
+const FONT_MARUBURI =
+  "https://cdn.jsdelivr.net/gh/webfontworld/MaruBuri/MaruBuri.css";
+
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://geuljeok.vercel.app";
 
@@ -78,6 +83,8 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`h-full antialiased ${literata.variable}`}>
       <head>
+        <link rel="stylesheet" href={FONT_PRETENDARD} />
+        <link rel="stylesheet" href={FONT_MARUBURI} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

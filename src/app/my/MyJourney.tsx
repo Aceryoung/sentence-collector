@@ -1,6 +1,7 @@
 "use client";
 
 import { ActivityHeatmap } from "./journey/ActivityHeatmap";
+import { PracticeCalendar } from "./journey/PracticeCalendar";
 
 export type JourneyData = {
   sentenceCount: number;
@@ -48,8 +49,11 @@ export function MyJourney({ data }: { data: JourneyData }) {
           </section>
         </div>
 
-        {/* 오른쪽: 히트맵 + 필사 기록 */}
+        {/* 오른쪽: 캘린더 + 히트맵 + 필사 기록 */}
         <div className="flex min-w-0 flex-1 flex-col gap-5">
+          {/* 필사 캘린더 */}
+          <PracticeCalendar activityMap={activityMap} streak={streak} />
+
           {/* 활동 히트맵 */}
           <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-hairline bg-surface px-5 py-4 shadow-[var(--shadow-card)]">
             <h2 className="font-serif text-sm font-bold text-ink">최근 90일 활동</h2>
